@@ -10,7 +10,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Setter
 @Getter
-@ToString(exclude = "photos")
+@ToString(exclude = {"photos","contributions","comments","assignedTasks"})
 @Entity
 public class Guest implements Serializable {
     @Id
@@ -26,5 +26,14 @@ public class Guest implements Serializable {
 
     @OneToMany(mappedBy = "guest")
     private Set<Photo> photos;
+
+    @OneToMany(mappedBy = "guest")
+    private Set<GiftContribution> contributions;
+
+    @OneToMany(mappedBy = "guest")
+    private Set<Comment> comments;
+
+    @OneToMany(mappedBy = "assigneeGuest")
+    private Set<Task> assignedTasks;
 
 }
