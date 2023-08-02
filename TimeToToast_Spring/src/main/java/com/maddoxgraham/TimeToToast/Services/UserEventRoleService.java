@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserEventRoleService {
@@ -36,7 +37,24 @@ public class UserEventRoleService {
                 .orElseThrow(() -> new UserNotFoundException("UserEventRole with key " + userEventKey + " was not found"));
     }
 
-    public void deleteByUserEventKey(UserEventKey userEventKey){
-        userEventRoleRepository.deleteByUserEventKey(userEventKey);
+    public void deleteUser(UserEventKey userEventKey){
+        Optional<UserEventRole> optionalUserEventRole = userEventRoleRepository.findById(userEventKey);
+
+        if(optionalUserEventRole.isPresent()){
+            userEventRoleRepository.deleteById(userEventKey);
+        } else {
+            throw new RuntimeException("This user and Event does not exists. : " + userEventKey);
+        }
     }
+
+    public UserEventRole findUserEventRoleByIdUserEventRole(UserEventKey userEventKey) {
+        Optional<UserEventRole> optionalUserEventRole = userEventRoleRepository.findById(userEventKey);
+        if (optionalUserEventRole.isPresent()) {
+            return optionalUserEventRole.get();
+        } else {
+            throw new UserNotFoundException("No relation between the Event and the user were found with the given ID");
+        }
+    }
+
+
 }
