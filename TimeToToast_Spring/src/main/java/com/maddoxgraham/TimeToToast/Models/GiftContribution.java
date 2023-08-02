@@ -15,10 +15,10 @@ public class GiftContribution implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)
-    private String idContribution;
+    private Long idGiftContribution;
 
     @Column(nullable = false)
-    private String amount;
+    private Double amount;
 
     @ManyToOne
     @JoinColumn(name="idGift", nullable=false)

@@ -12,8 +12,11 @@ import java.util.Set;
 @ToString(exclude = {"comments"})
 @Entity
 public class Photo {
+
     @Id
-    private String idPhoto;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, updatable = false)
+    private Long idPhoto;
 
     @ManyToOne
     @JoinColumn(name = "idUser", nullable = true)

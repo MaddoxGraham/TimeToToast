@@ -11,17 +11,19 @@ import java.io.Serializable;
 @AllArgsConstructor
 @ToString
 @Entity
-@Table(name = "UserEventRole")
 public class UserEventRole implements Serializable {
 
-    @Id
+    @EmbeddedId
+    private UserEventKey userEventKey;
+
+    @MapsId("idUser")
     @ManyToOne
-    @JoinColumn(name = "idUser", nullable = false, updatable = false, referencedColumnName = "idUser")
+    @JoinColumn(name = "idUser", nullable = false, updatable = false, insertable = false)
     private User idUser;
 
-    @Id
+    @MapsId("idEvent")
     @ManyToOne
-    @JoinColumn(name = "idEvent", nullable = false, updatable = false, referencedColumnName = "idEvent")
+    @JoinColumn(name = "idEvent", nullable = false, updatable = false, insertable = false)
     private Event idEvent;
 
     @Column(name = "role", nullable = false)
