@@ -10,6 +10,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Setter
 @Getter
+@Data
 @ToString(exclude = {"photo", "event", "user", "guest", "parentComment", "replies"})
 @Entity
 public class Comment implements Serializable {

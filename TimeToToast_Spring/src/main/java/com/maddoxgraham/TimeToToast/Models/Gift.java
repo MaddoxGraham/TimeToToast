@@ -10,6 +10,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Setter
 @Getter
+@Data
 @ToString(exclude = { "event", "contributions" })
 @Entity
 public class Gift implements Serializable{

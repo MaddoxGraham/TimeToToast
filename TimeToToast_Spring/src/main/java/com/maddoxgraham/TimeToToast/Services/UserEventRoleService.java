@@ -1,5 +1,9 @@
 package com.maddoxgraham.TimeToToast.Services;
 
+import com.maddoxgraham.TimeToToast.DTOs.UserEventRoleDTO;
+import com.maddoxgraham.TimeToToast.Mappers.UserEventRoleMapper;
+import com.maddoxgraham.TimeToToast.Models.Event;
+import com.maddoxgraham.TimeToToast.Models.User;
 import com.maddoxgraham.TimeToToast.Models.UserEventKey;
 import com.maddoxgraham.TimeToToast.TimeToToastApplication;
 import com.maddoxgraham.TimeToToast.Exception.UserNotFoundException;
@@ -14,15 +18,21 @@ import java.util.Optional;
 @Service
 public class UserEventRoleService {
     private final UserEventRoleRepository userEventRoleRepository;
+    private  final UserService userService;
+    private final EventService eventService;
 
     @Autowired
-    public UserEventRoleService(UserEventRoleRepository userEventRoleRepository) {
+    public UserEventRoleService(EventService eventService,UserService userService,UserEventRoleRepository userEventRoleRepository) {
         this.userEventRoleRepository = userEventRoleRepository;
+        this.userService = userService;
+        this.eventService=eventService;
     }
 
-    public UserEventRole addUserEventRole(UserEventRole userEventRole){
-        return userEventRoleRepository.save(userEventRole);
-    }
+    public UserEventRole addUserEventRole(UserEventRoleDTO userEventRoleDTO){
+            UserEventRole userEventRole = UserEventRoleMapper.toEntity(userEventRoleDTO, userService, eventService);
+            return userEventRoleRepository.save(userEventRole);
+        }
+
 
     public List<UserEventRole> findAllUserEventRoles(){
         return userEventRoleRepository.findAll();
@@ -37,13 +47,14 @@ public class UserEventRoleService {
                 .orElseThrow(() -> new UserNotFoundException("UserEventRole with key " + userEventKey + " was not found"));
     }
 
-    public void deleteUser(UserEventKey userEventKey){
-        Optional<UserEventRole> optionalUserEventRole = userEventRoleRepository.findById(userEventKey);
-
-        if(optionalUserEventRole.isPresent()){
-            userEventRoleRepository.deleteById(userEventKey);
+    public boolean deleteUserEventRole(UserEventRoleDTO dto, UserService userService, EventService eventService) {
+        UserEventRole userEventRole = UserEventRoleMapper.toEntity(dto, userService, eventService);
+        UserEventKey key = userEventRole.getUserEventKey();
+        if (userEventRoleRepository.existsById(key)) {
+            userEventRoleRepository.deleteById(key);
+            return true;
         } else {
-            throw new RuntimeException("This user and Event does not exists. : " + userEventKey);
+            return false;
         }
     }
 

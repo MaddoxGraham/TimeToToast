@@ -1,9 +1,12 @@
 package com.maddoxgraham.TimeToToast.Controllers;
 
 
-import com.maddoxgraham.TimeToToast.Models.UserEventRole;
+import com.maddoxgraham.TimeToToast.DTOs.UserEventRoleDTO;
 import com.maddoxgraham.TimeToToast.Models.UserEventKey;
+import com.maddoxgraham.TimeToToast.Models.UserEventRole;
+import com.maddoxgraham.TimeToToast.Services.EventService;
 import com.maddoxgraham.TimeToToast.Services.UserEventRoleService;
+import com.maddoxgraham.TimeToToast.Services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +18,13 @@ import java.util.List;
 public class UserEventRoleController {
 
     private final UserEventRoleService userEventRoleService;
+    private final UserService userService;
+    private final EventService eventService;
 
-    public UserEventRoleController(UserEventRoleService userEventRoleService) {
+    public UserEventRoleController(UserEventRoleService userEventRoleService, UserService userService,EventService eventService) {
         this.userEventRoleService = userEventRoleService;
+        this.userService = userService;
+        this.eventService = eventService;
     }
 
     @GetMapping("/all")
@@ -26,18 +33,12 @@ public class UserEventRoleController {
         return new ResponseEntity<>(userEventRoles, HttpStatus.OK);
     }
 
-    @GetMapping("/find/{idUser}/{idEvent}")
-    public ResponseEntity<UserEventRole> getUserEventRoleById(@PathVariable("idUser") Long idUser, @PathVariable("idEvent") Long idEvent) {
-        UserEventKey userEventKey = new UserEventKey(idUser, idEvent);
-        UserEventRole userEventRole = userEventRoleService.findUserEventRoleByIdUserEventRole(userEventKey);
-        return new ResponseEntity<>(userEventRole, HttpStatus.OK);
-    }
-
     @PostMapping("/add")
-    public ResponseEntity<UserEventRole> addUserEventRole(@RequestBody UserEventRole userEventRole){
-        UserEventRole newUserEventRole = userEventRoleService.addUserEventRole(userEventRole);
+    public ResponseEntity<UserEventRole> addUserEventRole(@RequestBody UserEventRoleDTO userEventRoleDTO){
+        UserEventRole newUserEventRole = userEventRoleService.addUserEventRole(userEventRoleDTO);
         return new ResponseEntity<>(newUserEventRole, HttpStatus.CREATED);
     }
+
 
     @PutMapping("/update")
     public ResponseEntity<UserEventRole> updateUserEventRole(@RequestBody UserEventRole userEventRole){
@@ -45,10 +46,12 @@ public class UserEventRoleController {
         return new ResponseEntity<>(updateUserEventRole, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{idUser}/{idEvent}")
-    public ResponseEntity<?> deleteUserEventRole(@PathVariable("idUser") Long idUser, @PathVariable("idEvent") Long idEvent){
-        UserEventKey userEventKey = new UserEventKey(idUser, idEvent);
-        userEventRoleService.deleteUser(userEventKey);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @DeleteMapping("/delete")
+    public ResponseEntity<Void> deleteUserEventRole(@RequestBody UserEventRoleDTO dto) {
+        if (userEventRoleService.deleteUserEventRole(dto, userService, eventService)) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

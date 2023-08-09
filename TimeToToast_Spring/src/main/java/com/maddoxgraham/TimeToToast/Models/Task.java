@@ -9,6 +9,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Setter
 @Getter
+@Data
 @ToString(exclude = {"event", "creator", "assigneeUser", "assigneeGuest"})
 @Entity
 public class Task implements Serializable {

@@ -10,15 +10,16 @@ import java.util.Set;
 @AllArgsConstructor
 @Setter
 @Getter
+@Data
 @ToString(exclude =  {"guests", "userEventRoles", "photos", "gifts","comments","tasks"})
 @Entity
 public class Event implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false)
     private Long idEvent;
 
-    @OneToMany(mappedBy = "idEvent")
+    @OneToMany(mappedBy = "event")
     private Set<UserEventRole> userEventRoles;
 
     @OneToMany(mappedBy = "event")

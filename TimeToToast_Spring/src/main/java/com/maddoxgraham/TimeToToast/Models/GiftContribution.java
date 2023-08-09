@@ -9,6 +9,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Setter
 @Getter
+@Data
 @ToString(exclude = {"gift", "user", "guest"})
 @Entity
 public class GiftContribution implements Serializable {

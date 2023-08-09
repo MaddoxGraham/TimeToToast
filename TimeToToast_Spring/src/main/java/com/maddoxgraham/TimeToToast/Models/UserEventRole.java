@@ -9,7 +9,8 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@Data
+@ToString(exclude = {"user","event"})
 @Entity
 public class UserEventRole implements Serializable {
 
@@ -18,13 +19,13 @@ public class UserEventRole implements Serializable {
 
     @MapsId("idUser")
     @ManyToOne
-    @JoinColumn(name = "idUser", nullable = false, updatable = false, insertable = false)
-    private User idUser;
+    @JoinColumn(name = "idUser")
+    private User user;
 
     @MapsId("idEvent")
     @ManyToOne
-    @JoinColumn(name = "idEvent", nullable = false, updatable = false, insertable = false)
-    private Event idEvent;
+    @JoinColumn(name = "idEvent")
+    private Event event;
 
     @Column(name = "role", nullable = false)
     private String role;

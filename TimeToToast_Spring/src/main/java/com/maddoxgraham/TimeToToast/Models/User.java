@@ -10,6 +10,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Setter
 @Getter
+@Data
 @ToString(exclude = {"photos","contributions","comments","assignedTasks"})
 @Entity
 public class User implements Serializable {
@@ -21,7 +22,7 @@ public class User implements Serializable {
     private String Name;
     private String password;
 
-    @OneToMany(mappedBy = "idUser")
+    @OneToMany(mappedBy = "user")
     private Set<UserEventRole> userEventRoles;
 
     @OneToMany(mappedBy = "user")

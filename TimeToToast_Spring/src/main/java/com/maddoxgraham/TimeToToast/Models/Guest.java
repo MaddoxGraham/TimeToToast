@@ -10,6 +10,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Setter
 @Getter
+@Data
 @ToString(exclude = {"photos","contributions","comments","assignedTasks"})
 @Entity
 public class Guest implements Serializable {
