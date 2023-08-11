@@ -1,2 +1,7 @@
 
-export interface UserEventRole { }
+export interface UserEventRole {
+    idUser:number,
+    idEvent:number,
+    role:string,
+    
+ }
