@@ -1,55 +1,60 @@
 package com.maddoxgraham.TimeToToast.Services;
 
-import com.maddoxgraham.TimeToToast.TimeToToastApplication;
+import com.maddoxgraham.TimeToToast.DTOs.UserDTo;
+import com.maddoxgraham.TimeToToast.DTOs.CredentialsDto;
+import com.maddoxgraham.TimeToToast.Exception.AppException;
 import com.maddoxgraham.TimeToToast.Exception.UserNotFoundException;
+import com.maddoxgraham.TimeToToast.Mappers.UserMapper;
 import com.maddoxgraham.TimeToToast.Models.User;
 import com.maddoxgraham.TimeToToast.Repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.nio.CharBuffer;
 import java.util.List;
 
 // Annoter la classe avec @Service indique que c'est une classe de service Spring.
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
-    // UserRepository est une interface qui gère la connexion avec la base de données.
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
 
-    // L'annotation @Autowired permet d'injecter UserRepository dans cette classe.
-    // C'est une technique appelée Injection de Dépendance (DI).
+    public UserDTo login(CredentialsDto credentialsDto){
+      User user = userRepository.findUserByLogin(credentialsDto.login())
+                .orElseThrow(() -> new AppException("Unknown User", HttpStatus.NOT_FOUND));
+      if (passwordEncoder.matches(CharBuffer.wrap(credentialsDto.password()),
+              user.getPassword())){
+          return userMapper.toUserDto(user);
+      }
+      throw new AppException("Invalid password", HttpStatus.BAD_REQUEST);
+    }
     @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    // Cette méthode ajoute un nouvel utilisateur à la base de données.
-    // Elle reçoit un objet utilisateur et utilise UserRepository pour l'enregistrer.
     public User addUser(User user){
-        // Avec un set, je pourrais manuellement ajouter des informations de mon utilisateur ici.
         return userRepository.save(user);
     }
 
-    // Cette méthode retourne une liste de tous les utilisateurs de la base de données.
     public List<User> findAllUsers(){
         return userRepository.findAll();
     }
 
-    // Cette méthode met à jour les informations d'un utilisateur existant.
-    // Elle reçoit un objet utilisateur et utilise UserRepository pour mettre à jour ses données.
-    public User updateUser(User user){
+   public User updateUser(User user){
         return userRepository.save(user);
     }
 
-    // Cette méthode trouve un utilisateur dans la base de données en utilisant son id.
-    // Si l'utilisateur n'est pas trouvé, une exception UserNotFoundException est levée.
-    public User findUserByIdUser(Long idUser){
-        // Ici, comme on retourne un optional dans UserRepository, on va devoir lui préciser :
-        // retourne un utilisateur par son idUser si tu le trouves sinon retourne l'exception UserNotFoundException.
+     public User findUserByIdUser(Long idUser){
         return userRepository.findUserByIdUser(idUser).orElseThrow(() -> new UserNotFoundException("User n° " + idUser + " was not found"));
     }
 
-    // Cette méthode supprime un utilisateur de la base de données en utilisant son id.
     public void deleteUser(Long idUser){
         userRepository.deleteUserByIdUser(idUser);
     }

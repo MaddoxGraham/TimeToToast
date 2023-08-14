@@ -12,6 +12,7 @@ import java.util.Set;
 @Getter
 @Data
 @ToString(exclude = {"photos","contributions","comments","assignedTasks"})
+@Builder
 @Entity
 public class User implements Serializable {
     @Id
@@ -20,6 +21,7 @@ public class User implements Serializable {
     private Long idUser;
 
     private String Name;
+    private String login;
     private String password;
 
     @OneToMany(mappedBy = "user")
