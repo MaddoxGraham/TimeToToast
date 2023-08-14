@@ -7,6 +7,7 @@ export interface User {
   idUser:number,
   name : string,
   password:string,
+  login:string,
   userEventRoles : UserEventRole[],
   contributions : GiftContribution[],
   comments : Comment[],

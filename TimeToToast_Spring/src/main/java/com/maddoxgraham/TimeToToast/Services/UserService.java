@@ -1,5 +1,6 @@
 package com.maddoxgraham.TimeToToast.Services;
 
+import com.maddoxgraham.TimeToToast.DTOs.SignUpDto;
 import com.maddoxgraham.TimeToToast.DTOs.UserDTo;
 import com.maddoxgraham.TimeToToast.DTOs.CredentialsDto;
 import com.maddoxgraham.TimeToToast.Exception.AppException;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.nio.CharBuffer;
 import java.util.List;
+import java.util.Optional;
 
 // Annoter la classe avec @Service indique que c'est une classe de service Spring.
 @Service
@@ -34,9 +36,18 @@ public class UserService {
       }
       throw new AppException("Invalid password", HttpStatus.BAD_REQUEST);
     }
-    @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+
+    public UserDTo register(SignUpDto signUpDto){
+        Optional<User> oUser = userRepository.findUserByLogin(signUpDto.login());
+
+        if (oUser.isPresent()){
+            throw new AppException("Login already exists", HttpStatus.BAD_REQUEST);
+        }
+
+        User user = userMapper.signUpToUser(signUpDto);
+        user.setPassword(passwordEncoder.encode(CharBuffer.wrap(signUpDto.password())));
+        User savedUser = userRepository.save(user);
+        return userMapper.toUserDto(savedUser);
     }
 
     public User addUser(User user){

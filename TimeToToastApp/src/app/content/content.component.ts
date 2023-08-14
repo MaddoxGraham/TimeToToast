@@ -8,9 +8,9 @@ import { AxiosService } from '../Controller/axios.service';
 })
 export class ContentComponent {
 
-  constructor(private axiosService:AxiosService){}
+  constructor(private axiosService: AxiosService) { }
 
-  onLogin(input:any):void{
+  onLogin(input: any): void {
     this.axiosService.request(
       "POST",
       "/login",
@@ -18,7 +18,19 @@ export class ContentComponent {
         login: input.login,
         password: input.password
       }
-    )
+    );
+  }
+
+  onRegister(input: any): void {
+    this.axiosService.request(
+      "POST",
+      "/register",
+      {
+        name: input.name,
+        login: input.login,
+        password: input.password
+      }
+    );
   }
 
 }
