@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { AxiosService } from '../Controller/axios.service';
 
 @Component({
-  selector: 'app-content',
-  templateUrl: './content.component.html',
-  styleUrls: ['./content.component.css']
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.css']
 })
-export class ContentComponent {
+export class HeaderComponent {
+
   componentToShow: String = "welcome";
 
   constructor(private axiosService: AxiosService) { }

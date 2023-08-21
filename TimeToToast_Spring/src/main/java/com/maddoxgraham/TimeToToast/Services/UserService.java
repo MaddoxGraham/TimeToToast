@@ -50,6 +50,13 @@ public class UserService {
         return userMapper.toUserDto(savedUser);
     }
 
+    public UserDTo findByLogin(String login) {
+        User user = userRepository.findUserByLogin(login)
+                .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
+        return userMapper.toUserDto(user);
+    }
+
+
     public User addUser(User user){
         return userRepository.save(user);
     }

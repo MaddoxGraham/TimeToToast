@@ -1,0 +1,34 @@
+
+<nav class="navbar py-5 navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">TimeToToast</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Accueil</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">À propos</a>
+          </li>
+          <li class="nav-item">
+            <div>
+              <app-buttons (loginEvent)="showComponent('login')" (logoutEvent)="showComponent('welcome')" />
+           
+           
+           
+           </div>
+
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <app-login-form *ngIf="componentToShow == 'login'" (onSubmitLoginEvent)="onLogin($event)"
+  (onSubmitRegisterEvent)="onRegister($event)" />
+
+<app-auth-content *ngIf="componentToShow == 'messages' " />
+

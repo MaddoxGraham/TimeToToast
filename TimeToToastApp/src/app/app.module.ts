@@ -9,6 +9,8 @@ import { AuthContentComponent } from './auth-content/auth-content.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { ContentComponent } from './content/content.component';
 import { FormsModule } from '@angular/forms';
+import { ButtonsComponent } from './buttons/buttons.component';
+import { HeaderComponent } from './header/header.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import { FormsModule } from '@angular/forms';
     LandingPageComponent,
     AuthContentComponent,
     LoginFormComponent,
-    ContentComponent
+    ContentComponent,
+    ButtonsComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
