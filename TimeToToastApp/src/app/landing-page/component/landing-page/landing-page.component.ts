@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from 'src/app/Controller/User.service';
-import { User } from 'src/app/Models/User';
-import { HttpErrorResponse } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-landing-page',
