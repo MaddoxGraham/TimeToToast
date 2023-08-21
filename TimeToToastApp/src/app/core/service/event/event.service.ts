@@ -1,14 +1,14 @@
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
 import { HttpClient } from '@angular/common/http';
-import { Event } from "../Models/Event";
+import { Injectable } from '@angular/core';
 
 @Injectable({
-    providedIn:'root'
+  providedIn: 'root'
 })
-export class EventService{
-    private apiServerUrl='http://localhost:8080';
+export class EventService {
 
+  constructor(private httpClient: HttpClient) { }
+
+  
     // constructor(private http: HttpClient) { }
         
     // public getEvents(): Observable<Event[]> {
@@ -26,6 +26,4 @@ export class EventService{
     // public deleteEvent(eventId: number): Observable<void> {
     //     return this.http.delete<void>(`${this.apiServerUrl}/event/delete/${eventId}`);
     // }
-
-    
 }

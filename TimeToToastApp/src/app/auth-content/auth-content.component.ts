@@ -14,7 +14,7 @@ export class AuthContentComponent{
   ngOnInit(): void{
     this.axiosService.request(
       "GET",
-      "/messages",
+      "/user/all",
       {}
     ).then(
       (response)=> this.data = response.data

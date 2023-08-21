@@ -10,7 +10,7 @@ import { LoginFormComponent } from './login-form/login-form.component';
 import { ContentComponent } from './content/content.component';
 import { FormsModule } from '@angular/forms';
 import { ButtonsComponent } from './buttons/buttons.component';
-import { HeaderComponent } from './header/header.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -18,9 +18,9 @@ import { HeaderComponent } from './header/header.component';
     LandingPageComponent,
     AuthContentComponent,
     LoginFormComponent,
+    RouterModule,
     ContentComponent,
     ButtonsComponent,
-    HeaderComponent
   ],
   imports: [
     BrowserModule,
