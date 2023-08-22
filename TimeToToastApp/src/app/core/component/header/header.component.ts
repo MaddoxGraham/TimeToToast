@@ -14,7 +14,7 @@ export class HeaderComponent implements OnInit, OnDestroy{
   activeItem: any | undefined;
   items!: any[];
   private subscription!: Subscription
-  showMenu: boolean = true;
+  showMenu: boolean = false;
 
   constructor(private router: Router,
               protected authService: AuthenticationService) {
@@ -39,16 +39,17 @@ export class HeaderComponent implements OnInit, OnDestroy{
   }
   
   private Routes = [
-    { label: 'Gérer les QCM', routerLink: 'admin/qcm' },
-    { label: 'Gérer les candidats', routerLink: 'admin/candidats' },
-    { label: 'Gérer les questions', routerLink: 'admin/question' },
-    { label: 'Ajouter un admin', routerLink: 'admin/add-admin' },
+    { label: 'Se connecter', routerLink: '/login' },
+    { label: ' Mon profil ', routerLink: 'user/userProfile' },
+    { label: 'Mes Evenements', routerLink: 'event/userEvent' },
+    { label: 'Créer un Evenement', routerLink: 'event/formEvent' },
     { label: 'Se déconnecter', command: (event: any) => this.logout() }
   ];
 
   logout() {
     sessionStorage.clear();
-    this.router.navigateByUrl('');
+//    this.router.navigateByUrl('');
+    this.showMenu = false
   }
 
 }

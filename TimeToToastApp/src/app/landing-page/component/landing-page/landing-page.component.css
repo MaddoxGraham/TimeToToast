@@ -1,0 +1,153 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300&display=swap');
+
+
+h2{
+    font-family: 'Source Sans 3', sans-serif;
+    font-variant:small-caps;
+    color: darkgoldenrod;
+}
+.parallax-container {
+    /* Taille de votre image */
+    height: 400px;
+    /* Réduction ou augmentation de la vitesse de l'effet de parallaxe */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    /* Remplacez par le chemin de votre image */
+    background-image: url('/assets/images/pexels-cottonbro-studio-3171837.jpg');
+}
+
+/* Pour assurer la réactivité et désactiver l'effet parallaxe sur les mobiles (car il peut causer des problèmes) */
+@media only screen and (max-width: 768px) {
+    .parallax-container {
+        height: auto;
+        background-attachment: scroll;
+    }
+}
+
+.card-img-top {
+    height: 400px; /* Ajustez cette valeur selon vos besoins */
+    object-fit: cover; /* Ajuste l'image pour couvrir l'espace sans déformation */
+    width: 100%; /* Assure que l'image couvre toute la largeur de la carte */
+}
+
+.card {
+    margin: 20px 0; /* Espacement vertical entre les cartes. Ajustez selon vos besoins */
+}
+
+.card-body {
+    min-height: 180px; /* Garantit que le corps de la carte est de la même hauteur, même si le texte varie */
+}
+
+
+
+.invitation-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/assets/images/joinUs.jpg') no-repeat top center;
+    background-size: cover;
+}
+
+.btn-light {
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.btn-light:hover {
+    background-color: #f8f9fa;
+    transform: scale(1.05);
+}
+
+
+
+.comment-bubble {
+    background-color: #f8f9fa; 
+    border-radius: 10px;
+    position: relative;
+    width: 70%; /* Pour réduire la largeur */
+
+}
+
+.comment-bubble::before {
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #f8f9fa; 
+    position: absolute;
+    left: 10px;
+    top: -5px; /* Ajusté pour le positionnement */
+}
+.user-img {
+    width: 60px; /* Ajustez selon vos besoins */
+    height: 60px;
+}
+
+
+.comment-container .stars {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    margin-bottom: -10px; /* Pour déborder sur la bulle */
+}
+
+.col-md-10.text-end .comment-bubble {
+    margin-left: 30%;
+    margin-right: 10%;
+}
+
+.col-md-10.text-end .comment-bubble::before {
+    left: auto;
+    right: 0px; /* Déplace le triangle à l'extérieur de la bulle */
+    border-bottom: 10px solid transparent;
+    border-top: 10px solid transparent;
+    border-left: 10px solid #f8f9fa; /* Cette bordure forme le triangle */
+    border-right: none; 
+}
+
+
+
+.statistic-item {
+    margin: 20px 0;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+}
+
+.statistic-number {
+    font-size: 3em;
+    font-weight: bold;
+    color: #333;
+}
+
+.statistic-text {
+    margin-top: 15px;
+    font-size: 1.2em;
+}
+
+.fade-in {
+    animation-name: fadeIn;
+    animation-duration: 1s;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
+}
+
+.delay-1 {
+    animation-delay: 0.5s;
+}
+
+.delay-2 {
+    animation-delay: 1s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

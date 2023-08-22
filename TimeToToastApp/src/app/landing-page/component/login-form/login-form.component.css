@@ -1,0 +1,40 @@
+.form-container {
+    background-color: #f9f9f9;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.15);
+}
+
+h2.text-center {
+    color: #333;
+}
+
+.nav-pills .nav-link {
+    border-radius: 25px;
+    color: #555;
+    border: 1px solid #ddd;
+    transition: background-color 0.3s, color 0.3s, transform 0.3s;
+}
+
+.nav-pills .nav-link:hover {
+    background-color: #eee;
+}
+
+.nav-pills .nav-link.active {
+    background-color: #333;
+    color: #fff;
+    border-color: #333;
+}
+
+.tab-content {
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
