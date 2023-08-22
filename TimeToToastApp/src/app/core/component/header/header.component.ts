@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthenticationService } from '../../service/authentication/authentication.service';
 import { Subscription } from 'rxjs';
 
@@ -10,24 +10,18 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit, OnDestroy{
-
+  connected: boolean = false
   activeItem: any | undefined;
   items!: any[];
   private subscription!: Subscription
-  showMenu: boolean = false;
+
 
   constructor(private router: Router,
-              protected authService: AuthenticationService) {
-    this.router.events.subscribe(event => {
-      if(event instanceof NavigationEnd) {
-        this.showMenu = event.url !== '/';
-      }
-    });
-  }
+              protected authService: AuthenticationService) { }
 
   ngOnInit(): void {
     this.subscription = this.authService.isLoggedIn.subscribe(isLoggedin => {
-      console.log("isLoggedIn subscription triggered", isLoggedin);
+      this.connected = isLoggedin;
       this.items = this.Routes;
       this.activeItem = this.items[0];
     })
@@ -39,7 +33,6 @@ export class HeaderComponent implements OnInit, OnDestroy{
   }
   
   private Routes = [
-    { label: 'Se connecter', routerLink: '/login' },
     { label: ' Mon profil ', routerLink: 'user/userProfile' },
     { label: 'Mes Evenements', routerLink: 'event/userEvent' },
     { label: 'Créer un Evenement', routerLink: 'event/formEvent' },
@@ -48,8 +41,8 @@ export class HeaderComponent implements OnInit, OnDestroy{
 
   logout() {
     sessionStorage.clear();
-//    this.router.navigateByUrl('');
-    this.showMenu = false
+    this.authService.isLoggedIn.next(false);
+    this.router.navigateByUrl('/landing');
   }
 
 }

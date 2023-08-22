@@ -22,7 +22,7 @@
   </nav>
 
   <div class="link">
-      <div class="card p-2" *ngIf="showMenu">
+      <div class="card p-2" *ngIf="connected">
           <p-tabMenu [model]="items" [activeItem]="activeItem"></p-tabMenu>
       </div>
   </div>
