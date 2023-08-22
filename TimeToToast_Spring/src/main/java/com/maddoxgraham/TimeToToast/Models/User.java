@@ -23,6 +23,11 @@ public class User implements Serializable {
     private String Name;
     private String login;
     private String password;
+    @Column(name = "token")
+    private String token;
+
+    @Column(name = "refreshToken")
+    private String refreshToken;
 
     @OneToMany(mappedBy = "user")
     private Set<UserEventRole> userEventRoles;
