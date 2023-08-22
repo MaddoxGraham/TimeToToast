@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { LoginDto } from 'src/app/share/dtos/login/login-dto';
 import { UserDto } from 'src/app/share/dtos/user/user-dto';
 import { environment } from 'src/environments/environment';
 
