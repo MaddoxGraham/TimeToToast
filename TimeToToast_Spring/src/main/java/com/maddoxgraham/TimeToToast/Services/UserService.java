@@ -6,6 +6,7 @@ import com.maddoxgraham.TimeToToast.DTOs.CredentialsDto;
 import com.maddoxgraham.TimeToToast.Exception.AppException;
 import com.maddoxgraham.TimeToToast.Exception.UserNotFoundException;
 import com.maddoxgraham.TimeToToast.Mappers.UserMapper;
+import com.maddoxgraham.TimeToToast.Models.Enums.Role;
 import com.maddoxgraham.TimeToToast.Models.User;
 import com.maddoxgraham.TimeToToast.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +45,8 @@ public class UserService {
         }
 
         User user = userMapper.signUpToUser(signUpDto);
+        user.setRole(Role.USER);
+        user.setName(signUpDto.name());
         user.setPassword(passwordEncoder.encode(CharBuffer.wrap(signUpDto.password())));
         User savedUser = userRepository.save(user);
         return userMapper.toUserDto(savedUser);

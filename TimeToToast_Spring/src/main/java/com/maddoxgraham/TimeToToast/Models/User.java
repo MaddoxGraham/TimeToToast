@@ -1,5 +1,6 @@
 package com.maddoxgraham.TimeToToast.Models;
 
+import com.maddoxgraham.TimeToToast.Models.Enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,10 +21,12 @@ public class User implements Serializable {
     @Column(nullable = false, updatable = false)
     private Long idUser;
 
-    private String Name;
+    private String name;
     private String login;
     private String password;
-    @Column(name = "token")
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
     private String token;
 
     @Column(name = "refreshToken")

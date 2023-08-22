@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ShareModule } from '../share/share.module';
 import { FooterComponent } from './component/footer/footer.component';
 import { LandingPageModule } from '../landing-page/landing-page.module';
+import { UserModule } from '../user/user.module';
 
 
 
@@ -18,7 +19,8 @@ import { LandingPageModule } from '../landing-page/landing-page.module';
     CommonModule,
     HttpClientModule,
     ShareModule,
-    LandingPageModule
+    LandingPageModule,
+    UserModule
   ],
   providers: [
     httpInterceptorProviders

@@ -1,5 +1,6 @@
 package com.maddoxgraham.TimeToToast.Models;
 
+import com.maddoxgraham.TimeToToast.Models.Enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,8 +19,8 @@ public class Guest implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)
     private Long idGuest;
-
-   private Long token;
+    private Role role;
+    private Long token;
 
     @ManyToOne
     @JoinColumn(name = "idEvent", nullable = false)

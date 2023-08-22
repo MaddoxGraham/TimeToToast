@@ -1,6 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { LoginDto } from 'src/app/share/dtos/login/login-dto';
+import { UserDto } from 'src/app/share/dtos/user/user-dto';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -27,5 +30,9 @@ export class AuthenticationService {
     } else {
       window.localStorage.removeItem("auth_token");
     }
+  }
+
+  authenticateUser(data: { login: string, password: string }): Observable<UserDto> {
+    return this.httpClient.post<UserDto>(environment.userConnexion, data);
   }
 }

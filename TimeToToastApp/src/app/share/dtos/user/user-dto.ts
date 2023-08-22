@@ -3,12 +3,15 @@ import { TaskDto } from "../task/task-dto";
 import { UserEventRoleDto } from "../userEventRole/user-event-role-dto";
 
 export interface UserDto {
-    idUser:number,
-    name : string,
+    idUser?:number,
+    name?: string,
     password:string,
     login:string,
-    userEventRoles : UserEventRoleDto[],
-    contributions : GiftContributionDto[],
-    comments : Comment[],
-    assignedTasks: TaskDto[],
+    token:string,
+    role?:string,
+    refreshToken: string,
+    userEventRoles?: UserEventRoleDto[],
+    contributions?: GiftContributionDto[],
+    comments?: Comment[],
+    assignedTasks?: TaskDto[],
 }

@@ -51,7 +51,7 @@ public class UserAuthProvider {
         Date validity = new Date(now.getTime() + 3_600_000);
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
-        String userType = "USER";
+        String userType = ((UserDto) userDto).getRole();
         String name = ((UserDto) userDto).getName();
         String login = ((UserDto) userDto).getLogin();
 
@@ -69,7 +69,7 @@ public class UserAuthProvider {
         Date validity = new Date(now.getTime() + 86400000); //1 jour
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
-        String userType = "USER";
+        String userType = ((UserDto) userDto).getRole();
 
         return JWT.create()
                 .withIssuer(userType)
