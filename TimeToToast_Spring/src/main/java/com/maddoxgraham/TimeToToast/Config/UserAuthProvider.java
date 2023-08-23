@@ -52,14 +52,16 @@ public class UserAuthProvider {
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
         String userType = ((UserDto) userDto).getRole();
-        String name = ((UserDto) userDto).getName();
+        String first_name = ((UserDto) userDto).getFirstName();
+        String last_name = ((UserDto) userDto).getLastName();
         String login = ((UserDto) userDto).getLogin();
 
         return JWT.create()
                 .withIssuer(userType)
                 .withIssuedAt(now)
                 .withExpiresAt(validity)
-                .withClaim("name", name)
+                .withClaim("first_name", first_name)
+                .withClaim("last_name", last_name)
                 .withClaim("login", login)
                 .sign(Algorithm.HMAC256(secretKey));
     }

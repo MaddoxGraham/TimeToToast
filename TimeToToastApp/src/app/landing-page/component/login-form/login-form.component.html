@@ -1,28 +1,28 @@
 <div class="container mt-5 mb-5">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="form-container d-flex">
+        <div class="col-lg-8 col-md-10">
+            <div class="form-container d-flex flex-sm-column flex-md-row">
+
                 <!-- Image on the left -->
-                <div class="col-md-6 p-5">
+                <div class="imagedisplay col-md-6 p-4">
                     <img src="/assets/images/joinUs.webp" alt="Image Placeholder" class="img-fluid">
                 </div>
 
                 <!-- Form on the right -->
-                <div class="col-md-6 p-5">
-                    <h6 class=" mb-4">Prêt pour un nouvel Evènement ? </h6>
+                <div class="col-md-6 p-4">
+                    <h6 class="mb-4">Prêt pour un nouvel Evènement ?</h6>
                     <ul class="nav nav-pills justified mb-4" id="ex1" role="tablist">
-                        <li class="nav-item mx-4 " role="presentation">
-                            <button [ngClass]="active == 'login' ? 'nav-link active' : 'nav-link' " id="tab-login"
-                                (click)="onLoginTab()"> Login </button>
+                        <li class="nav-item mx-1 mx-md-4" role="presentation">
+                            <button [ngClass]="active == 'login' ? 'nav-link active' : 'nav-link'" id="tab-login"
+                                (click)="onLoginTab()">Se Connecter</button>
                         </li>
-                        <li class="nav-item mx-4" role="presentation">
-                            <button [ngClass]="active == 'register' ? 'nav-link active' : 'nav-link' " id="tab-register"
-                                (click)="onRegisterTab()"> Register </button>
+                        <li class="nav-item mx-1 mx-md-4" role="presentation">
+                            <button [ngClass]="active == 'register' ? 'nav-link active' : 'nav-link'" id="tab-register"
+                                (click)="onRegisterTab()">S'enregistrer</button>
                         </li>
                     </ul>
 
                     <div class="tab-content">
-
                         <!-- Login Form -->
                         <div [ngClass]=" active == 'login' ? 'tab-pane fade show active' : 'tab-pane fade ' ">
                             <form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm)">
@@ -32,22 +32,30 @@
                                 </div>
                         
                                 <div class="form-outline mb-4">
-                                    <label class="form-label" for="loginPassword"> Password </label>
+                                    <label class="form-label" for="loginPassword"> Mot de Passe </label>
                                     <input class="form-control" type="password" id="loginPassword" formControlName="password">
                                 </div>
                         
-                                <button class="btn btn-primary btn-block mb-4" type="submit"> Sign in </button>
+                                <button class="btn btn-primary btn-block mb-4" type="submit"> Se Connecter </button>
                             </form>
                         </div>
 
                         <!-- Register Form -->
                         <div [ngClass]=" active == 'register' ? 'tab-pane fade show active' : 'tab-pane fade ' ">
                             <form [formGroup]="registerForm" (ngSubmit)="onSubmit(registerForm)">
-                                <div class="form-outline mb-4">
-                                    <label class="form-label" for="name"> Name </label>
-                                    <input class="form-control" type="text" id="name" formControlName="name">
+                                <h6 class="txt-handwritting"> Qui etes vous ? </h6>
+
+
+                                <div class="d-flex flex-row">
+                                <div class="form-outline me-2 mb-4">
+                                    <label class="form-label" for="firstName"> Nom </label>
+                                    <input class="form-control" type="text" id="firstName" formControlName="firstName">
                                 </div>
-                        
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="lastName"> Prénom </label>
+                                    <input class="form-control" type="text" id="lastName" formControlName="lastName">
+                                </div>
+                                </div>
                                 <div class="form-outline mb-4">
                                     <label class="form-label" for="login"> Login </label>
                                     <input class="form-control" type="text" id="login" formControlName="login">
@@ -57,8 +65,46 @@
                                     <label class="form-label" for="password"> Password </label>
                                     <input class="form-control" type="password" id="password" formControlName="password">
                                 </div>
+
+                                <h6 class="txt-handwritting"> Vous contacter  </h6>
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="email"> Email </label>
+                                    <input class="form-control" type="email" id="email" formControlName="email">
+                                    <div class="invalid-feedback">
+                                        Please provide a valid city.
+                                      </div>
+                                </div>
+
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="phone"> Téléphone </label>
+                                    <input class="form-control" type="phone" id="phone" formControlName="phone">
+                                </div>
+
+                                <h6 class="txt-handwritting"> Dites nous en plus  </h6>
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="adresse"> Adresse </label>
+                                    <input class="form-control" type="text" id="adresse" formControlName="adresse">
+                                </div>
+                                <div class="d-flex flex-row">
+                                <div class="form-outline mb-4 me-2">
+                                    <label class="form-label" for="ville"> Ville </label>
+                                    <input class="form-control" type="text" id="ville" formControlName="ville">
+                                </div>
+
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="cp"> Code Postal </label>
+                                    <input class="form-control" type="text" id="cp" formControlName="cp">
+                                </div>
                         
-                                <button class="btn btn-primary btn-block mb-4" type="submit"> Register </button>
+                                </div>
+                        
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="birthday"> Date de Naissance </label>
+                                    <input class="form-control" type="date" id="birthday" formControlName="birthday">
+                                </div>
+
+
+                                <button class="btn btn-primary btn-block mb-4" type="submit"> S'enregistrer </button>
                             </form>
                         </div>
                     </div>

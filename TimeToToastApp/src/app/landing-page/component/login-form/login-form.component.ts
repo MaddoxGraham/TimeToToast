@@ -29,8 +29,15 @@ export class LoginFormComponent implements OnInit{
     });
 
     this.registerForm = this.formBuilder.group({
-        name: ['', Validators.required],
+        firstName: ['', Validators.required],
+        lastName: ['', Validators.required],
+        email: ['', Validators.required],
+        phone:['',Validators.required],
         login: ['', Validators.required],
+        adresse: ['', Validators.required],
+        ville: ['', Validators.required],
+        cp: ['', Validators.required],
+        birthday: ['', Validators.required],
         password: ['', Validators.required]
     });
   }
@@ -57,7 +64,16 @@ export class LoginFormComponent implements OnInit{
           })
         } else if(form === this.registerForm) {
           this.userService.addUser({
-            name: form.value.name.toLowerCase(),
+            firstName: form.value.firstName.toLowerCase(),
+            lastName: form.value.lastName.toLowerCase(),
+
+            email: form.value.email,
+            phone:form.value.phone,
+            adresse: form.value.adresse,
+            ville: form.value.ville,
+            cp: form.value.cp,
+            birthday: form.value.birthday,
+
             login: form.value.login,
             password: form.value.password
           }).subscribe(resp => {

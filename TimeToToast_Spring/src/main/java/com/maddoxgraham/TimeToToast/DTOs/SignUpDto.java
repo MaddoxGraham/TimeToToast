@@ -1,5 +1,5 @@
 package com.maddoxgraham.TimeToToast.DTOs;
 
-public record SignUpDto (String name, String login, char[] password) {
+public record SignUpDto (String firstName,String lastName, String login, char[] password) {
 
 }

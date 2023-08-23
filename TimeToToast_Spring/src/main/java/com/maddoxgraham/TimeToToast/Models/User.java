@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -21,7 +22,17 @@ public class User implements Serializable {
     @Column(nullable = false, updatable = false)
     private Long idUser;
 
-    private String name;
+    private String firstName;
+    private String lastName;
+
+    private String adresse;
+    private String cp;
+    private String ville;
+    private Date birthday;
+    private String avatar;
+    private String email;
+    private String phone;
+
     private String login;
     private String password;
 

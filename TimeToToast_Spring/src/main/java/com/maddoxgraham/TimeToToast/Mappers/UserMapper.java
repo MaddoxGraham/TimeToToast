@@ -10,11 +10,13 @@ import org.mapstruct.Mapping;
 public interface UserMapper {
 
     @Mapping(source = "role", target = "role")
-    @Mapping(source = "name", target = "name")
+    @Mapping(source = "firstName", target = "firstName")
+    @Mapping(source = "lastName", target = "lastName")
     UserDto toUserDto(User user );
 
     @Mapping(target = "password", ignore = true)
-    @Mapping(source = "name", target = "name")
+    @Mapping(source = "firstName", target = "firstName")
+    @Mapping(source = "lastName", target = "lastName")
     User signUpToUser(SignUpDto signUpDto);
 
     @Mapping(target = "password", ignore = true)

@@ -11,7 +11,7 @@ export class UserService {
 
   constructor(private httpClient: HttpClient) { }
 
-  addUser(data: { login: string, name:string, password: string }): Observable<UserDto> {
+  addUser(data: { login: string, firstName:string, lastName:string, email:string, ville:string, cp:string, birthday:Date,phone:string, adresse:string,  password: string }): Observable<UserDto> {
     return this.httpClient.post<UserDto>(environment.addUser, data);
   }
 }
