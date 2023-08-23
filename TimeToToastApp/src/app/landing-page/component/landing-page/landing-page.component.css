@@ -16,7 +16,7 @@ h2{
     background-repeat: no-repeat;
     background-size: cover;
     /* Remplacez par le chemin de votre image */
-    background-image: url('/assets/images/pexels-cottonbro-studio-3171837.jpg');
+    background-image: url('/assets/images/ban.webp');
 }
 
 /* Pour assurer la réactivité et désactiver l'effet parallaxe sur les mobiles (car il peut causer des problèmes) */
@@ -44,7 +44,7 @@ h2{
 
 
 .invitation-section {
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/assets/images/joinUs.jpg') no-repeat top center;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/assets/images/joinUs.webp') no-repeat top center;
     background-size: cover;
 }
 
