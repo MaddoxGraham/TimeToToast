@@ -1,0 +1,110 @@
+
+h2{
+    font-family: 'Phudu', cursive;
+    font-size: 1.2rem;
+    font-variant: small-caps;
+    letter-spacing: 2px;
+    color: #a57b45;
+}
+
+.user-profile-sidebar {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    background-color: #f4f4f4;
+}
+
+.user-profile-sidebar::before {
+    content: "";
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    top: 0;
+
+    background: radial-gradient(
+        circle at top left,
+        #3498db, /* blue */
+        #e74c3c, /* red */
+        #f1c40f, /* yellow */
+        #2ecc71  /* green */
+    );
+    transform: rotate(45deg);
+    opacity: 0.2;
+    z-index: 0;
+}
+
+.infoBox{
+    position: inherit;
+    z-index: 2 !important;
+}
+.infosText{
+    
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+ }
+
+
+.user-profile-sidebar h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    font-family: 'Yeseva One', cursive;
+    color: #a57b45;
+    font-variant: small-caps;
+
+}
+
+.user-profile-sidebar p {
+    margin-bottom: 0rem !important;
+}
+.user-profile-sidebar img {
+    display: block;
+    margin-bottom: 0 !important;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.custom-dropdown-toggle.dropdown-toggle::after {
+    content: none;
+}
+
+.dropdown .fa-cog:before {
+    color: rgb(104, 104, 104) !important;    
+}
+
+.dropdown span {
+    font-size: 0.8rem;
+    font-variant: small-caps;
+    letter-spacing: 2px;
+    color: rgb(158, 158, 158) !important;    
+}
+
+.myEvent {
+ margin-top: 1rem;
+}
+
+.parallax-section {
+    background: url('/assets/images/joinUs.webp') no-repeat center center;
+    background-attachment: fixed;
+    background-size: cover;
+    min-height: 400px; /* Hauteur de la section - ajustez selon vos besoins */
+    position: relative;
+    color: #ffffff; /* Couleur du texte pour contraster avec l'arrière-plan */
+}
+
+.parallax-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.parallax-tagline {
+    margin: 20px 0;
+    font-size: 18px;
+}
+.fa-plus{
+    color: grey;
+}

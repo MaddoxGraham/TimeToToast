@@ -1,1 +1,82 @@
-<p>user-profile works!</p>
+
+<div class="container-fluid">
+<div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3 user-profile-sidebar bg-light p-3">
+
+        <div class="dropdown text-right ">
+
+            <button class="btn btn-link dropdown-toggle custom-dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-cog"></i>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item " href="#" (click)="toggleDisplayName($event)">{{ showLogin ? 'Montrer Nom'
+                        :
+                        'Montrer Login' }}</a></li>
+                <li><a class="dropdown-item" [routerLink]="['/user/update']">Modifier Profil</a></li>
+            </ul>
+        </div>
+
+        <div class="infoBox m-auto text-center">
+            <img src="/assets/images/user2.webp" alt="User Avatar" class="img-fluid rounded-circle mb-3"
+                style="width: 100px;">
+            <h3>{{ showLogin ? user.login : (user.lastName + ' ' + user.firstName) }}</h3>
+
+            <div class="infosText">
+                <p>Email: {{user.email}}</p>
+                <p>Phone: {{user.phone}}</p>
+            </div>
+            <h2> vos coordonnées </h2>
+            <div class="infosText">
+                <p> {{user.adresse}} </p>
+                <p> {{user.ville | uppercase}} </p>
+                <p> {{user.cp}} </p>
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="mainContent col-md-9">
+        <!-- User Info Section -->
+
+        <!-- Events Section -->
+
+
+        <div class="container box-shadow rounded myEvent border p-4">
+            <h2 class="mb-4">Mes Derniers Evènement</h2>
+            <div class="row mb-3 ">
+                <!-- Event -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Event Title</h5>
+                            <p class="card-text">Description of the event...</p>
+                            <a href="/event/path" class="btn btn-primary">Go to Event</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-right m-auto">
+                <span class="pe-2"> voir tous mes évènements</span>
+                <a [routerLink]="['/path/to/your/route']"><i class="fa fa-plus"></i></a>
+            </div>
+        </div>
+
+
+        <!-- Create Event Section -->
+        <div class="parallax-section box-shadow card mt-4 rounded">
+            <div class="card-body">
+                <div class="parallax-content">
+                    <h5 class="card-title">Créer un événement inoubliable dés maintenant ! </h5>
+                    <a href="#" class="btn btn-primary">Créer un Evenement</a>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+</div>

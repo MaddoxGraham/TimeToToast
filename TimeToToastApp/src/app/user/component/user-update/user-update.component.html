@@ -1,0 +1,98 @@
+
+<div class="bubbles">
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+  </div>
+
+<div class="container mt-5 mb-5 position-relative">
+    <h1 class="text-center mb-5">Modifier mon profil</h1>
+
+    <form action="/path/to/update/user" method="post">
+
+        <div class="row">
+            <h2> votre identitée</h2>
+            <div class="col-md-6">
+
+                <div class="form-group">
+                    <label for="firstName">Prénom:</label>
+                    <input type="text" class="form-control" id="firstName" name="firstName" value="{{user.firstName}}" required>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="lastName">Nom:</label>
+                    <input type="text" class="form-control" id="lastName" name="lastName" value="{{user.lastName}}"  required>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="login">Login:</label>
+            <input type="text" class="form-control" id="login" name="login" value="{{user.login}}"  required>
+        </div>
+
+        <button (click)="togglePasswordFields()" class="mt-4 btn-animated-border">Modifier mon mot de passe</button>
+
+        <div *ngIf="showPasswordFields">
+            <div class="form-group position-relative">
+                <label for="password">Mot de passe:</label>
+                <input [type]="passwordFieldType" class="form-control" id="password" name="password" required>
+                <i class="fa fa-eye position-absolute" style="right: 10px; top: 30px;" (click)="togglePasswordVisibility()"></i>
+            </div>
+            <div class="form-group position-relative">
+                <label for="confirmPassword">Confirmer le mot de passe:</label>
+                <input [type]="confirmPasswordFieldType" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                <i class="fa fa-eye position-absolute" style="right: 10px; top: 30px;" (click)="toggleConfirmPasswordVisibility()"></i>
+            </div>
+        </div>
+
+
+
+        <div class=" mt-4 form-group">
+            <h2> vos coordonnées</h2>
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{user.email}}" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Téléphone:</label>
+            <input type="tel" class="form-control" id="phone" value="{{user.phone}}" name="phone">
+        </div>
+
+
+        <div class="mt-4 form-group">
+            <h2> votre adresse</h2>
+            <label for="adresse">Adresse:</label>
+            <input type="text" class="form-control" id="adresse" value="{{user.adresse}}" name="adresse">
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="ville">Ville:</label>
+                    <input type="text" class="form-control" id="ville" name="ville" value="{{user.ville}}" required>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="cp">Code Postal:</label>
+                    <input type="text" class="form-control" id="cp" name="cp" value="{{user.cp}}"  required>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="mt-5 form-group">
+            <label for="profilePicture me-2">Photo de profil:</label>
+            <input type="file" class="form-control-file" id="profilePicture" name="profilePicture">
+        </div>
+        <div class="text-right">
+        <button type="submit" class="btn-animated-border">Mettre à jour le profil</button> </div>
+    </form>
+</div>

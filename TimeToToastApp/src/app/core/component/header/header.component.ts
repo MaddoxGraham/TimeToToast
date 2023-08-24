@@ -33,7 +33,7 @@ export class HeaderComponent implements OnInit, OnDestroy{
   }
   
   private Routes = [
-    { label: ' Mon profil ', routerLink: 'user/userProfile' },
+    { label: ' Mon profil ', routerLink: 'user/user' },
     { label: 'Mes Evenements', routerLink: 'event/userEvent' },
     { label: 'Créer un Evenement', routerLink: 'event/formEvent' },
     { label: 'Se déconnecter', command: (event: any) => this.logout() }

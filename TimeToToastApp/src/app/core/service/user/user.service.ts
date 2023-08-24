@@ -14,4 +14,10 @@ export class UserService {
   addUser(data: { login: string, firstName:string, lastName:string, email:string, ville:string, cp:string, birthday:Date,phone:string, adresse:string,  password: string }): Observable<UserDto> {
     return this.httpClient.post<UserDto>(environment.addUser, data);
   }
+
+  getUserByIdUser(id: number): Observable<UserDto> {
+    const url = `${environment.getUser}/${id}`; 
+    return this.httpClient.get<UserDto>(url);
+  }
+
 }

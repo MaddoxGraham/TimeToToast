@@ -5,6 +5,7 @@ export const environment = {
     refreshToken: 'http://localhost:8080/login/refresh-token',
     logout: '',
     addUser: 'http://localhost:8080/register',
+    getUser:'http://localhost:8080/find',
 
   }
   

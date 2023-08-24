@@ -4,13 +4,15 @@ import { UserProfileComponent } from './component/user-profile/user-profile.comp
 import { AdminComponent } from './component/admin/admin.component';
 import { ShareModule } from '../share/share.module';
 import { UserRoutingModule } from './user-routing.module';
+import { UserUpdateComponent } from './component/user-update/user-update.component';
 
 
 
 @NgModule({
   declarations: [
     UserProfileComponent,
-    AdminComponent
+    AdminComponent,
+    UserUpdateComponent
   ],
   imports: [
     UserRoutingModule,
