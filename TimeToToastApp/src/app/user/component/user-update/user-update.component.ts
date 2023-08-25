@@ -62,28 +62,18 @@ export class UserUpdateComponent implements OnInit {
     if(updateForm.valid) {
       this.updatedUser = this.updateForm.value
       console.log(this.updatedUser)
-
+      console.log(this.user.idUser)
+      if (this.user.idUser) {
+        this.userService.updateUser(this.user.idUser, this.updatedUser).subscribe(
+            success => {
+              sessionStorage.setItem('user', JSON.stringify(success));
+            },
+            error => {
+                console.log("Erreur lors de la mise à jour", error);
+            }
+        );
+      }
     }
-//     if (updateForm.valid) {
-//       const updatedFields: any = {};
-//       Object.keys(this.updateForm.controls).forEach(key => {
-//         if (updateForm.value[key] !== this.user[key]) {
-//           updatedFields[key] = updateForm.value[key];
-//         }
-//       });
-      
-//       this.updateUser(this.user.id, updatedFields).subscribe(
-//         response => {
-//           console.log('Le profil a été mis à jour avec succès!');
-//           sessionStorage.setItem('user', JSON.stringify(response));
-//         },
-//         error => {
-//           console.log('Erreur lors de la mise à jour du profil:', error);
-//         }
-//       );
-//     } else {
-//       console.log('Formulaire invalide');
-//     }
  }
 
 }
