@@ -88,10 +88,24 @@ public class UserService {
         return userRepository.findAll();
     }
 
-   public User updateUser(User user){
-        return userRepository.save(user);
-    }
+    public User updateUser(Long idUser, User user) {
+        User existingUser = userRepository.findUserByIdUser(user.getIdUser())
+                .orElseThrow(() -> new UserNotFoundException("User n° " + user.getIdUser() + " was not found"));
 
+        // Fusionner les champs de 'user' avec 'existingUser' selon vos besoins
+        if (user.getFirstName() != null) existingUser.setFirstName(user.getFirstName());
+        if (user.getLastName() != null) existingUser.setLastName(user.getLastName());
+        if (user.getPassword() != null) existingUser.setPassword(user.getPassword());
+        if (user.getPhone() != null) existingUser.setPhone(user.getPhone());
+        if (user.getEmail() != null) existingUser.setEmail(user.getEmail());
+        if (user.getBirthday() != null) existingUser.setBirthday(user.getBirthday());
+        if (user.getAdresse() != null) existingUser.setAdresse(user.getAdresse());
+        if (user.getVille() != null) existingUser.setVille(user.getVille());
+        if (user.getCp() != null) existingUser.setCp(user.getCp());
+        // Répétez pour les autres champs
+
+        return userRepository.save(existingUser);
+    }
      public User findUserByIdUser(Long idUser){
         return userRepository.findUserByIdUser(idUser).orElseThrow(() -> new UserNotFoundException("User n° " + idUser + " was not found"));
     }

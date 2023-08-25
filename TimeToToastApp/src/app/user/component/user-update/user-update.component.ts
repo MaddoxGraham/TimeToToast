@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { UserDto } from 'src/app/share/dtos/user/user-dto';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthenticationService } from 'src/app/core/service/authentication/authentication.service';
+import { UserService } from 'src/app/core/service/user/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-update',
@@ -7,11 +11,18 @@ import { UserDto } from 'src/app/share/dtos/user/user-dto';
   styleUrls: ['./user-update.component.css']
 })
 export class UserUpdateComponent implements OnInit {
-
   user!: UserDto;
   showPasswordFields = false;
   passwordFieldType = 'password';
   confirmPasswordFieldType = 'password';
+  updateForm!: FormGroup;
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private authService: AuthenticationService,
+    private userService: UserService,
+    private router: Router
+  ) {}
 
   togglePasswordFields() {
     this.showPasswordFields = !this.showPasswordFields;
@@ -26,9 +37,47 @@ export class UserUpdateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const userString = sessionStorage.getItem("user");
+    const userString = sessionStorage.getItem('user');
     if (userString) {
       this.user = JSON.parse(userString) as UserDto;
     }
+
+    this.updateForm = this.formBuilder.group({
+      firstName: [this.user.firstName || '', Validators.required],
+      lastName: [this.user.lastName || '', Validators.required],
+      email: [this.user.email || '', Validators.required],
+      phone: [this.user.phone || '', Validators.required],
+      login: [this.user.login || '', Validators.required],
+      adresse: [this.user.adresse || '', Validators.required],
+      ville: [this.user.ville || '', Validators.required],
+      cp: [this.user.cp || '', Validators.required],
+      birthday: [this.user.birthday || ''],
+      password: [this.user.password || '']
+      // Ajouter un contrôle pour le mot de passe de confirmation si nécessaire
+    });
   }
+
+  onSubmit(updateForm: FormGroup): void {
+    if (updateForm.valid) {
+      const updatedFields: any = {};
+      Object.keys(this.updateForm.controls).forEach(key => {
+        if (updateForm.value[key] !== this.user[key]) {
+          updatedFields[key] = updateForm.value[key];
+        }
+      });
+      
+      this.updateUser(this.user.id, updatedFields).subscribe(
+        response => {
+          console.log('Le profil a été mis à jour avec succès!');
+          sessionStorage.setItem('user', JSON.stringify(response));
+        },
+        error => {
+          console.log('Erreur lors de la mise à jour du profil:', error);
+        }
+      );
+    } else {
+      console.log('Formulaire invalide');
+    }
+}
+
 }

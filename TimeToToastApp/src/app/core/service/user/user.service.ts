@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class UserService {
-
+  
   constructor(private httpClient: HttpClient) { }
 
   addUser(data: { login: string, firstName:string, lastName:string, email:string, ville:string, cp:string, birthday:Date,phone:string, adresse:string,  password: string }): Observable<UserDto> {
@@ -20,4 +20,7 @@ export class UserService {
     return this.httpClient.get<UserDto>(url);
   }
 
+  updateUser(id: string, user: any): Observable<any> {
+    return this.httpClient.put(`${environment.updateUser}/${id}`, user);
+  }
 }

@@ -6,6 +6,6 @@ export const environment = {
     logout: '',
     addUser: 'http://localhost:8080/register',
     getUser:'http://localhost:8080/find',
-
-  }
+    updateUser:'http://localhost:8080/user/update',
+}
   
