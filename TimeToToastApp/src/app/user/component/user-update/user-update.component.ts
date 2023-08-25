@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 })
 export class UserUpdateComponent implements OnInit {
   user!: UserDto;
+  updatedUser!: UserDto;
   showPasswordFields = false;
   passwordFieldType = 'password';
   confirmPasswordFieldType = 'password';
@@ -58,26 +59,31 @@ export class UserUpdateComponent implements OnInit {
   }
 
   onSubmit(updateForm: FormGroup): void {
-    if (updateForm.valid) {
-      const updatedFields: any = {};
-      Object.keys(this.updateForm.controls).forEach(key => {
-        if (updateForm.value[key] !== this.user[key]) {
-          updatedFields[key] = updateForm.value[key];
-        }
-      });
-      
-      this.updateUser(this.user.id, updatedFields).subscribe(
-        response => {
-          console.log('Le profil a été mis à jour avec succès!');
-          sessionStorage.setItem('user', JSON.stringify(response));
-        },
-        error => {
-          console.log('Erreur lors de la mise à jour du profil:', error);
-        }
-      );
-    } else {
-      console.log('Formulaire invalide');
+    if(updateForm.valid) {
+      this.updatedUser = this.updateForm.value
+      console.log(this.updatedUser)
+
     }
-}
+//     if (updateForm.valid) {
+//       const updatedFields: any = {};
+//       Object.keys(this.updateForm.controls).forEach(key => {
+//         if (updateForm.value[key] !== this.user[key]) {
+//           updatedFields[key] = updateForm.value[key];
+//         }
+//       });
+      
+//       this.updateUser(this.user.id, updatedFields).subscribe(
+//         response => {
+//           console.log('Le profil a été mis à jour avec succès!');
+//           sessionStorage.setItem('user', JSON.stringify(response));
+//         },
+//         error => {
+//           console.log('Erreur lors de la mise à jour du profil:', error);
+//         }
+//       );
+//     } else {
+//       console.log('Formulaire invalide');
+//     }
+ }
 
 }

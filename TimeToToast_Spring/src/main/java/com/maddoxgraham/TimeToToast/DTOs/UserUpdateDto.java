@@ -13,7 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDto {
+public class UserUpdateDto {
 
     private Long idUser;
     private String firstName;
@@ -28,9 +28,10 @@ public class UserDto {
     private String email;
     private String phone;
 
+    private String password;
+
     private String login;
     private String token;
     private String refreshToken;
     private String role;
-
 }

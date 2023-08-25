@@ -20,7 +20,7 @@ export class UserService {
     return this.httpClient.get<UserDto>(url);
   }
 
-  updateUser(id: string, user: any): Observable<any> {
-    return this.httpClient.put(`${environment.updateUser}/${id}`, user);
+  updateUser(id: string, user: UserDto): Observable<UserDto> {
+    return this.httpClient.put<UserDto>(`${environment.updateUser}/${id}`, user);
   }
 }

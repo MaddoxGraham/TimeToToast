@@ -4,8 +4,7 @@ import { UserEventRoleDto } from "../userEventRole/user-event-role-dto";
 
 export interface UserDto {
     idUser?:number,
-
-
+    
     firstName?:string;
     lastName?:string;
     adresse?:string;

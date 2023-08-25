@@ -3,8 +3,10 @@ package com.maddoxgraham.TimeToToast.Models;
 import com.maddoxgraham.TimeToToast.Models.Enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
@@ -28,7 +30,9 @@ public class User implements Serializable {
     private String adresse;
     private String cp;
     private String ville;
-    private Date birthday;
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate birthday;
     private String avatar;
     private String email;
     private String phone;

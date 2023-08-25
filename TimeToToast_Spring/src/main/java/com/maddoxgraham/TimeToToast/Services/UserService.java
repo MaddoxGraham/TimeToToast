@@ -3,6 +3,7 @@ package com.maddoxgraham.TimeToToast.Services;
 import com.maddoxgraham.TimeToToast.DTOs.SignUpDto;
 import com.maddoxgraham.TimeToToast.DTOs.UserDto;
 import com.maddoxgraham.TimeToToast.DTOs.CredentialsDto;
+import com.maddoxgraham.TimeToToast.DTOs.UserUpdateDto;
 import com.maddoxgraham.TimeToToast.Exception.AppException;
 import com.maddoxgraham.TimeToToast.Exception.UserNotFoundException;
 import com.maddoxgraham.TimeToToast.Mappers.UserMapper;
@@ -38,7 +39,7 @@ public class UserService {
     }
 
     public UserDto register(SignUpDto signUpDto){
-        Optional<User> oUser = userRepository.findUserByLogin(signUpDto.login());
+        Optional<User> oUser = userRepository.findUserByLogin(signUpDto.getLogin());
 
         if (oUser.isPresent()){
             throw new AppException("Login already exists", HttpStatus.BAD_REQUEST);
@@ -46,7 +47,8 @@ public class UserService {
 
         User user = userMapper.signUpToUser(signUpDto);
         user.setRole(Role.USER);
-        user.setPassword(passwordEncoder.encode(CharBuffer.wrap(signUpDto.password())));
+        user.setPassword(passwordEncoder.encode(CharBuffer.wrap(signUpDto.getPassword())));
+        user.setBirthday(signUpDto.getBirthday());
         User savedUser = userRepository.save(user);
         return userMapper.toUserDto(savedUser);
     }
@@ -88,23 +90,25 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User updateUser(Long idUser, User user) {
-        User existingUser = userRepository.findUserByIdUser(user.getIdUser())
+    public UserDto updateUser(Long idUser, UserUpdateDto user) {
+        User existingUser = userRepository.findUserByIdUser(idUser)
                 .orElseThrow(() -> new UserNotFoundException("User n° " + user.getIdUser() + " was not found"));
 
-        // Fusionner les champs de 'user' avec 'existingUser' selon vos besoins
-        if (user.getFirstName() != null) existingUser.setFirstName(user.getFirstName());
-        if (user.getLastName() != null) existingUser.setLastName(user.getLastName());
-        if (user.getPassword() != null) existingUser.setPassword(user.getPassword());
-        if (user.getPhone() != null) existingUser.setPhone(user.getPhone());
-        if (user.getEmail() != null) existingUser.setEmail(user.getEmail());
-        if (user.getBirthday() != null) existingUser.setBirthday(user.getBirthday());
-        if (user.getAdresse() != null) existingUser.setAdresse(user.getAdresse());
-        if (user.getVille() != null) existingUser.setVille(user.getVille());
-        if (user.getCp() != null) existingUser.setCp(user.getCp());
-        // Répétez pour les autres champs
 
-        return userRepository.save(existingUser);
+        // Fusionner les champs de 'user' avec 'existingUser' selon vos besoins
+        if (user.getFirstName() != existingUser.getFirstName()) existingUser.setFirstName(user.getFirstName());
+        if (user.getLastName() != existingUser.getLastName()) existingUser.setLastName(user.getLastName());
+        if (user.getPassword() != "") existingUser.setPassword(passwordEncoder.encode(CharBuffer.wrap(user.getPassword())));
+        if (user.getPhone() != existingUser.getPhone()) existingUser.setPhone(user.getPhone());
+        if (user.getEmail() != existingUser.getEmail()) existingUser.setEmail(user.getEmail());
+        if (user.getBirthday() != null) existingUser.setBirthday(user.getBirthday());
+        if (user.getAdresse() != existingUser.getAdresse()) existingUser.setAdresse(user.getAdresse());
+        if (user.getVille() != existingUser.getVille()) existingUser.setVille(user.getVille());
+        if (user.getCp() != existingUser.getCp()) existingUser.setCp(user.getCp());
+
+        userRepository.save(existingUser);
+        UserDto updatedUser = userMapper.toUserDto(existingUser);
+        return updatedUser;
     }
      public User findUserByIdUser(Long idUser){
         return userRepository.findUserByIdUser(idUser).orElseThrow(() -> new UserNotFoundException("User n° " + idUser + " was not found"));

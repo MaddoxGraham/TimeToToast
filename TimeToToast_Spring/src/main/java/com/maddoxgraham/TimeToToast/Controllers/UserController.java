@@ -1,5 +1,7 @@
 package com.maddoxgraham.TimeToToast.Controllers;
 
+import com.maddoxgraham.TimeToToast.DTOs.UserDto;
+import com.maddoxgraham.TimeToToast.DTOs.UserUpdateDto;
 import com.maddoxgraham.TimeToToast.Models.User;
 import com.maddoxgraham.TimeToToast.Services.UserService;
 import org.springframework.http.HttpStatus;
@@ -43,8 +45,8 @@ public class UserController {
 
 
     @PutMapping("/update/{idUser}")
-    public ResponseEntity<User> updateUser(@PathVariable("idUser") Long idUser, @RequestBody User user) {
-        User updateUser = userService.updateUser(idUser, user);
+    public ResponseEntity<UserDto> updateUser(@PathVariable("idUser") Long idUser, @RequestBody UserUpdateDto user) {
+        UserDto updateUser = userService.updateUser(idUser, user);
         return new ResponseEntity<>(updateUser, HttpStatus.OK);
     }
     @DeleteMapping("/delete/{idUser}")
