@@ -1,0 +1,82 @@
+<div class="bubbles">
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+</div>
+
+<!---->
+<div class="container my-5">
+    <div class="row">
+      <div class="col-md-6">
+        <h2 class="mb-4">Quel type d'événement avez-vous en tête ? </h2>
+        <form [formGroup]="form" class="d-flex flex-column justify-content-between" style="height: 200px;">
+          <div class="form-group" *ngIf="currentStep === 1">
+            <!-- Step 1 -->
+            <div class="d-flex align-items-center">
+                <div class="me-2"> 
+              <label for="category" >Catégorie:</label>
+              <select *ngIf="!useCustomCategory" id="category" formControlName="category" class="form-control me-2" required>
+                <option value=""  selected>Selectionner une catégorie</option>
+                <option value="Anniverssaire">Anniverssaire</option>
+                <option value="Marriage">Marriage</option>
+                <option value="Retraite">Retraite</option>
+                <option value="Soirée entre amis">Soirée entre amis</option>
+                <option value="Réunion Familiale">Réunion Familiale</option>
+                <option value="Fête d'Entreprise">Fête d'Entreprise</option>
+                <option value="Anniverssaire de Marriage">Anniverssaire de Marriage</option>
+                <option value="Nouvelle Année">Nouvelle Année</option>
+                <option value="Fête Religieuse">Fête Religieuse</option>
+              </select>
+            </div>
+              <input *ngIf="useCustomCategory" type="text" id="customCategory" formControlName="customCategory" class="form-control me-2" placeholder="Entrez votre catégorie" required>
+              <button type="button" (click)="toggleInput()" class="btn btn-primary">Rentrer votre catégorie</button>
+            </div>
+          </div>
+<!-- STEP 2  -->
+<div class="form-group mt-3" *ngIf="currentStep === 2">
+  <!-- Step 2 -->
+  <label for="eventTitle">Donnez un nom à votre événement:</label>
+  <input type="text" id="eventTitle" formControlName="eventTitle" class="form-control" required>
+
+  <label for="eventDescription" class="mt-2">Description:</label>
+  <input type="text" id="eventDescription" formControlName="eventDescription" class="form-control">
+
+  <label for="eventDate" class="mt-2">Date de l'événement:</label>
+  <input type="date" id="eventDate" formControlName="eventDate" class="form-control" required>
+</div>
+<!-- ... -->
+
+          <div class="mt-auto d-flex justify-content-start">
+            <button type="button" (click)="continue()" [disabled]="!form.valid" class="btn btn-success">Continuer</button>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-6">
+        <h2 class="mb-4 text-end">Voir mon événement </h2>
+        <div class="card">
+            <div class="card-header parallax">
+              </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item" *ngFor="let step of completedSteps">
+                  <div *ngIf="step.step === 1">{{ step.value.category || step.value.customCategory }}</div>
+                  <div *ngIf="step.step === 2">
+                    Titre: {{ step.value.eventTitle }} <br>
+                    Date: {{ step.value.eventDate }} <br>
+                    Description: {{ step.value.eventDescription }}
+                  </div>
+                </li>
+              </ul>
+          <div class="card-footer d-flex justify-content-start">
+            <button type="button" (click)="goBack()" *ngIf="completedSteps.length > 0" class="btn btn-warning">Retour</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

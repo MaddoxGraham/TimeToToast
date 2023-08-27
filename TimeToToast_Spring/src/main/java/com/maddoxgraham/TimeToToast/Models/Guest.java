@@ -20,6 +20,7 @@ public class Guest implements Serializable {
     @Column(nullable = false, updatable = false)
     private Long idGuest;
     private Role role;
+
     private Long token;
 
     @ManyToOne

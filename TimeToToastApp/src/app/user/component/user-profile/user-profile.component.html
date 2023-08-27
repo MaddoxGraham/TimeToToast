@@ -54,14 +54,14 @@
                         <div class="card-body">
                             <h5 class="card-title">Event Title</h5>
                             <p class="card-text">Description of the event...</p>
-                            <a href="/event/path" class="btn btn-primary">Go to Event</a>
+                            <a [routerLink]="['/event/singleEvent']" class="btn btn-primary">Go to Event</a>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="text-right m-auto">
                 <span class="pe-2"> voir tous mes évènements</span>
-                <a [routerLink]="['/path/to/your/route']"><i class="fa fa-plus"></i></a>
+                <a [routerLink]="['/event/myEvent']"><i class="fa fa-plus"></i></a>
             </div>
         </div>
 
@@ -71,7 +71,7 @@
             <div class="card-body">
                 <div class="parallax-content">
                     <h5 class="card-title">Créer un événement inoubliable dés maintenant ! </h5>
-                    <a href="#" class="btn btn-primary">Créer un Evenement</a>
+                    <a [routerLink]="['/event/creer']" class="btn btn-primary">Créer un Evenement</a>
                 </div>
             </div>
         </div>

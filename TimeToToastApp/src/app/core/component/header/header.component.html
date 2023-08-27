@@ -15,9 +15,15 @@
           </a>
 
           <!-- Icône "Login" à droite -->
-          <a class="ms-4" routerLink="/login" title="Login">
+          <a class="ms-4" *ngIf="connected" routerLink="/user/user" title="Login">
               <i class="fas fa-user-circle fa-3x text-dark"></i>
           </a>
+
+
+          <a class="ms-4" *ngIf="!connected" routerLink="/login" title="Login">
+            <i class="fas fa-user-circle fa-3x text-dark"></i>
+        </a>
+
       </div>
   </nav>
 
