@@ -20,6 +20,7 @@ public class EventDto {
     private String Description;
     private String Categorie;
     private String adresse;
+    private String startTime;
     private String cp;
     private String ville;@DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate createdAt;

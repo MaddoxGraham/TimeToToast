@@ -31,7 +31,7 @@ public class Event implements Serializable {
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate EventDate;
-
+    private String startTime;
     private String Categorie;
     private String Adresse;
     private String Ville;
