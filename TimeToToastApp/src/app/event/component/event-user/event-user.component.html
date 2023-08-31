@@ -28,13 +28,17 @@
   </nav>
   
   <!-- Corps du component -->
-  <div class="container mb-5 mt-4">
-    <div class="card m-2">
-      <div class="card-body">
-        <h5 class="card-title">Event Title</h5>
-        <p class="card-text">Description of the event...</p>
-        <a [routerLink]="['/event/singleEvent']" class="btn btn-primary">Go to Event</a>
+  <div *ngFor="let userEventRole of userEventRoles" class="card m-2">
+    <div>{{ userEventRole.role }}</div>
+    <div>{{ userEventRole.idEvent }}</div>
+    <div *ngIf="userEventRole.idEvent">
+      <!-- Appel de la méthode pour obtenir les détails de l'événement -->
+      <div *ngIf="userEventRole.idEvent">
+        <ng-container *ngIf="eventDetails[userEventRole.idEvent]; else loadingTemplate">
+          <div>{{ eventDetails[userEventRole.idEvent].title }}</div>
+          <!-- Autres détails de l'événement -->
+        </ng-container>
       </div>
     </div>
   </div>
-  
+  <ng-template #loadingTemplate>Loading event details...</ng-template>

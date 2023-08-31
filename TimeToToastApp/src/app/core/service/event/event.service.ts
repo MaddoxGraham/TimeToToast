@@ -1,5 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { EventDto } from 'src/app/share/dtos/event/event-dto';
+import { UserEventRoleDto } from 'src/app/share/dtos/userEventRole/user-event-role-dto';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -8,22 +12,22 @@ export class EventService {
 
   constructor(private httpClient: HttpClient) { }
 
-  
-    // constructor(private http: HttpClient) { }
-        
-    // public getEvents(): Observable<Event[]> {
-    //     return this.http.get<Event[]>(`${this.apiServerUrl}/event/all`);
-    // }
 
-    // public addEvent(event: Event): Observable<Event> {
-    //     return this.http.post<Event>(`${this.apiServerUrl}/event/add`, event);
-    // }
+    addEvent(data: { adresse: string, categorie:string, description:string, eventDate:Date, title:string, cp:string, ville:Date,createdAt:Date, startTime:string}): Observable<EventDto> {
+      return this.httpClient.post<EventDto>(environment.addevent, data);
+    }
 
-    // public udpateEvent(event: Event): Observable<Event> {
-    //     return this.http.put<Event>(`${this.apiServerUrl}/event/update`, event);
-    // }
+    getEventById(id: number): Observable<EventDto> {
+      const url = `${environment.getEvent}/${id}`; 
+      return this.httpClient.get<EventDto>(url);
+    }
 
-    // public deleteEvent(eventId: number): Observable<void> {
-    //     return this.http.delete<void>(`${this.apiServerUrl}/event/delete/${eventId}`);
-    // }
-}
+
+    addUserEventRole(data: { idEvent: number, idUser: number, role: string }): Observable<UserEventRoleDto> {
+      return this.httpClient.post<UserEventRoleDto>(environment.addUserEventRole, data);
+    }
+
+    getUserRolesByUserId(userId: number): Observable<UserEventRoleDto[]> {
+      return this.httpClient.get<UserEventRoleDto[]>(`${environment.getUserEvents}/${userId}`);
+    } 
+  }

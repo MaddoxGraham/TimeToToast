@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { EventService } from 'src/app/core/service/event/event.service';
+import { UserDto } from 'src/app/share/dtos/user/user-dto';
+
 
 @Component({
   selector: 'app-event-creation',
@@ -7,97 +11,197 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./event-creation.component.css']
 })
 export class EventCreationComponent implements OnInit {
-  public form!: FormGroup;
-  public useCustomCategory: boolean = false;
-  public completedSteps: any[] = [];
-  public currentStep: number = 1;
-  public minDate!: string;
 
-  constructor(private fb: FormBuilder) {}
+  public previewData: any[] = [];
+  public step:number = 1;
+  public createEvent!:FormGroup;
+  public useCustomCategory: boolean = false;
+  public categorie!:string;
+  user!: UserDto;
+  public minDate!: string;
+  public heureEvent: string = '';
+  public today: Date = new Date (); 
+
+
+  constructor(private builder: FormBuilder,
+              private eventService: EventService,
+              private router: Router) {}
 
   ngOnInit(): void {
-    this.form = this.fb.group({
-      category: ['', Validators.required],
+    this.createEvent = this.builder.group({
+      // Put form fields here.
+      //step1
+      category: [''],
       customCategory: [''],
-      eventTitle: ['', Validators.required],
-      eventDescription: [''],
-      eventDate: ['', Validators.required],
-      heure: ['', [Validators.required, Validators.min(0), Validators.max(23)]],
-      minutes: ['', [Validators.required, Validators.min(0), Validators.max(59)]]
+
+      //step2
+      eventTitle:[''],
+      eventDescription:[''],
+      eventDate:[''],
+      heure:[''],
+      minutes:[''],
+
+        //step2
+
+       adresse:[''],
+       ville:[''],
+       cp:[''],
     });
 
-    const date = new Date();
-    this.minDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+    this.createEvent.valueChanges.subscribe(() => {
+      this.updateCategorie(); // Mettez à jour la catégorie en fonction des valeurs des contrôles
+      this.updateHeureEvent(); // Mettre à jour l'heure de l'Event. 
+    });
 
-    this.form.get('eventTitle')?.disable();
-    this.form.get('eventDescription')?.disable();
-    this.form.get('eventDate')?.disable();
-    this.form.get('heure')?.disable();
-    this.form.get('minutes')?.disable();
+      const date = new Date();
+      this.minDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+
+
   }
+
+    updateCategorie() {
+      const categoryControl = this.createEvent.get('category');
+      const customCategoryControl = this.createEvent.get('customCategory');    
+      if (categoryControl && customCategoryControl) {
+        if (this.createEvent.valid) {
+          this.categorie = categoryControl.value || customCategoryControl.value;
+        } else {
+          this.categorie = '';
+        }
+      }
+    }
+
+    updateHeureEvent() {
+      const heureControl = this.createEvent.get('heure');
+      const minuteControl = this.createEvent.get('minutes');
+    
+      if (heureControl && minuteControl) {
+        const heureValue = heureControl.value;
+        const minuteValue = minuteControl.value;
+    
+        // Traitement pour l'heure
+        let heureEvent = '';
+        if (heureValue < 10) {
+          heureEvent = '0' + heureValue.toString();
+        } else {
+          heureEvent = heureValue.toString();
+        }
+    
+        // Traitement pour les minutes
+        let minuteEvent = '';
+        if (minuteValue < 10) {
+          minuteEvent = '0' + minuteValue.toString();
+        } else {
+          minuteEvent = minuteValue.toString();
+        }
+    
+        // Concaténation de l'heure et des minutes
+        this.heureEvent = heureEvent + minuteEvent;
+      }
+    }
+
+    isContinueButtonDisabled(): boolean {
+      return !this.categorie;
+    }
+
+    isvalidButtonDisbled(): boolean {
+      const adresseControl = this.createEvent.get('adresse');
+      const villeControl = this.createEvent.get('ville');
+      const cpControl = this.createEvent.get('cp');
+    
+      return !(adresseControl?.value && villeControl?.value && cpControl?.value);
+    }
+
+  onPrevious(){ this.step --; }
+
+  onContinue(){ 
+      this.previewData = [];
+    this.previewData.push(this.createEvent.value);
+
+    console.log(this.previewData)
+    console.log(this.step)
+    this.step ++;
+
+    }
+
+  onValidate(){ 
+    this.previewData = [];
+    this.previewData.push(this.createEvent.value);
+    console.log('validate')  }
 
   toggleInput() {
     this.useCustomCategory = !this.useCustomCategory;
+    const categoryControl = this.createEvent.get('category');
+    const customCategoryControl = this.createEvent.get('customCategory');
     if (this.useCustomCategory) {
-      this.form.get('category')?.disable();
-      this.form.get('customCategory')?.enable();
-      this.form.get('customCategory')?.setValidators([Validators.required]);
-      this.form.get('customCategory')?.updateValueAndValidity();
+      categoryControl?.disable();
+      customCategoryControl?.enable();
+      customCategoryControl?.setValidators([Validators.required]);
     } else {
-      this.form.get('customCategory')?.disable();
-      this.form.get('category')?.enable();
-      this.form.get('category')?.setValidators([Validators.required]);
-      this.form.get('category')?.updateValueAndValidity();
+      customCategoryControl?.disable();
+      categoryControl?.enable();
+      categoryControl?.setValidators([Validators.required]);
+    }
+    
+    categoryControl?.updateValueAndValidity();
+    customCategoryControl?.updateValueAndValidity();
+  }
+
+  cancelModal(){
+    const cancelButton = document.getElementById("cancelButton");
+      if (cancelButton) {
+    cancelButton.click(); // Simule le clic sur le bouton
+  }
+  }
+
+  submitEvent(createEvent: FormGroup) {
+    if (createEvent.valid) {
+      this.eventService.addEvent({
+        categorie: this.categorie,
+        title: createEvent.value.eventTitle,
+        description: createEvent.value.eventDescription,
+        eventDate: createEvent.value.eventDate,
+        startTime: this.heureEvent,
+        createdAt: this.today,
+        adresse: createEvent.value.adresse,
+        ville: createEvent.value.ville,
+        cp: createEvent.value.cp,
+      }).subscribe(
+        (response) => {
+          console.log('Événement ajouté avec succès:');
+          const userString = sessionStorage.getItem("user");
+          if (userString) {
+            this.user = JSON.parse(userString) as UserDto;
+            if (this.user.idUser !== undefined) { // Vérification ici
+              this.addUserEventRole(response.idEvent, this.user.idUser);
+            } else {
+              console.error('ID utilisateur non défini.');
+            }
+          }
+        },
+        (error) => {
+          console.error('Erreur lors de l\'ajout de l\'événement:', error);
+        }
+      );
     }
   }
 
-  continue() {
-    this.completedSteps.push({ step: this.currentStep, value: this.form.value });
-    this.currentStep++;
-    if (this.currentStep === 2) {
-      this.form.get('category')?.disable();
-      this.form.get('customCategory')?.disable();
-      this.form.get('eventTitle')?.enable();
-      this.form.get('eventDescription')?.enable();
-      this.form.get('eventDate')?.enable();
-      this.form.get('heure')?.enable();
-      this.form.get('minutes')?.enable();
-    }
-    this.form.reset();
-  }
-
-  goBack() {
-    this.currentStep--;
-    const lastStep = this.completedSteps.pop();
-    if (lastStep) {
-      this.form.patchValue(lastStep.value);
-    }
-    if (this.currentStep === 1) {
-      this.form.get('eventTitle')?.disable();
-      this.form.get('eventDescription')?.disable();
-      this.form.get('eventDate')?.disable();
-      this.form.get('heure')?.disable();
-      this.form.get('minutes')?.disable();
-      if (this.useCustomCategory) {
-        this.form.get('customCategory')?.enable();
-        this.form.get('category')?.disable();
-      } else {
-        this.form.get('category')?.enable();
-        this.form.get('customCategory')?.disable();
+  addUserEventRole(idEvent: number, idUser: number) {
+    this.eventService.addUserEventRole({
+      idUser: idUser,
+      idEvent: idEvent,
+      role: 'CREATEUR'
+    }).subscribe(
+      (response) => {
+        console.log('Role CREATEUR ajouté avec succès:');
+        this.cancelModal();
+        this.router.navigate(['/event/singleEvent', idEvent]);
+      },
+      (error) => {
+        console.error('Erreur lors de l\'ajout du rôle CREATEUR:', error);
       }
-    }
+    );
   }
 
-  convertTimeToString(): string {
-    const hour = this.form.get('heure')?.value;
-    const minute = this.form.get('minutes')?.value;
-    return `${hour.toString().padStart(2, '0')}.${minute.toString().padStart(2, '0')}`;
-  }
 
-  // Ajoute une méthode pour soumettre le formulaire
-  submitForm() {
-    const timeString = this.convertTimeToString();
-    console.log('Heure en string:', timeString);
-    // Insérer ici le code pour envoyer les données à ta BDD
-  }
 }

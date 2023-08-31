@@ -1,5 +1,6 @@
 package com.maddoxgraham.TimeToToast.Services;
 
+import com.maddoxgraham.TimeToToast.DTOs.UserDto;
 import com.maddoxgraham.TimeToToast.DTOs.UserEventRoleDTO;
 import com.maddoxgraham.TimeToToast.Mappers.UserEventRoleMapper;
 import com.maddoxgraham.TimeToToast.Models.Event;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserEventRoleService {
@@ -32,6 +34,17 @@ public class UserEventRoleService {
             UserEventRole userEventRole = UserEventRoleMapper.toEntity(userEventRoleDTO, userService, eventService);
             return userEventRoleRepository.save(userEventRole);
         }
+
+
+    public List<UserEventRole> findEventsByUserId(Long userId) {
+        List<UserEventRole> allUserEventRoles = findAllUserEventRoles();
+
+        // Filtrer les UserEventRole en fonction de l'ID de l'utilisateur
+        List<UserEventRole> userEventRolesForUser = allUserEventRoles.stream()
+                .filter(userEventRole -> userEventRole.getUserEventKey().getIdUser().equals(userId))
+                .collect(Collectors.toList());
+        return userEventRolesForUser;
+    }
 
 
     public List<UserEventRole> findAllUserEventRoles(){

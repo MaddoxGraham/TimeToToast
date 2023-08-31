@@ -11,88 +11,162 @@
   <div class="bubble"></div>
 </div>
 
-<!---->
-<div class="container my-5">
+
+<div class="container">
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-8">
       <h2 class="mb-4">Quel type d'événement avez-vous en tête ? </h2>
-      <form [formGroup]="form" class="d-flex flex-column justify-content-between">
-        <div class="form-group" *ngIf="currentStep === 1">
-          <!-- Step 1 -->
-          <label for="category">Catégorie:</label>
-          <div class="d-flex align-items-center">
-            <div class="me-2">
 
-              <select *ngIf="!useCustomCategory" id="category" formControlName="category" class="form-control me-2"
-                required>
-                <option value="" selected>Selectionner une catégorie</option>
-                <option value="Anniverssaire">Anniverssaire</option>
-                <option value="Marriage">Marriage</option>
-                <option value="Retraite">Retraite</option>
-                <option value="Soirée entre amis">Soirée entre amis</option>
-                <option value="Réunion Familiale">Réunion Familiale</option>
-                <option value="Fête d'Entreprise">Fête d'Entreprise</option>
-                <option value="Anniverssaire de Marriage">Anniverssaire de Marriage</option>
-                <option value="Nouvelle Année">Nouvelle Année</option>
-                <option value="Fête Religieuse">Fête Religieuse</option>
-              </select>
-            </div>
-            <input *ngIf="useCustomCategory" type="text" id="customCategory" formControlName="customCategory"
-              class="form-control me-2" placeholder="Entrez votre catégorie" required>
-            <div><button type="button" (click)="toggleInput()" class="btn btn-primary">Catégorie Personnalisée</button>
+      <form [formGroup]="createEvent" class="d-flex flex-column justify-content-between">
+        <div class="row">
+          <!-- STEP 1 *ngIf="step === 1"-->
+          <div class="form-group" *ngIf="step === 1">
+
+            <label for="category">Catégorie:</label>
+            <div class="d-flex align-items-center">
+              <div class="me-2">
+
+                <select *ngIf="!useCustomCategory" id="category" formControlName="category" class="form-control me-2"
+                  required>
+                  <option value="" selected>Selectionner une catégorie</option>
+                  <option value="Anniverssaire">Anniverssaire</option>
+                  <option value="Marriage">Marriage</option>
+                  <option value="Retraite">Retraite</option>
+                  <option value="Soirée entre amis">Soirée entre amis</option>
+                  <option value="Réunion Familiale">Réunion Familiale</option>
+                  <option value="Fête d'Entreprise">Fête d'Entreprise</option>
+                  <option value="Anniverssaire de Marriage">Anniverssaire de Marriage</option>
+                  <option value="Nouvelle Année">Nouvelle Année</option>
+                  <option value="Fête Religieuse">Fête Religieuse</option>
+                </select>
+              </div>
+              <input *ngIf="useCustomCategory" type="text" id="customCategory" formControlName="customCategory"
+                class="form-control w-50 me-2" placeholder="Entrez votre catégorie" required>
+              <div>
+                <button type="button" (click)="toggleInput()" class="btn"
+                  [ngClass]="{'btn-secondary': !useCustomCategory, 'btn-primary': useCustomCategory}">
+                  {{ useCustomCategory ? 'Changer Catégorie' : 'Catégorie Personnalisée'}}
+                </button>
+              </div>
             </div>
           </div>
+
+
+          <!-- STEP 2 -->
+
+          <div class="form-group mt-3" *ngIf="step === 2">
+
+            <label for="eventTitle">Donnez un nom à votre événement:</label>
+            <input type="text" id="eventTitle" formControlName="eventTitle" class="form-control" required>
+
+            <label for="eventDescription" class="mt-2">Description:</label>
+            <input type="text" id="eventDescription" formControlName="eventDescription" class="form-control">
+
+            <div class="d-flex flex-row justify-content-between">
+              <label for="eventDate" class=" mt-2">Date de l'événement:</label>
+              <label class="mt-2" for="heure">Heure de début:</label>
+            </div>
+            <div class="d-flex flex-row ">
+              <input type="date" id="eventDate" formControlName="eventDate" class="form-control" required
+                [min]="minDate">
+              <div class="d-flex ms-2 flex-row ">
+                <input type="number" id="heure" formControlName="heure" class="datewidth form-control" required min="0"
+                  max="23"> H
+                <input type="number" id="minutes" formControlName="minutes" class="form-control" required min="0"
+                  max="59">
+              </div>
+            </div>
+
+          </div>
+
+          <!-- STEP 3 -->
+
+          <div class="form-group mt-3" *ngIf="step === 3">
+
+            <label for="adresse">Dites à vos convives ou aura lieu la fête:</label>
+            <input type="text" id="adresse" formControlName="adresse" class="form-control"
+              placeholder="ex: 7 rue des bleuets" required>
+
+            <div class="d-flex flex-row justify-content-between">
+              <label for="ville" class="mt-2">Ville:</label>
+              <label class="mt-2" for="cp">Code Postal:</label>
+            </div>
+            <div class="d-flex flex-row ">
+              <input type="text" id="ville" class="me-2" formControlName="ville" class="form-control" required>
+
+              <input type="text" id="cp" formControlName="cp" class="form-control" required>
+
+            </div>
+
+          </div>
+
+
+
+
         </div>
-        <!-- STEP 2  -->
-        <div class="form-group mt-3" *ngIf="currentStep === 2">
-          <!-- Step 2 -->
-          <label for="eventTitle">Donnez un nom à votre événement:</label>
-          <input type="text" id="eventTitle" formControlName="eventTitle" class="form-control" required>
-
-          <label for="eventDescription" class="mt-2">Description:</label>
-          <input type="text" id="eventDescription" formControlName="eventDescription" class="form-control">
-
-          <div class="d-flex flex-row justify-content-between">
-            <label for="eventDate" class=" mt-2">Date de l'événement:</label>
-            <label class="mt-2" for="heure">Heure de début:</label>
-          </div>
-          <div class="d-flex flex-row ">
-            <input type="date" id="eventDate" formControlName="eventDate" class="form-control" required [min]="minDate">
-            <div class="d-flex ms-2 flex-row ">
-              <input type="number" id="heure" formControlName="heure" class="datewidth form-control" required min="0" max="23"> H
-              <input type="number" id="minutes" formControlName="minutes" class="form-control" required min="0" max="59">
-            </div>
-          </div>
-
-        </div>
-        <!-- ... -->
-
-        <div class="mt-auto d-flex justify-content-start">
-          <button type="button" (click)="continue()" [disabled]="!form.valid"
-            class="btn btn-success mt-3">Continuer</button>
+        <div class="row mt-4 justify-content-between">
+          <div class="col-md-4"> <button *ngIf="this.step > 1" (click)="onPrevious()" class="btn btn-warning"> Retour
+            </button> </div>
+          <div class="col-md-4"> <button *ngIf="this.step <= 2" (click)="onContinue()" class="btn btn-primary"
+              [disabled]="isContinueButtonDisabled()"> Continuer </button> </div>
+          <div class="col-md-4"> <button *ngIf="this.step > 2" (click)="onValidate()" class="btn btn-success"
+              [disabled]="isvalidButtonDisbled()" data-bs-toggle="modal" data-bs-target="#confirmationModal"> Valider </button> </div>
         </div>
       </form>
+
     </div>
-    <div class="col-md-6">
+
+    <!-- preview -->
+    <div class="col-md-4">
+
       <h2 class="mb-4 text-end">Voir mon événement </h2>
       <div class="card">
         <div class="card-header parallax">
         </div>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item" *ngFor="let step of completedSteps">
-            <div *ngIf="step.step === 1">{{ step.value.category || step.value.customCategory }}</div>
-            <div *ngIf="step.step === 2">
-              Titre: {{ step.value.eventTitle }} <br>
-              Date: {{ step.value.eventDate }} <br>
-              Description: {{ step.value.eventDescription }}
+          <li class="list-group-item" *ngFor="let data of previewData">
+            
+            <div *ngIf="this.step >= 2">{{ data.category || data.customCategory }}</div>
+            <div *ngIf="this.step == 3">
+              <span class=""> {{ data.eventTitle }} </span> <br>
+              Date: {{ data.eventDate }} <br>
+              Description: {{ data.eventDescription }}<br>
+              Heure de l'événement: {{ data.heure }} H {{ data.minutes }}<br>
             </div>
           </li>
         </ul>
-        <div class="card-footer d-flex justify-content-start">
-          <button type="button" (click)="goBack()" *ngIf="completedSteps.length > 0"
-            class="btn btn-warning">Retour</button>
-        </div>
+      </div>
+
+
+
+
+    </div>
+  </div>
+<!-- Modale de confirmation -->
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2> Êtes-vous sûr de vouloir valider ces données ?</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group list-group-flush" *ngFor="let data of previewData">
+          <li class="list-group-item"> {{ data.eventTitle }} </li>
+          <li class="list-group-item"> {{ data.category || data.customCategory }} </li>
+          <li class="list-group-item"> {{ data.eventDescription }} </li>
+          <li class="list-group-item"> Le <div>  {{ data.eventDate }} </div> à <div> {{ data.heure }} H {{ data.minutes }} </div> </li>
+          <li class="list-group-item">  {{ data.adresse }} </li>
+          <li class="list-group-item"> <div> {{ data.cp }}</div> <div> {{ data.ville | uppercase }} </div> </li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button id="cancelButton" type="button" class="btn btn-danger" data-bs-dismiss="modal">Annuler</button>
+        <button type="submit" class="btn btn-success" (click)="submitEvent(createEvent)" >Valider</button>
       </div>
     </div>
   </div>
 </div>
+  
+</div>
+

@@ -9,5 +9,9 @@ export const environment = {
     updateUser:'http://localhost:8080/user/update/',
 
     addevent: 'http://localhost:8080/event/add',
+    getEvent:'http://localhost:8080/event/find',
+    addUserEventRole: 'http://localhost:8080/userEventRole/add',
+    getUserEvents: 'http://localhost:8080/userEventRole/find',
+
 }
   

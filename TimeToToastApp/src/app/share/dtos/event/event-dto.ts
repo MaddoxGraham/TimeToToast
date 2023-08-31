@@ -7,6 +7,15 @@ import { UserEventRoleDto } from "../userEventRole/user-event-role-dto";
 
 export interface EventDto {
     idEvent:number,
+    categorie:string,
+    description:string,
+    title:string,
+    adresse:string,
+    ville:string,
+    cp:string,
+    eventDate:Date,
+    createdAt:Date,
+    startTime: string,
     userEventRoles: UserEventRoleDto[],
     guests:GuestDto[],
     photos:PhotoDto[],

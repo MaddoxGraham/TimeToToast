@@ -9,7 +9,7 @@ import { EventUserComponent } from './component/event-user/event-user.component'
 const routes: Routes = [
     { path: 'creer', component: EventCreationComponent, canActivate: [RoleGuard], data: { expectedRole: 'USER' } },
     { path: 'myEvent', component: EventUserComponent, canActivate: [RoleGuard], data: { expectedRole: 'USER' } },
-    { path: 'singleEvent', component: SingleEventComponent, canActivate: [RoleGuard], data: { expectedRole: 'USER' } },
+    { path: 'singleEvent/:idEvent', component: SingleEventComponent, canActivate: [RoleGuard], data: { expectedRole: 'USER' } },
  
   ];
   

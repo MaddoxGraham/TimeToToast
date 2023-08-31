@@ -2,6 +2,7 @@ package com.maddoxgraham.TimeToToast.Controllers;
 
 
 import com.maddoxgraham.TimeToToast.DTOs.UserEventRoleDTO;
+import com.maddoxgraham.TimeToToast.Models.User;
 import com.maddoxgraham.TimeToToast.Models.UserEventKey;
 import com.maddoxgraham.TimeToToast.Models.UserEventRole;
 import com.maddoxgraham.TimeToToast.Services.EventService;
@@ -32,6 +33,13 @@ public class UserEventRoleController {
         List<UserEventRole> userEventRoles = userEventRoleService.findAllUserEventRoles();
         return new ResponseEntity<>(userEventRoles, HttpStatus.OK);
     }
+
+    @GetMapping("/find/{idUser}")
+    public ResponseEntity<List<UserEventRole>> findEventsByUserId(@PathVariable("idUser") Long idUser) {
+        List<UserEventRole> userEventRoles = userEventRoleService.findEventsByUserId(idUser);
+        return new ResponseEntity<>(userEventRoles, HttpStatus.OK);
+    }
+
 
     @PostMapping("/add")
     public ResponseEntity<UserEventRole> addUserEventRole(@RequestBody UserEventRoleDTO userEventRoleDTO){
