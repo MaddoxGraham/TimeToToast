@@ -38,8 +38,8 @@ export class EventUserComponent implements OnInit {
   }
 
   loadEventDetails() {
-    for (const userEventRole of this.userEventsList) {
-      console.log(userEventRole);
+    for (const userEvent of this.userEventsList) {
+      console.log(userEvent);
       // this.eventService.getEventById(userEventRole.idEvent).subscribe(
       //   (eventDetails) => {
       //     this.eventDetails[userEventRole.idEvent] = eventDetails;
