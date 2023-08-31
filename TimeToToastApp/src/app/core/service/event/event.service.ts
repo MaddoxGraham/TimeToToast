@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { EventDto } from 'src/app/share/dtos/event/event-dto';
 import { UserEventRoleDto } from 'src/app/share/dtos/userEventRole/user-event-role-dto';
+import { UserEventsDto } from 'src/app/share/dtos/userEvents/user-events-dto';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -27,7 +28,7 @@ export class EventService {
       return this.httpClient.post<UserEventRoleDto>(environment.addUserEventRole, data);
     }
 
-    getUserRolesByUserId(userId: number): Observable<UserEventRoleDto[]> {
-      return this.httpClient.get<UserEventRoleDto[]>(`${environment.getUserEvents}/${userId}`);
+    getUserRolesByUserId(userId: number): Observable<UserEventsDto[]> {
+      return this.httpClient.get<UserEventsDto[]>(`${environment.getUserEvents}/${userId}`);
     } 
   }

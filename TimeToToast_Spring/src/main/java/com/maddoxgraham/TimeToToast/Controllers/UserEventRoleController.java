@@ -2,12 +2,14 @@ package com.maddoxgraham.TimeToToast.Controllers;
 
 
 import com.maddoxgraham.TimeToToast.DTOs.UserEventRoleDTO;
+import com.maddoxgraham.TimeToToast.DTOs.UserEventsDto;
 import com.maddoxgraham.TimeToToast.Models.User;
 import com.maddoxgraham.TimeToToast.Models.UserEventKey;
 import com.maddoxgraham.TimeToToast.Models.UserEventRole;
 import com.maddoxgraham.TimeToToast.Services.EventService;
 import com.maddoxgraham.TimeToToast.Services.UserEventRoleService;
 import com.maddoxgraham.TimeToToast.Services.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,17 +18,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/userEventRole")
+@AllArgsConstructor
 public class UserEventRoleController {
 
     private final UserEventRoleService userEventRoleService;
     private final UserService userService;
     private final EventService eventService;
-
-    public UserEventRoleController(UserEventRoleService userEventRoleService, UserService userService,EventService eventService) {
-        this.userEventRoleService = userEventRoleService;
-        this.userService = userService;
-        this.eventService = eventService;
-    }
 
     @GetMapping("/all")
     public ResponseEntity<List<UserEventRole>> getAllUserEventRole() {
@@ -35,9 +32,9 @@ public class UserEventRoleController {
     }
 
     @GetMapping("/find/{idUser}")
-    public ResponseEntity<List<UserEventRole>> findEventsByUserId(@PathVariable("idUser") Long idUser) {
-        List<UserEventRole> userEventRoles = userEventRoleService.findEventsByUserId(idUser);
-        return new ResponseEntity<>(userEventRoles, HttpStatus.OK);
+    public ResponseEntity<List<UserEventsDto>> findEventsByUserId(@PathVariable("idUser") Long idUser) {
+        List<UserEventsDto> UserEventsDtoList = userEventRoleService.findEventsByUserId(idUser);
+        return new ResponseEntity<>(UserEventsDtoList, HttpStatus.OK);
     }
 
 

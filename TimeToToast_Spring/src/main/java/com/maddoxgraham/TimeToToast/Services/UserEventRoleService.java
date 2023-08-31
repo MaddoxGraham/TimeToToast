@@ -1,34 +1,34 @@
 package com.maddoxgraham.TimeToToast.Services;
 
+import com.maddoxgraham.TimeToToast.DTOs.EventDto;
 import com.maddoxgraham.TimeToToast.DTOs.UserDto;
 import com.maddoxgraham.TimeToToast.DTOs.UserEventRoleDTO;
+import com.maddoxgraham.TimeToToast.DTOs.UserEventsDto;
+import com.maddoxgraham.TimeToToast.Mappers.EventMapper;
 import com.maddoxgraham.TimeToToast.Mappers.UserEventRoleMapper;
 import com.maddoxgraham.TimeToToast.Models.Event;
 import com.maddoxgraham.TimeToToast.Models.User;
 import com.maddoxgraham.TimeToToast.Models.UserEventKey;
+import com.maddoxgraham.TimeToToast.Repository.EventRepository;
 import com.maddoxgraham.TimeToToast.TimeToToastApplication;
 import com.maddoxgraham.TimeToToast.Exception.UserNotFoundException;
 import com.maddoxgraham.TimeToToast.Models.UserEventRole;
 import com.maddoxgraham.TimeToToast.Repository.UserEventRoleRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class UserEventRoleService {
     private final UserEventRoleRepository userEventRoleRepository;
     private  final UserService userService;
     private final EventService eventService;
-
-    @Autowired
-    public UserEventRoleService(EventService eventService,UserService userService,UserEventRoleRepository userEventRoleRepository) {
-        this.userEventRoleRepository = userEventRoleRepository;
-        this.userService = userService;
-        this.eventService=eventService;
-    }
+    private final EventMapper eventMapper;
+    private final EventRepository eventRepository;
 
     public UserEventRole addUserEventRole(UserEventRoleDTO userEventRoleDTO){
             UserEventRole userEventRole = UserEventRoleMapper.toEntity(userEventRoleDTO, userService, eventService);
@@ -36,14 +36,39 @@ public class UserEventRoleService {
         }
 
 
-    public List<UserEventRole> findEventsByUserId(Long userId) {
+    public List<UserEventsDto> findEventsByUserId(Long userId) {
         List<UserEventRole> allUserEventRoles = findAllUserEventRoles();
-
-        // Filtrer les UserEventRole en fonction de l'ID de l'utilisateur
         List<UserEventRole> userEventRolesForUser = allUserEventRoles.stream()
                 .filter(userEventRole -> userEventRole.getUserEventKey().getIdUser().equals(userId))
                 .collect(Collectors.toList());
-        return userEventRolesForUser;
+
+        Map<String, UserEventsDto> roleToUserEventsDtoMap = new HashMap<>();
+        List<UserEventsDto> userEventsDtoList = new ArrayList<>();
+
+        for (UserEventRole userEventRole: userEventRolesForUser){
+            Optional<Event> eventOpt = eventRepository.findById(userEventRole.getEvent().getIdEvent());
+            if(eventOpt.isPresent()){
+                Event event = eventOpt.get();
+                EventDto eventDto = eventMapper.toDto(event);
+
+                UserEventsDto userEventsDto = roleToUserEventsDtoMap.get(userEventRole.getRole());
+                if(userEventsDto == null) {
+                    userEventsDto = UserEventsDto.builder()
+                            .userId(userId)
+                            .role(userEventRole.getRole())
+                            .events((new EventDto[]{eventDto}))
+                            .build();
+                    roleToUserEventsDtoMap.put(userEventsDto.getRole(), userEventsDto);
+                    userEventsDtoList.add(userEventsDto);
+                } else {
+                    EventDto[] existingEvents = userEventsDto.getEvents();
+                    EventDto[] updatedEvents = Arrays.copyOf(existingEvents, existingEvents.length + 1);
+                    updatedEvents[existingEvents.length] = eventDto;
+                    userEventsDto.setEvents(updatedEvents);
+                }
+            }
+        }
+        return userEventsDtoList;
     }
 
 
