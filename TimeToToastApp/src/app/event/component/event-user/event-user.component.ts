@@ -3,6 +3,7 @@ import { EventService } from 'src/app/core/service/event/event.service';
 import { UserDto } from 'src/app/share/dtos/user/user-dto';
 import { UserEventRoleDto } from 'src/app/share/dtos/userEventRole/user-event-role-dto';
 import { EventDto } from 'src/app/share/dtos/event/event-dto';
+import { UserEventsDto } from 'src/app/share/dtos/userEvents/user-events-dto';
 
 @Component({
   selector: 'app-event-user',
@@ -12,6 +13,7 @@ import { EventDto } from 'src/app/share/dtos/event/event-dto';
 export class EventUserComponent implements OnInit {
   userEventRoles: UserEventRoleDto[] = []; // Liste des rôles utilisateur
   eventDetails: { [idEvent: number]: EventDto } = {}; // Détails des événements
+  userEventsList: UserEventsDto[] = [];
 
   constructor(private eventService: EventService) { }
 
@@ -21,10 +23,10 @@ export class EventUserComponent implements OnInit {
 
   loadUserEventRoles() {
     const user: UserDto = JSON.parse(sessionStorage.getItem('user') || '{}');
-    if (user && user.idUser) {
+    if (user?.idUser) {
       this.eventService.getUserRolesByUserId(user.idUser).subscribe(
-        (userEventRoles) => {
-          this.userEventRoles = userEventRoles;
+        (userEventRoles: UserEventsDto[]) => {
+          this.userEventsList = userEventRoles;
           // Appeler la méthode pour obtenir les détails de chaque événement
           this.loadEventDetails();
         },
@@ -36,8 +38,8 @@ export class EventUserComponent implements OnInit {
   }
 
   loadEventDetails() {
-    for (const userEventRole of this.userEventRoles) {
-      console.log(userEventRole.idEvent);
+    for (const userEvent of this.userEventsList) {
+      console.log(userEvent);
       // this.eventService.getEventById(userEventRole.idEvent).subscribe(
       //   (eventDetails) => {
       //     this.eventDetails[userEventRole.idEvent] = eventDetails;

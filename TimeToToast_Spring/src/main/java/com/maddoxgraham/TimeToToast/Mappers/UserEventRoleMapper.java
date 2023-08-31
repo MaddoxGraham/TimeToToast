@@ -7,7 +7,9 @@ import com.maddoxgraham.TimeToToast.Models.UserEventKey;
 import com.maddoxgraham.TimeToToast.Models.UserEventRole;
 import com.maddoxgraham.TimeToToast.Services.EventService;
 import com.maddoxgraham.TimeToToast.Services.UserService;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserEventRoleMapper {
 
     public static UserEventRole toEntity(UserEventRoleDTO dto, UserService userService, EventService eventService) {
