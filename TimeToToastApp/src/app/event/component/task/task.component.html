@@ -1,0 +1,31 @@
+<div id="accordion mt-4">
+    <div class="card">
+        <div class="card-header">
+            <div class="mb-0 d-flex flex-row nowrap justify-content-between">
+
+
+                <h4> Module Tâches </h4>
+                <div>
+                    <button class="btn btn-link toggle-btn" [attr.aria-expanded]="isOpen" (click)="isOpen = !isOpen">
+                        <i [ngClass]="{'fa-chevron-down': !isOpen, 'fa-chevron-up': isOpen}" class="fa"></i>
+                    </button>
+
+                    <button class="btn" (click)="deleteModule()">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <div id="collapseOne" class="collapse" [ngClass]="{'show': isOpen}">
+            <div class="card-body">
+
+                WARNING - il faudra vérifier que le user est créateur <br>
+
+               menu qui propose : voir mes tâches (taches ou l'utilisateur est inscrit ou qu'il a créer ) / créer une tache 
+               tache : qui quoi quand edit 
+
+            </div>
+        </div>
+    </div>
+</div>

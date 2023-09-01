@@ -1,0 +1,75 @@
+.icon-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .creator-icon {
+    color: goldenrod;
+   
+  }
+
+  .participant-icon{
+    color: darkred;
+  }
+
+  .icon-container p {
+    margin: 0 !important;
+  }
+  
+  .creator-info {
+    position: absolute;
+    top: -10px; /* Ajustez la position verticale de la bulle */
+    left: 50%;
+    background-color: lightgrey;
+    color: rgb(163, 163, 163);
+    padding: 2px;
+    border-radius: 8px;
+    font-family: sans-serif;
+    font-size: 10px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+  }
+  
+  .icon-container:hover .creator-info {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .card-header{
+    background-color: rgba(233, 183, 125, 0.432);
+  }
+
+  .row.cards-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -15px; /* Ajustez la marge négative pour l'espacement entre les cartes */
+  }
+  
+  .cardDistinct {
+    flex: 1 1 calc(25% - 30px); /* Pour afficher jusqu'à 4 cartes par ligne avec espacement */
+    margin: 15px; /* Ajustez l'espacement entre les cartes */
+    transition: transform 0.3s;
+  }
+  
+  .cardDistinct:hover {
+    transform: scale(1.05); /* Effet d'agrandissement au survol */
+  }
+
+  h3{
+    font-family: 'Phudu', cursive;
+    font-size: 1.5rem;
+    font-variant: small-caps;
+    letter-spacing: 2px;
+    color: #a57b45;
+  }
+
+  .btn-party{
+    background-color: rgba(233, 183, 125, 0.432);
+    font-family: 'Phudu', cursive;
+    font-size: 1rem;
+    font-variant: small-caps;
+    letter-spacing: 2px;
+    color: #a57b45;
+  }

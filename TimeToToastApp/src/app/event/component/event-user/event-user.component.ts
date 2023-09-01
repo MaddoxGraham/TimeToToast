@@ -19,6 +19,7 @@ export class EventUserComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadUserEventRoles();
+  
   }
 
   loadUserEventRoles() {
@@ -40,14 +41,13 @@ export class EventUserComponent implements OnInit {
   loadEventDetails() {
     for (const userEvent of this.userEventsList) {
       console.log(userEvent);
-      // this.eventService.getEventById(userEventRole.idEvent).subscribe(
-      //   (eventDetails) => {
-      //     this.eventDetails[userEventRole.idEvent] = eventDetails;
-      //   },
-      //   (error) => {
-      //     console.error(`Erreur lors de la récupération des détails de l'événement ${userEventRole.idEvent}:`, error);
-      //   }
-      // );
     }
   }
+
+  formatStartTime(startTime: string): string {
+    const hours = startTime.substr(0, 2);
+    const minutes = startTime.substr(2, 2);
+    return `${hours}H${minutes}`;
+  }
+  
 }

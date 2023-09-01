@@ -1,0 +1,16 @@
+.moduleBtn{
+    padding-right: 10% !important;
+    border-bottom: 1px solid grey;
+    border-top: none !important;
+    border-left: none !important;
+}
+
+.rightModule{
+    padding: 0 !important;
+
+}
+
+.display-6{
+    color: rgb(173, 173, 173);
+    font-size: 2vw;
+}

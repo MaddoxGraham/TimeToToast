@@ -5,6 +5,7 @@ import { SingleEventComponent } from './single-event.component';
 describe('SingleEventComponent', () => {
   let component: SingleEventComponent;
   let fixture: ComponentFixture<SingleEventComponent>;
+  
 
   beforeEach(() => {
     TestBed.configureTestingModule({

@@ -1,6 +1,56 @@
 <!-- single-event.component.html -->
-<div *ngIf="event">
-    <h2>{{ event.title }}</h2>
-    <p>{{ event.description }}</p>
-    <!-- Autres détails de l'événement -->
+
+<div *ngIf="event" class="">
+
+  <div class="row">
+
+        <!-- infos sur le user -->
+    <div class="col-md-2 bg-light p-4 "> </div>
+
+
+        <!-- corps de l'event  -->
+    <div class="col-md-8">
+      <div class="">
+        <div class=" my-4 moduleEventInfos mx-2">
+        <h2>{{ event.title }}</h2>
+        <p>{{ event.description }}</p>
+maps desc border-bottom et modules si existants. 
+
+        </div>
+
+
+<!-- localstorage check :-->
+<div class="container text-center row "> <span class="display-4 col-12">Cet événement n'a aucun module  </span> 
+  
+  <span *ngIf="userEvent?.role == 'CREATEUR'"  class="col-12 display-6">Séléctionnez votre premier module pour débuter </span>
+  <span *ngIf="userEvent?.role != 'CREATEUR'"  class="col-12 display-6">Patientez, le créateur de cet événement va peut être en rajouter ! </span> 
+</div>
+
+<app-task *ngIf="isTaskModuleActive" (moduleDeleted)="onModuleDeleted()"></app-task>
+
+
+      </div>
+     
+
+    </div> 
+    <!-- modules gestion -->
+    <div *ngIf="userEvent?.role == 'CREATEUR'" class="col-md-2 bg-light rightModule ">
+      <h6 class="p-4"> Ajouter le module  :</h6>
+      <button (click)="activateTaskModule()" class="p-2 m-0 box-shadow border-bottom w-100 d-flex flex-row nowrap justify-content-between moduleBtn">
+         <div>Tâches </div> <i class="fa fa-plus my-auto "></i>
+      </button>
+      <button (click)="activatePhotosModule()" class="p-2 m-0 box-shadow border-bottom w-100 d-flex flex-row nowrap justify-content-between moduleBtn">
+        <div>Photos </div> <i class="fa fa-plus my-auto "></i>
+     </button>
+     <button (click)="activateGiftModule()" class="p-2 m-0 box-shadow border-bottom w-100 d-flex flex-row nowrap justify-content-between moduleBtn">
+      <div>Cadeaux </div> <i class="fa fa-plus my-auto "></i>
+   </button>
+    </div>
   </div>
+</div>
+
+
+
+<div *ngIf="!event">
+  404 Event Not Found
+</div>

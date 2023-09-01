@@ -13,5 +13,6 @@ export const environment = {
     addUserEventRole: 'http://localhost:8080/userEventRole/add',
     getUserEvents: 'http://localhost:8080/userEventRole/find',
 
+    getUserEventRole:'http://localhost:8080/userEventRole/findRole',
 }
   

@@ -7,6 +7,8 @@ import { ShareModule } from '../share/share.module';
 import { EventRoutingModule } from './event-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; // Ajouté
 import { DropdownModule } from 'primeng/dropdown'; // Ajouté
+import { MapComponent } from './component/map/map.component';
+import { TaskComponent } from './component/task/task.component';
 
 
 
@@ -14,7 +16,9 @@ import { DropdownModule } from 'primeng/dropdown'; // Ajouté
   declarations: [
     EventCreationComponent,
     EventUserComponent,
-    SingleEventComponent
+    SingleEventComponent,
+    MapComponent,
+    TaskComponent
   ],
   imports: [
     CommonModule,

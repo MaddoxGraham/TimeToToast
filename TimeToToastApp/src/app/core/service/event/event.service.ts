@@ -31,4 +31,9 @@ export class EventService {
     getUserRolesByUserId(userId: number): Observable<UserEventsDto[]> {
       return this.httpClient.get<UserEventsDto[]>(`${environment.getUserEvents}/${userId}`);
     } 
+
+    getUserEventRole(idUser: number, idEvent: number): Observable<UserEventRoleDto> {
+      return this.httpClient.get<UserEventRoleDto>(`${environment.getUserEventRole}/${idUser}/${idEvent}`);
+    }
+
   }

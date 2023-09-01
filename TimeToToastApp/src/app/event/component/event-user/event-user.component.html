@@ -31,12 +31,48 @@
 
 <!-- Corps du component -->
 <div *ngFor="let userEvent of this.userEventsList" class="card m-2">
-  <ng-container *ngFor="let event of userEvent.events">
-    <div>{{ userEvent.role }}</div>
-    <p>{{event.title}}</p>
+  <div class="row m-2 cards-row">
+    <ng-container *ngFor="let event of userEvent.events">
+      <div class="col-md-2 cardDistinct">
+        <div class="card box-shadow bg-light">
+          <div class="card-header d-flex flex-row w-100 justify-content-between">
+            <div class="my-auto">
+              <div class="icon-container">
+                <i *ngIf="userEvent.role == 'CREATEUR'" class="fa-solid fa-champagne-glasses creator-icon"></i>
+                <div class="creator-info">
+                  <p>Créateur de cet événement</p>
+                </div>
+              </div>
+              <div class="icon-container">
+                <i *ngIf="userEvent.role != 'CREATEUR'" class="fa-solid fa-champagne-glasses participant-icon"></i>
+              </div>
+            </div>
+            <div class="my-auto">
+              <h3 class="card-title">{{ event.title }}</h3>
+            </div>
 
-  </ng-container>
-  
+
+          </div>
+          <div class="card-body">
+
+            <p class="card-subtitle text-muted"> <i class="fa-solid fa-calendar-days"></i> {{ event.eventDate | date:'d
+              MMM y' }} <i class="ms-2 fa-solid fa-clock"></i> {{ formatStartTime(event.startTime) }} </p>
+            <div class="card-text mt-4">
+              <i class="fa-solid fa-location-dot"></i> {{ event.adresse }}, {{ event.cp }} {{ event.ville }}
+
+              <div class="map-container"> 
+                <app-map [completeAddress]="event.adresse + ' ' + event.ville + ' ' + event.cp" [completeAddress]="event.ville + ' ' + event.cp" [eventId]="event.idEvent"></app-map>
+              </div>
+
+            </div>
+            <p class="card-text">
+              {{ event.description | slice:0:150 }}
+            </p>
+            <a [routerLink]="['/event/singleEvent', event.idEvent]" class="btn btn-party">En savoir plus <i
+                class="fa-solid fa-angles-right"></i> </a>
+          </div>
+        </div>
+      </div>
+    </ng-container>
   </div>
-
-<ng-template #loadingTemplate>Loading event details...</ng-template>
+</div>

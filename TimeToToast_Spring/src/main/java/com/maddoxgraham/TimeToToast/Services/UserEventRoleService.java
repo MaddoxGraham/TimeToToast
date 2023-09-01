@@ -71,6 +71,12 @@ public class UserEventRoleService {
         return userEventsDtoList;
     }
 
+    public UserEventRole findRoleByEventAndUser(Long idUser, Long idEvent) {
+        UserEventKey key = new UserEventKey(idUser, idEvent);
+        Optional<UserEventRole> optionalRole = userEventRoleRepository.findById(key);
+        return optionalRole.orElse(null);
+    }
+
 
     public List<UserEventRole> findAllUserEventRoles(){
         return userEventRoleRepository.findAll();
