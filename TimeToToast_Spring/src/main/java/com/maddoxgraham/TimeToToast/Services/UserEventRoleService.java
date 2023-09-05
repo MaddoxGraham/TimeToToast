@@ -6,6 +6,7 @@ import com.maddoxgraham.TimeToToast.DTOs.UserEventRoleDTO;
 import com.maddoxgraham.TimeToToast.DTOs.UserEventsDto;
 import com.maddoxgraham.TimeToToast.Mappers.EventMapper;
 import com.maddoxgraham.TimeToToast.Mappers.UserEventRoleMapper;
+import com.maddoxgraham.TimeToToast.Mappers.UserMapper;
 import com.maddoxgraham.TimeToToast.Models.Event;
 import com.maddoxgraham.TimeToToast.Models.User;
 import com.maddoxgraham.TimeToToast.Models.UserEventKey;
@@ -25,10 +26,11 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class UserEventRoleService {
     private final UserEventRoleRepository userEventRoleRepository;
-    private  final UserService userService;
+    private final UserService userService;
     private final EventService eventService;
     private final EventMapper eventMapper;
     private final EventRepository eventRepository;
+    private final UserMapper userMapper;
 
     public UserEventRole addUserEventRole(UserEventRoleDTO userEventRoleDTO){
             UserEventRole userEventRole = UserEventRoleMapper.toEntity(userEventRoleDTO, userService, eventService);
@@ -65,6 +67,41 @@ public class UserEventRoleService {
                     EventDto[] updatedEvents = Arrays.copyOf(existingEvents, existingEvents.length + 1);
                     updatedEvents[existingEvents.length] = eventDto;
                     userEventsDto.setEvents(updatedEvents);
+                }
+            }
+        }
+        return userEventsDtoList;
+    }
+
+    public List<UserEventsDto> findUsersByEventId(Long eventId) {
+        List<UserEventRole> allUserEventRoles = findAllUserEventRoles();
+        List<UserEventRole> userEventRolesForEvent = allUserEventRoles.stream()
+                .filter(userEventRole -> userEventRole.getUserEventKey().getIdEvent().equals(eventId))
+                .collect(Collectors.toList());
+
+        Map<String, UserEventsDto> roleToUserEventsDtoMap = new HashMap<>();
+        List<UserEventsDto> userEventsDtoList = new ArrayList<>();
+
+        for (UserEventRole userEventRole : userEventRolesForEvent) {
+            Optional<User> userOpt = Optional.ofNullable(userService.findUserByIdUser(userEventRole.getUserEventKey().getIdUser()));
+            if (userOpt.isPresent()) {
+                User user = userOpt.get();
+                UserDto userDto = userMapper.toUserDto(user); // Assurez-vous que userMapper est injecté ou accessible
+
+                UserEventsDto userEventsDto = roleToUserEventsDtoMap.get(userEventRole.getRole());
+                if (userEventsDto == null) {
+                    userEventsDto = UserEventsDto.builder()
+                            .userId(user.getIdUser())
+                            .role(userEventRole.getRole())
+                            .users(new UserDto[]{userDto})
+                            .build();
+                    roleToUserEventsDtoMap.put(userEventRole.getRole(), userEventsDto);
+                    userEventsDtoList.add(userEventsDto);
+                } else {
+                    UserDto[] existingUsers = userEventsDto.getUsers();
+                    UserDto[] updatedUsers = Arrays.copyOf(existingUsers, existingUsers.length + 1);
+                    updatedUsers[existingUsers.length] = userDto;
+                    userEventsDto.setUsers(updatedUsers);
                 }
             }
         }

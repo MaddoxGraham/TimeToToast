@@ -5,7 +5,23 @@
   <div class="row">
 
         <!-- infos sur le user -->
-    <div class="col-md-2 bg-light p-4 "> </div>
+<!-- infos sur le user -->
+<div class="col-md-2 bg-light p-4 "> 
+  <h3> Créateur </h3>
+  <ul>
+    <li *ngFor="let user of getUsersByRole('CREATEUR')">
+      {{ user.lastName | capitalize  }} {{ user.firstName | uppercase  }}
+    </li>
+  </ul>
+  
+  <h3> Invités </h3>
+  <ul>
+    <li *ngFor="let user of getUsersByRole('INVITE')">
+      {{ user.lastName | capitalize  }} {{ user.firstName | uppercase }}
+    </li>
+  </ul>
+</div>
+
 
 
         <!-- corps de l'event  -->
@@ -20,13 +36,18 @@ maps desc border-bottom et modules si existants.
 
 
 <!-- localstorage check :-->
-<div class="container text-center row "> <span class="display-4 col-12">Cet événement n'a aucun module  </span> 
+<div class="container text-center row my-5"> <span class="display-4 col-12">Cet événement n'a aucun module  </span> 
   
   <span *ngIf="userEvent?.role == 'CREATEUR'"  class="col-12 display-6">Séléctionnez votre premier module pour débuter </span>
   <span *ngIf="userEvent?.role != 'CREATEUR'"  class="col-12 display-6">Patientez, le créateur de cet événement va peut être en rajouter ! </span> 
 </div>
 
-<app-task *ngIf="isTaskModuleActive" (moduleDeleted)="onModuleDeleted()"></app-task>
+<app-task *ngIf="isTaskModuleActive" 
+          [userEvent]="userEvent" 
+          [event]="event" 
+          (moduleDeleted)="onModuleDeleted()">
+</app-task>
+
 
 
       </div>

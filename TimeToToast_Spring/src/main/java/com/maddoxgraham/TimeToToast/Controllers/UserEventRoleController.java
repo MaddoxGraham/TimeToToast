@@ -37,6 +37,12 @@ public class UserEventRoleController {
         return new ResponseEntity<>(UserEventsDtoList, HttpStatus.OK);
     }
 
+    @GetMapping("AllByEvent/{idEvent}")
+    public ResponseEntity<List<UserEventsDto>> findUsersByEventId(@PathVariable("idEvent") Long idEvent){
+        List<UserEventsDto> UserEventsDtoList = userEventRoleService.findUsersByEventId(idEvent);
+        return new ResponseEntity<>(UserEventsDtoList, HttpStatus.OK);
+    }
+
     @GetMapping("/findRole/{idUser}/{idEvent}")
     public ResponseEntity<UserEventRole> getRoleByEventAndUser(@PathVariable("idUser") Long idUser, @PathVariable("idEvent") Long idEvent) {
         UserEventRole role = userEventRoleService.findRoleByEventAndUser(idUser, idEvent);

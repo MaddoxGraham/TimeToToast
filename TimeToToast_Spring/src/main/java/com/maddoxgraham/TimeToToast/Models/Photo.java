@@ -14,6 +14,8 @@ import java.util.Set;
 @Entity
 public class Photo {
 
+    private boolean photosModuleActive;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)

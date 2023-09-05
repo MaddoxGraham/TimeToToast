@@ -13,4 +13,5 @@ public class UserEventsDto {
     private Long userId;
     private String role;
     private EventDto events[];
+    private UserDto users[]; // Ajout de ce champ
 }

@@ -37,6 +37,7 @@ public class Event implements Serializable {
     private String Ville;
     private String cp;
 
+
     @OneToMany(mappedBy = "event")
     private Set<UserEventRole> userEventRoles;
 
