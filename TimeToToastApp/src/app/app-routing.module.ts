@@ -6,6 +6,7 @@ const routes: Routes = [
   { path: 'landing', loadChildren: () =>import('./landing-page/landing-page.module').then(m => m.LandingPageModule) },
   { path: 'user', loadChildren: () =>import('./user/user.module').then(m => m.UserModule) },
   { path: 'event', loadChildren: () =>import('./event/event.module').then(m => m.EventModule) },
+  { path: 'guest', loadChildren: () =>import('./guest/guest.module').then(m => m.GuestModule) },
 ];
 
 @NgModule({

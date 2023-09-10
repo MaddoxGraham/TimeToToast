@@ -18,7 +18,6 @@ import { UserUpdateComponent } from './component/user-update/user-update.compone
     UserRoutingModule,
     CommonModule,
     ShareModule,
-    
   ],
 })
 export class UserModule { }
