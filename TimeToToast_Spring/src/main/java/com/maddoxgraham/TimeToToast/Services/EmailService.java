@@ -1,6 +1,7 @@
 package com.maddoxgraham.TimeToToast.Services;
 
 
+import com.maddoxgraham.TimeToToast.Models.User;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -28,19 +29,24 @@ public class EmailService {
         mailSender.send(message);
     }
 
-    public void sendHtmlEmail(String[] toAddresses, String eventName, String creatorName) throws MessagingException {
+    public void sendHtmlEmail(String[] toAddresses, Long idEvent, Long idUser) throws MessagingException {
+
+        // recupération du user via idUser
+        //récupération du event via idEvent.
+
         for (String to : toAddresses) {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
+//génération d'un token et d'un lien associé
 
-            helper.setTo(to);
-            helper.setSubject(creatorName + " vous invite à l'événement : " + eventName);
+//            helper.setTo(to);
+//            helper.setSubject(creatorName + " vous invite à l'événement : " + eventName);
+//
+//            String htmlContent = "<h1>" + creatorName + " vous invite à l'événement : " + eventName + "</h1>"
+//                    + "<p>Cliquez sur le lien pour participer.</p>"
+//                    + "<a href='ton_lien_ici'>Participer</a>";
 
-            String htmlContent = "<h1>" + creatorName + " vous invite à l'événement : " + eventName + "</h1>"
-                    + "<p>Cliquez sur le lien pour participer.</p>"
-                    + "<a href='ton_lien_ici'>Participer</a>";
-
-            helper.setText(htmlContent, true);
+//            helper.setText(htmlContent, true);
 
             mailSender.send(message);
         }

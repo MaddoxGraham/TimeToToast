@@ -7,6 +7,7 @@ import com.maddoxgraham.TimeToToast.Models.User;
 import com.maddoxgraham.TimeToToast.Repository.UserRepository;
 import com.maddoxgraham.TimeToToast.Services.EmailService;
 import com.maddoxgraham.TimeToToast.Services.EventService;
+import com.maddoxgraham.TimeToToast.Services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +20,13 @@ import java.util.Optional;
 public class EventController {
 
     private final EventService eventService;
-    private EmailService emailService;
+    private final EmailService emailService;
+    private final UserService userService;
 
-    public EventController(EventService eventService,EmailService emailService ) {
+    public EventController(EventService eventService,EmailService emailService,UserService userService ) {
         this.eventService = eventService;
         this.emailService = emailService;
+        this.userService = userService;
     }
 
     @GetMapping("/all")
@@ -56,17 +59,21 @@ public class EventController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/sendEmail")
-    public String sendTestEmail(@RequestBody EmailDataDto emailDataDto) {
-        emailService.sendingMail(emailDataDto.getTo(), emailDataDto.getSubject(), emailDataDto.getBody());
-        return "Email sent successfully!";
-    }
-    
-//    @PostMapping("/sendHTMLEmail")
-//    public String sendHTMLEmail(@RequestBody EmailDataDto emailDataDto) {
-//        emailService.sendHtmlEmail(emailDataDto.getTo(), emailDataDto.getSubject(), emailDataDto.getBody());
+//    @PostMapping("/sendEmail")
+//    public String sendTestEmail(@RequestBody EmailDataDto emailDataDto) {
+//        emailService.sendingMail(emailDataDto.getTo(), emailDataDto.getSubject(), emailDataDto.getBody());
 //        return "Email sent successfully!";
 //    }
+
+    @PostMapping("/sendHTMLEmail")
+    public String sendHTMLEmail(@RequestBody EmailDataDto emailDataDto) {
+        User user = userService.findUserByIdUser(emailDataDto.getIdUser());
+        Event event = eventService.findEventByIdEvent(emailDataDto.getIdEvent());
+
+        emailService.sendHtmlEmail(emailDataDto.getTo(),user, event);
+
+        return "Email sent successfully!";
+    }
 
 }
 
