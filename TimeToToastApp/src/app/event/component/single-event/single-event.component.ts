@@ -169,13 +169,14 @@ sendEmail(): void {
   this.eventService.addGuest(this.emailData).subscribe(
     (response) => {
       this.successMessage = "E-mails envoyés avec succès !";
-      document.getElementById('emailModal')?.click(); // Ferme la modale
+      
     },
     (error) => {
       this.successMessage = "Erreur lors de l'envoi des e-mails.";
       // Vous pouvez choisir de ne pas fermer la modale ici
     }
   );
+  document.getElementById('emailModal')?.click(); // Ferme la modale
 }
 
 
@@ -183,27 +184,40 @@ sendEmail(): void {
 checkEmail(event: KeyboardEvent, inputEmail: string, inputElement: HTMLInputElement): void {
   this.emailInvalid = false;
   this.emailExists = false;
+
+   // Supprimer les espaces en début et en fin de chaîne
+   inputEmail = inputEmail.trim();
+
+     // Gérer le cas de la touche Backspace
+  if (event.code === 'Backspace') {
+    if (inputEmail === '') {
+      this.emailList.pop();
+    }
+    return;
+  }
   
   if (event.code === 'Space' || event.code === 'Enter') {
-    // Vérifier si l'email est valide
+    event.preventDefault(); // Ajouté cette ligne pour empêcher le comportement par défaut
+
+    // Votre code pour vérifier la validité de l'e-mail reste le même
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     if (!emailRegex.test(inputEmail)) {
       this.emailInvalid = true;
       return;
     }
 
-    // Vérifier si l'email existe déjà dans la liste
+    // Votre code pour vérifier si l'e-mail existe déjà dans la liste reste le même
     if (this.emailList.includes(inputEmail)) {
       this.emailExists = true;
       return;
     }
 
-    // Ajouter l'email à la liste et réinitialiser l'input
+    // Ajoutez l'e-mail à la liste et réinitialisez l'input
     this.emailList.push(inputEmail);
     inputElement.value = '';
-  } else if (event.code === 'Backspace' && inputEmail === '') {
-    // Supprimer la dernière adresse e-mail de la liste
-    this.emailList.pop();
+
+ 
+
   }
 }
 

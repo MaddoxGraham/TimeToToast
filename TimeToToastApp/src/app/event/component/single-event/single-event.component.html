@@ -41,6 +41,7 @@
          type="text"
          class="form-control"
          (keyup)="checkEmail($event, emailInput.value, emailInput)"
+         (keydown.enter)="$event.preventDefault()"
          #emailInput
        />
        <div *ngIf="emailInvalid" class="invalid-feedback d-block">
