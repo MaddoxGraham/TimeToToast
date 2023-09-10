@@ -1,21 +1,29 @@
 package com.maddoxgraham.TimeToToast.Controllers;
 
+import com.maddoxgraham.TimeToToast.DTOs.EmailDataDto;
+import com.maddoxgraham.TimeToToast.Models.EmailData;
 import com.maddoxgraham.TimeToToast.Models.Event;
+import com.maddoxgraham.TimeToToast.Models.User;
+import com.maddoxgraham.TimeToToast.Repository.UserRepository;
+import com.maddoxgraham.TimeToToast.Services.EmailService;
 import com.maddoxgraham.TimeToToast.Services.EventService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/event")
 public class EventController {
 
     private final EventService eventService;
+    private EmailService emailService;
 
-    public EventController(EventService eventService) {
+    public EventController(EventService eventService,EmailService emailService ) {
         this.eventService = eventService;
+        this.emailService = emailService;
     }
 
     @GetMapping("/all")
@@ -47,6 +55,19 @@ public class EventController {
         eventService.deleteEvent(idEvent);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PostMapping("/sendEmail")
+    public String sendTestEmail(@RequestBody EmailDataDto emailDataDto) {
+        emailService.sendingMail(emailDataDto.getTo(), emailDataDto.getSubject(), emailDataDto.getBody());
+        return "Email sent successfully!";
+    }
+    
+//    @PostMapping("/sendHTMLEmail")
+//    public String sendHTMLEmail(@RequestBody EmailDataDto emailDataDto) {
+//        emailService.sendHtmlEmail(emailDataDto.getTo(), emailDataDto.getSubject(), emailDataDto.getBody());
+//        return "Email sent successfully!";
+//    }
+
 }
 
 

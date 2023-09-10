@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { EmailDataDto } from 'src/app/share/dtos/EmailData/EmailDataDto';
 import { EventDto } from 'src/app/share/dtos/event/event-dto';
 import { UserEventRoleDto } from 'src/app/share/dtos/userEventRole/user-event-role-dto';
 import { UserEventsDto } from 'src/app/share/dtos/userEvents/user-events-dto';
@@ -40,4 +41,7 @@ export class EventService {
       return this.httpClient.get<UserEventRoleDto[]>(`${environment.getUserEventRoleList}/${idEvent}`);
     }
 
+    addGuest(emailData: EmailDataDto) {
+      return this.httpClient.post<any>(`${environment.sendingEmail}`, emailData);
+    }
   }

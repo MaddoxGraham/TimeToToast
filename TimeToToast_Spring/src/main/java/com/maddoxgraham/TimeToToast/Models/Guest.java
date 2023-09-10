@@ -19,6 +19,11 @@ public class Guest implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)
     private Long idGuest;
+
+    private String email;
+    private String lastName;
+    private String firstName;
+
     private Role role;
 
     private Long token;
