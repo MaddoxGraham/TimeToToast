@@ -5,6 +5,8 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.maddoxgraham.TimeToToast.DTOs.UserDto;
+import com.maddoxgraham.TimeToToast.Models.Event;
+import com.maddoxgraham.TimeToToast.Models.Guest;
 import com.maddoxgraham.TimeToToast.Services.UserService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -65,6 +70,31 @@ public class UserAuthProvider {
                 .withClaim("login", login)
                 .sign(Algorithm.HMAC256(secretKey));
     }
+
+    public String createGuestToken(Guest guest, Event event) {
+        Date now = new Date();
+        LocalTime localTime = LocalTime.now();
+        LocalDateTime localDateTime = LocalDateTime.of(event.getEventDate(), localTime);
+        Date dateEvent = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+        long eventPlusSevenDays = dateEvent.getTime();
+        eventPlusSevenDays += 7L * 24 * 60 * 60 * 1000;
+        Date validity = new Date(eventPlusSevenDays);
+        Algorithm algorithm = Algorithm.HMAC256(secretKey);
+
+        String userType = guest.getRole().toString();
+        String email = guest.getEmail();
+        Long idEvent = event.getIdEvent();
+
+        return JWT.create()
+                .withIssuer(userType)
+                .withIssuedAt(now)
+                .withExpiresAt(validity)
+                .withClaim("email", email)
+                .withClaim("idEvent", idEvent)
+                .sign(Algorithm.HMAC256(secretKey));
+
+    }
+
 
     private String createRefreshToken(Object userDto) {
         Date now = new Date();
