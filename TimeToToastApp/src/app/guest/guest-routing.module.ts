@@ -8,7 +8,7 @@ import { RoleGuard } from '../core/guard/role.guard';
 
 const routes: Routes = [
  
-    { path: 'newGuest', component: NewGuestComponent, canActivate: [RoleGuard], data: { expectedRole: 'USER' } }
+    { path: 'newGuest/:token', component: NewGuestComponent }
   ];
   
   @NgModule({

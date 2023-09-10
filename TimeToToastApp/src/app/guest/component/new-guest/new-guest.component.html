@@ -1,1 +1,21 @@
-<p>new-guest works!</p>
+<section *ngIf="state === 'form'">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+        <span class="p-float-label">
+            <input pInputText id="firstName" formControlName="firstName" />
+            <label htmlFor="firstName">Prénom</label>
+        </span>
+        <span class="p-float-label">
+            <input pInputText id="lastName" formControlName="lastName" />
+            <label htmlFor="lastName">Nom</label>
+        </span>
+        <p-button label="Submit"></p-button>
+    </form>
+</section>
+
+<section *ngIf="state === 'text'">
+    <p>Texte simple</p>
+</section>
+
+<section *ngIf="state === 'spinner'">
+    <p-progressSpinner></p-progressSpinner>
+</section>

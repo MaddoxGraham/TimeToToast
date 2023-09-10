@@ -6,7 +6,6 @@ import { SingleEventComponent } from './component/single-event/single-event.comp
 import { ShareModule } from '../share/share.module';
 import { EventRoutingModule } from './event-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; // Ajouté
-import { DropdownModule } from 'primeng/dropdown'; // Ajouté
 import { MapComponent } from './component/map/map.component';
 import { TaskComponent } from './component/task/task.component';
 
@@ -24,7 +23,6 @@ import { TaskComponent } from './component/task/task.component';
     CommonModule,
     ShareModule,
     EventRoutingModule,
-    DropdownModule, // Ajouté
     FormsModule,
     ReactiveFormsModule
   ]

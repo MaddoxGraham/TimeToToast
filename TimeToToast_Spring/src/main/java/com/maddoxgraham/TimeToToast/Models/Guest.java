@@ -27,7 +27,7 @@ public class Guest implements Serializable {
     private Role role;
 
     private String token;
-    private  boolean isPresent;
+    private Boolean isPresent;
 
     @ManyToOne
     @JoinColumn(name = "idEvent", nullable = false)

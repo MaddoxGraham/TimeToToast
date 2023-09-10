@@ -52,14 +52,14 @@ public class EmailService {
             guest.setFirstName(user.getFirstName());
             guest.setLastName(user.getLastName());
             guest.setEmail(to);
-            guest.setPresent(false);
+            guest.setIsPresent(false);
             guest.setRole(Role.GUEST);
             guest.setEvent(event);
             guest.setToken(userAuthProvider.createGuestToken(guest, event));
             guestRepository.save(guest);
 
 
-//génération d'un token et d'un lien associé
+            //génération d'un token et d'un lien associé
 
             helper.setTo(to);
             helper.setSubject(user.getLastName() + ' ' + user.getFirstName() + " vous invite à l'événement : " + event.getTitle());

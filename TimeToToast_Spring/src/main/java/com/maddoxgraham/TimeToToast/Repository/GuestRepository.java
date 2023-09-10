@@ -10,5 +10,8 @@ import java.util.Optional;
 public interface GuestRepository extends JpaRepository<Guest, Long> {
     void deleteGuestByIdGuest(Long idGuest);
     Optional<Guest> findGuestByIdGuest(Long idGuest);
+
+    Optional<Guest> findGuestByEmail(String email);
+
 }
 
