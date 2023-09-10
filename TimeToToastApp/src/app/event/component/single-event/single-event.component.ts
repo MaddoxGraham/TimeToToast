@@ -195,7 +195,7 @@ checkEmail(event: KeyboardEvent, inputEmail: string, inputElement: HTMLInputElem
     }
     return;
   }
-  
+
   if (event.code === 'Space' || event.code === 'Enter') {
     event.preventDefault(); // Ajouté cette ligne pour empêcher le comportement par défaut
 
@@ -216,10 +216,9 @@ checkEmail(event: KeyboardEvent, inputEmail: string, inputElement: HTMLInputElem
     this.emailList.push(inputEmail);
     inputElement.value = '';
 
- 
-
   }
 }
+//forced commit
 
 
 }
