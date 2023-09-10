@@ -67,7 +67,7 @@ public class EmailService {
             String htmlContent = " <h2 style=\"font-family: 'Phudu', cursive; font-size: 1.5rem; font-variant: small-caps; letter-spacing: 2px; color: #a57b45; margin-bottom: 5%;\">" + user.getLastName() + ' ' + user.getFirstName() + " vous invite à l'événement : " + event.getTitle() + "</h2>"
                  + "<p> Le" + event.getEventDate() + " à " + event.getVille() +  "</p>"
                    + "<h4 style=\"font-size: 14px; font-variant: small-caps; letter-spacing: 2px; margin-top: 5%;\">Cliquez sur le lien pour participer.</h4>"
-                    + "<a href='http://localhost:4200/newGuest/" + guest.getToken() + "'>Participer</a>";
+                    + "<a href='http://localhost:4200/guest/newGuest/" + guest.getToken() + "'>Participer</a>";
 
             helper.setText(htmlContent, true);
 
