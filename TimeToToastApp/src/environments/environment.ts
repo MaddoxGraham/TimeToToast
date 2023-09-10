@@ -16,6 +16,6 @@ export const environment = {
     getUserEventRole:'http://localhost:8080/userEventRole/findRole',
     getUserEventRoleList:'http://localhost:8080/userEventRole/AllByEvent',
 
-    sendingEmail:'http://localhost:8080/event/sendEmail'
+    sendingEmail:'http://localhost:8080/event/sendHTMLEmail'
 }
   

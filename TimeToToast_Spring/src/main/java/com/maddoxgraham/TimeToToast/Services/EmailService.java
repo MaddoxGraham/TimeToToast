@@ -1,6 +1,7 @@
 package com.maddoxgraham.TimeToToast.Services;
 
 
+import com.maddoxgraham.TimeToToast.Models.Event;
 import com.maddoxgraham.TimeToToast.Models.User;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
@@ -29,24 +30,23 @@ public class EmailService {
         mailSender.send(message);
     }
 
-    public void sendHtmlEmail(String[] toAddresses, Long idEvent, Long idUser) throws MessagingException {
+    public void sendHtmlEmail(String[] toAddresses, User user, Event event) throws MessagingException {
 
-        // recupération du user via idUser
-        //récupération du event via idEvent.
 
         for (String to : toAddresses) {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
 //génération d'un token et d'un lien associé
 
-//            helper.setTo(to);
-//            helper.setSubject(creatorName + " vous invite à l'événement : " + eventName);
-//
-//            String htmlContent = "<h1>" + creatorName + " vous invite à l'événement : " + eventName + "</h1>"
-//                    + "<p>Cliquez sur le lien pour participer.</p>"
-//                    + "<a href='ton_lien_ici'>Participer</a>";
+            helper.setTo(to);
+            helper.setSubject(user.getLastName() + ' ' + user.getFirstName() + " vous invite à l'événement : " + event.getTitle());
 
-//            helper.setText(htmlContent, true);
+            String htmlContent = " <h2 style=\"font-family: 'Phudu', cursive; font-size: 1.5rem; font-variant: small-caps; letter-spacing: 2px; color: #a57b45; margin-bottom: 5%;\">" + user.getLastName() + ' ' + user.getFirstName() + " vous invite à l'événement : " + event.getTitle() + "</h2>"
+                 + "<p> Le" + event.getEventDate() + " à " + event.getVille() +  "</p>"
+                   + "<h4 style=\"font-size: 14px; font-variant: small-caps; letter-spacing: 2px; margin-top: 5%;\">Cliquez sur le lien pour participer.</h4>"
+                    + "<a href='http://localhost:4200'>Participer</a>";
+
+            helper.setText(htmlContent, true);
 
             mailSender.send(message);
         }

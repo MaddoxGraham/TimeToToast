@@ -8,6 +8,7 @@ import com.maddoxgraham.TimeToToast.Repository.UserRepository;
 import com.maddoxgraham.TimeToToast.Services.EmailService;
 import com.maddoxgraham.TimeToToast.Services.EventService;
 import com.maddoxgraham.TimeToToast.Services.UserService;
+import jakarta.mail.MessagingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -66,11 +67,15 @@ public class EventController {
 //    }
 
     @PostMapping("/sendHTMLEmail")
-    public String sendHTMLEmail(@RequestBody EmailDataDto emailDataDto) {
+    public String sendHTMLEmail(@RequestBody EmailDataDto emailDataDto) throws MessagingException {
         User user = userService.findUserByIdUser(emailDataDto.getIdUser());
         Event event = eventService.findEventByIdEvent(emailDataDto.getIdEvent());
 
-        emailService.sendHtmlEmail(emailDataDto.getTo(),user, event);
+        try {
+            emailService.sendHtmlEmail(emailDataDto.getTo(),user, event);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
 
         return "Email sent successfully!";
     }

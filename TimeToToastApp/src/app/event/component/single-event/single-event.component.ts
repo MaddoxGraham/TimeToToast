@@ -22,7 +22,9 @@ export class SingleEventComponent implements OnInit {
   public isTaskModuleActive: boolean = false;
   public idUser = localStorage.getItem("user");
   public userEvent!: UserEventRoleDto;
-  emailData: EmailDataDto = { to: [], subject: '', body: '' };  // Initialise avec des valeurs par défaut
+  emailData: EmailDataDto = { to : [], 
+    idUser: 0,
+    idEvent: 0 } 
   emailForm: FormGroup = this.fb.group({});
 
   emailList: string[] = [];
@@ -34,9 +36,11 @@ export class SingleEventComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
     private eventService: EventService,
-    private userService: UserService,
-    private fb: FormBuilder) { 
-      
+    private fb: FormBuilder,) { 
+     
+        this.emailForm = this.fb.group({
+          emails: this.fb.array([]),
+        });
     }
 
 
@@ -148,28 +152,20 @@ export class SingleEventComponent implements OnInit {
 
 
   dataEmail() {  
-    this.emailData.subject = `${this.user.lastName} ${this.user.firstName} vous invite à l'événement : ${this.event.title}`;
-    this.emailData.body = this.getEmailBody();
+    const idUser: UserDto = JSON.parse(sessionStorage.getItem('user') || '{}');
+      if (idUser.idUser  && this.event) {
+        this.emailData.idUser = idUser.idUser;
+        this.emailData.idEvent = this.event.idEvent;
+        console.log(this.emailData)
+      } else {
+        // Gérer le cas où les valeurs sont indéfinies
+        console.error("idUser ou idEvent est indéfini");
+      }
   }
-
-getEmailBody() {
-  return `
-    <div style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; text-align: center;"><strong>Corps :</strong>
-      <h2 style="font-family: 'Phudu', cursive; font-size: 1.5rem; font-variant: small-caps; letter-spacing: 2px; color: #a57b45; margin-bottom: 5%;"> ${this.user.lastName} ${this.user.firstName} vous invite à l'événement : ${this.event.title} </h2>
-      type de l'événement : ${this.event.categorie}.<br>
-      Le ${this.event.eventDate} <br>
-
-      <h4 style="font-size: 14px; font-variant: small-caps; letter-spacing: 2px; margin-top: 5%;"> Dites à vos proches que vous participez en vous connectant sur le lien : </h4>
-
-      <a href="localhost://4200/event/${this.event.idEvent}" style="color: #a57b45; font-variant: small-caps; letter-spacing: 2px;"> Cliquez ici  </a> 
-
-      <img class="img-fluid" src="/assets/images/timetotoast.webp" />
-    </div>
-  `;
-}
 
 sendEmail(): void {
   this.emailData.to = [...this.emailList];
+  console.log(this.emailData)
   this.eventService.addGuest(this.emailData).subscribe(
     (response) => {
       this.successMessage = "E-mails envoyés avec succès !";

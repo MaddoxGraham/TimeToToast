@@ -17,7 +17,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="emailModalLabel">Envoyer un email</h5>
+        <h5 class="modal-title" id="emailModalLabel">Envoyez des invitation </h5>
         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Fermer">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -34,7 +34,10 @@
 
           </div>
          <!-- Input pour entrer l'e-mail -->
+         <label for="email"> Rentrez les emails de vos invités </label>
          <input
+         name="email"
+         id="email"
          type="text"
          class="form-control"
          (keyup)="checkEmail($event, emailInput.value, emailInput)"
@@ -47,9 +50,6 @@
          Cette adresse e-mail existe déjà dans la liste.
        </div>
 
-
-          <p><strong>Sujet :</strong> {{emailData.subject}}</p>
-          <div [innerHTML]="getEmailBody()"></div>
           <button type="submit" [disabled]="emailList.length === 0" class="btn btn-primary">Envoyer</button>
         </form>
         

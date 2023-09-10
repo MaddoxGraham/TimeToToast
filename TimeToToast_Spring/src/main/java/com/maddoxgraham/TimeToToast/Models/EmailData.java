@@ -11,8 +11,10 @@ import lombok.NoArgsConstructor;
 public class EmailData {
 
     private String[] to;
-    private String subject;
-    private String body;
+    private User user;
+    private Event event;
+//    private String subject;
+//    private String body;
 
 
 }
