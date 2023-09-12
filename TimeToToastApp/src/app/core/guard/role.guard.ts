@@ -15,10 +15,12 @@ export class RoleGuard implements CanActivate {
     state: RouterStateSnapshot): boolean {
       const userData = sessionStorage.getItem('user');
       if (userData) {
+
         const user = JSON.parse(userData) as UserDto;
-        if (route.data['expectedRole'] === user.role) {
+        if (route.data['expectedRole'].includes(user.role)) {
           return true;
-        }
+          
+        }        
       }
       this.router.navigate(['']);
       return false;
