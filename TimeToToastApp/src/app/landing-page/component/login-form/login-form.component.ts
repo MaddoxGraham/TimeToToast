@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/core/service/authentication/authentication.service';
 import { UserService } from 'src/app/core/service/user/user.service';
+import { GuestDto } from 'src/app/share/dtos/guest/guest-dto';
 import { UserDto } from 'src/app/share/dtos/user/user-dto';
 
 @Component({
@@ -15,12 +16,13 @@ export class LoginFormComponent implements OnInit{
     active: string = "login";
     loginForm!: FormGroup;
     registerForm!: FormGroup;
+    guest!: GuestDto;
 
     constructor(private formBuilder: FormBuilder,
                 private authService: AuthenticationService,
                 private userService: UserService,
                 private router: Router,) {
-        
+      this.guest = JSON.parse(sessionStorage.getItem("user") || `{}`);
     }
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
@@ -51,6 +53,10 @@ export class LoginFormComponent implements OnInit{
     }
 
     onSubmit(form: FormGroup): void {
+      console.log(this.guest.role == 'GUEST')
+      if(this.guest.role == 'GUEST'){
+        this.userService.deleteGuest(this.guest.idGuest).subscribe();
+      }
       if(this.authService.getAuthToken() !== null) {
         window.localStorage.removeItem("auth_token");
       }

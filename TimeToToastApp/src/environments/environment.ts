@@ -19,5 +19,7 @@ export const environment = {
     sendingEmail:'http://localhost:8080/event/sendHTMLEmail',
 
     verifyGuest:'http://localhost:8080/guest/verifyGuest',
+    deleteGuest: 'http://localhost:8080/guest/delete/',
+    addDetailsToGuest: 'http://localhost:8080/guest/addDetailsToGuest/',
 }
   

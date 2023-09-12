@@ -49,8 +49,6 @@ public class EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             // Enregistrement du candidat
             Guest guest = new Guest();
-            guest.setFirstName(user.getFirstName());
-            guest.setLastName(user.getLastName());
             guest.setEmail(to);
             guest.setIsPresent(false);
             guest.setRole(Role.GUEST);

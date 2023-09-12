@@ -1,5 +1,5 @@
 <section *ngIf="state === 'form'">
-    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="userForm">
         <span class="p-float-label">
             <input pInputText id="firstName" formControlName="firstName" />
             <label htmlFor="firstName">Prénom</label>
@@ -8,7 +8,7 @@
             <input pInputText id="lastName" formControlName="lastName" />
             <label htmlFor="lastName">Nom</label>
         </span>
-        <p-button label="Submit"></p-button>
+        <p-button label="Submit" (click)="onSubmit()"></p-button>
     </form>
 </section>
 

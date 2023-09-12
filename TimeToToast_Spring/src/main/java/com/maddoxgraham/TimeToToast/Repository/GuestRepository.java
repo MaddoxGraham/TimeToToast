@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface GuestRepository extends JpaRepository<Guest, Long> {
-    void deleteGuestByIdGuest(Long idGuest);
+    //void deleteGuestByIdGuest(Long idGuest);
     Optional<Guest> findGuestByIdGuest(Long idGuest);
 
     Optional<Guest> findGuestByEmail(String email);

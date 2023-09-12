@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GuestDto {
-    Long id;
+    Long idGuest;
     String token;
     Long idEvent;
     String role;

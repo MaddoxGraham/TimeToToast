@@ -6,4 +6,5 @@ export interface GuestDto {
     firstName: string,
     lastName: string,
     isPresent: boolean,
+    token: string,
 }

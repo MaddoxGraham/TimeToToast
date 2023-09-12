@@ -40,7 +40,8 @@ public class GuestService {
     }
 
     public void deleteGuest(Long idGuest){
-        guestRepository.deleteGuestByIdGuest(idGuest);
+        //guestRepository.deleteGuestByIdGuest(idGuest);
+        guestRepository.deleteById(idGuest);
     }
 
     public GuestDto verifyGuest(String email) {
@@ -57,5 +58,18 @@ public class GuestService {
         Guest guest = guestRepository.findGuestByEmail(email)
                 .orElseThrow(() -> new AppException("Unknown guest", HttpStatus.NOT_FOUND));
         return GuestMapper.toDto(guest);
+    }
+
+    public GuestDto addDetailsToGuest(Long igGuest, String firstName, String lastName) {
+        Optional<Guest> guestOpt = guestRepository.findGuestByIdGuest(igGuest);
+        if(guestOpt.isPresent()){
+            Guest guest = guestOpt.get();
+            guest.setFirstName(firstName);
+            guest.setLastName(lastName);
+            guestRepository.save(guest);
+            GuestDto guestDto = GuestMapper.toDto(guest);
+            return guestDto;
+        }
+        return null;
     }
 }

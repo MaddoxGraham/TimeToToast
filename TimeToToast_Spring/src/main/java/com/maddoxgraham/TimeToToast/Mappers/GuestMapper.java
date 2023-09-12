@@ -12,7 +12,7 @@ public class GuestMapper {
         }
 
         GuestDto dto = new GuestDto();
-        dto.setId(guest.getIdGuest());
+        dto.setIdGuest(guest.getIdGuest());
         dto.setToken(guest.getToken());
         dto.setEmail(guest.getEmail());
         dto.setFirstName(guest.getFirstName());
@@ -30,7 +30,7 @@ public class GuestMapper {
         }
 
         Guest guest = new Guest();
-        guest.setIdGuest(dto.getId());
+        guest.setIdGuest(dto.getIdGuest());
         guest.setToken(dto.getToken());
         guest.setEmail(dto.getEmail());
         guest.setFirstName(dto.getFirstName());

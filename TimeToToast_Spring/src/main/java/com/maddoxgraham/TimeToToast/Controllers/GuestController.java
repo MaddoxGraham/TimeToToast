@@ -21,12 +21,25 @@ public class GuestController {
         this.userAuthProvider = userAuthProvider;
     }
 
-
     @PostMapping("/verifyGuest")
     public ResponseEntity<GuestDto> verifyGuest(@RequestBody String token){
         String email = userAuthProvider.verifyGuest(token);
         GuestDto guestDto = guestService.verifyGuest(email);
         return new ResponseEntity<>(guestDto, HttpStatus.OK);
     }
+
+    @DeleteMapping("/delete/{idGuest}")
+    public ResponseEntity<?> deleteGuest(@PathVariable Long idGuest){
+        guestService.deleteGuest(idGuest);
+        String message = "Guest supprimé";
+        return new ResponseEntity<>(message, HttpStatus.OK);
+    }
+
+    @PutMapping("/addDetailsToGuest/{idGuest}")
+    public ResponseEntity<GuestDto> addDetailsToGuest(@PathVariable Long idGuest, @RequestBody GuestDto guestDetailsDto) {
+        GuestDto guestDto = guestService.addDetailsToGuest(idGuest, guestDetailsDto.getFirstName(), guestDetailsDto.getLastName());
+        return new ResponseEntity<>(guestDto, HttpStatus.OK);
+    }
+
 
 }

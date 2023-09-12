@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class UserService {
-  
+
   constructor(private httpClient: HttpClient) { }
 
   addUser(data: { login: string, firstName:string, lastName:string, email:string, ville:string, cp:string, birthday:Date,phone:string, adresse:string,  password: string }): Observable<UserDto> {
@@ -22,5 +22,9 @@ export class UserService {
 
   updateUser(id: number, user: UserDto): Observable<UserDto> {
     return this.httpClient.put<UserDto>(`${environment.updateUser}${id}`, user);
+  }
+
+  deleteGuest(idGuest: number) {
+    return this.httpClient.delete(`${environment.deleteGuest}${idGuest}`);
   }
 }

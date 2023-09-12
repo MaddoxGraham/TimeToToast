@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { from } from 'rxjs';
+import { AuthenticationService } from 'src/app/core/service/authentication/authentication.service';
 import { GuestService } from 'src/app/core/service/guest/guest.service';
 import { GuestDto } from 'src/app/share/dtos/guest/guest-dto';
 
@@ -19,16 +19,16 @@ export class NewGuestComponent implements OnInit{
 
   constructor(private route: ActivatedRoute,
               private guestService: GuestService,
-              private fb: FormBuilder) {}
-
-
+              private fb: FormBuilder,
+              private authService: AuthenticationService,) { }
+              
+              
   ngOnInit(): void {
     this.verifyGuest();
     this.initForm();
     const storedGuestInfo = localStorage.getItem('guestInfo');
     if (storedGuestInfo) {
       const guest: GuestDto = JSON.parse(storedGuestInfo);
-      
     }
   }
 
@@ -37,8 +37,9 @@ export class NewGuestComponent implements OnInit{
     if(this.token) {
       this.guestService.verifyGuest(this.token).subscribe((response: GuestDto) => {
         this.guest = response;
-        sessionStorage.setItem('user',JSON.stringify(this.guest))
-        console.log(this.guest);
+        sessionStorage.setItem('user',JSON.stringify(this.guest));
+        window.localStorage.setItem("auth_token", this.guest.token);
+        this.authService.isLoggedIn.next(true);
         if(this.guest.firstName == null && this.guest.lastName == null) {
           this.state = 'form';
         } else {
@@ -56,13 +57,21 @@ export class NewGuestComponent implements OnInit{
   initForm() {
     this.userForm = this.fb.group({
       firstName: ['', Validators.required],
-      lastName: ['', Validators.required]
+      lastName: ['', Validators.required],
     });
   }
 
   onSubmit(): void {
     if (this.userForm.valid) {
-      
+      this.guestService.addDetailsToGuest(
+        {
+          lastName: this.userForm.value.lastName,
+          firstName: this.userForm.value.firstName 
+        }, this.guest.idGuest).subscribe((response: GuestDto) => {
+          this.guest = response;
+          console.log(this.guest)
+          //localStorage.setItem('guestInfo', JSON.stringify(this.guest));
+      })
     }
   }
 
