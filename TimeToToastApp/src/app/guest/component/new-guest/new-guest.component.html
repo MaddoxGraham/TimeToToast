@@ -12,8 +12,13 @@
     </form>
 </section>
 
-<section *ngIf="state === 'text'">
-    <p>Texte simple</p>
+<section class="container my-5 text-center " *ngIf="state === 'text'">
+    <div class="row"> 
+ <div class="col-md-6"> <img src="/assets/images/confettis.webp" class="img-fluid" alt=""> </div>
+  <div class="col-md-6 border box-shadow pt-5" > <h2 class="my-4 ">BON RETOUR PARMIS NOUS ! </h2>
+  <div class="mt-5">   <p> Accéder à votre événement en cliquant sur le boutton ci-dessous. Ou inscrivez vous directement pour partager et vivre des experiences uniques !</p>
+      <small>  sans inscription de votre part votre lien d'accès sera disponible jusqu'à septs jours aprés votre événement.</small></div>
+    <button (click)="storeGuestInfo()" [routerLink]="['/event/singleEvent/', guest.idEvent]"  class="btn btn-light box-shadow p-3 my-4"> Accéder à l'événement <i class="fa-solid fa-angles-right"></i></button> </div>  </div>
 </section>
 
 <section *ngIf="state === 'spinner'">

@@ -62,8 +62,8 @@
             <p class="card-text">
               {{ event.description | slice:0:150 }}
             </p>
-            <a [routerLink]="['/event/singleEvent', event.idEvent]" class="btn btn-party">En savoir plus <i
-                class="fa-solid fa-angles-right"></i> </a>
+            <button [routerLink]="['/event/singleEvent', event.idEvent]" class="btn btn-party">En savoir plus <i
+                class="fa-solid fa-angles-right"></i> </button>
           </div>
         </div>
       </div>

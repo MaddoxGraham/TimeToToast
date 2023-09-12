@@ -15,6 +15,7 @@ export class NewGuestComponent implements OnInit{
   guest!: GuestDto;
   userForm!: FormGroup;
   state: 'form' | 'text' | 'spinner' = 'spinner';
+  
 
   constructor(private route: ActivatedRoute,
               private guestService: GuestService,
@@ -24,19 +25,29 @@ export class NewGuestComponent implements OnInit{
   ngOnInit(): void {
     this.verifyGuest();
     this.initForm();
+    const storedGuestInfo = localStorage.getItem('guestInfo');
+    if (storedGuestInfo) {
+      const guest: GuestDto = JSON.parse(storedGuestInfo);
+      
+    }
   }
 
   verifyGuest() {
     this.token = this.route.snapshot.paramMap.get('token');
     if(this.token) {
       this.guestService.verifyGuest(this.token).subscribe((response: GuestDto) => {
-        this.guest = response;
+        this.guest = response; console.log(this.guest);
         if(this.guest.firstName == null && this.guest.lastName == null) {
           this.state = 'form';
         } else {
           this.state = 'text'
         }
       })
+    }
+  }
+  storeGuestInfo(): void {
+    if (this.guest) {
+      localStorage.setItem('guestInfo', JSON.stringify(this.guest));
     }
   }
 
