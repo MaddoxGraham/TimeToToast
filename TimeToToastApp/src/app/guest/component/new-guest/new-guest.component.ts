@@ -36,7 +36,9 @@ export class NewGuestComponent implements OnInit{
     this.token = this.route.snapshot.paramMap.get('token');
     if(this.token) {
       this.guestService.verifyGuest(this.token).subscribe((response: GuestDto) => {
-        this.guest = response; console.log(this.guest);
+        this.guest = response;
+        sessionStorage.setItem('user',JSON.stringify(this.guest))
+        console.log(this.guest);
         if(this.guest.firstName == null && this.guest.lastName == null) {
           this.state = 'form';
         } else {
