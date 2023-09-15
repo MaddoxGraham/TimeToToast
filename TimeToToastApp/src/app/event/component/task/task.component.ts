@@ -23,10 +23,6 @@ export class TaskComponent implements OnInit{
   constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
-    this.isTaskModuleActive = localStorage.getItem('isTaskModuleActive') ? localStorage.getItem('isTaskModuleActive') === 'true' : false;
-
-    console.log(this.isTaskModuleActive);
-
     this.taskForm = this.fb.group({
       description: ['', [Validators.required]],
       urgency: ['Moyenne', [Validators.required]],

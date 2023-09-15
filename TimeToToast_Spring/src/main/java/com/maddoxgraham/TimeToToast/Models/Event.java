@@ -37,6 +37,9 @@ public class Event implements Serializable {
     private String Ville;
     private String cp;
 
+    private boolean taskModuleActive;
+    private boolean GiftModuleActive;
+    private boolean PhotoModuleActive;
 
     @OneToMany(mappedBy = "event")
     private Set<UserEventRole> userEventRoles;

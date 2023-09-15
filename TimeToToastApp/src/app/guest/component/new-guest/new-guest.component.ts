@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/core/service/authentication/authentication.service';
 import { GuestService } from 'src/app/core/service/guest/guest.service';
 import { GuestDto } from 'src/app/share/dtos/guest/guest-dto';
@@ -20,10 +20,12 @@ export class NewGuestComponent implements OnInit{
   constructor(private route: ActivatedRoute,
               private guestService: GuestService,
               private fb: FormBuilder,
-              private authService: AuthenticationService,) { }
+              private authService: AuthenticationService,
+              private router : Router) { }
               
               
   ngOnInit(): void {
+
     this.verifyGuest();
     this.initForm();
     const storedGuestInfo = localStorage.getItem('guestInfo');
@@ -61,6 +63,8 @@ export class NewGuestComponent implements OnInit{
     });
   }
 
+  
+
   onSubmit(): void {
     if (this.userForm.valid) {
       this.guestService.addDetailsToGuest(
@@ -70,6 +74,7 @@ export class NewGuestComponent implements OnInit{
         }, this.guest.idGuest).subscribe((response: GuestDto) => {
           this.guest = response;
           console.log(this.guest)
+          this.router.navigateByUrl(`/event/singleEvent/${this.guest.idEvent}`)
           //localStorage.setItem('guestInfo', JSON.stringify(this.guest));
       })
     }

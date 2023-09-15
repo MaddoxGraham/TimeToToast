@@ -6,6 +6,7 @@ import com.maddoxgraham.TimeToToast.Models.Enums.Role;
 import com.maddoxgraham.TimeToToast.Models.Event;
 import com.maddoxgraham.TimeToToast.Models.Guest;
 import com.maddoxgraham.TimeToToast.Models.User;
+import com.maddoxgraham.TimeToToast.Models.UserEventRole;
 import com.maddoxgraham.TimeToToast.Repository.GuestRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
@@ -56,8 +57,7 @@ public class EmailService {
             guest.setToken(userAuthProvider.createGuestToken(guest, event));
             guestRepository.save(guest);
 
-
-            //génération d'un token et d'un lien associé
+          //génération d'un token et d'un lien associé
 
             helper.setTo(to);
             helper.setSubject(user.getLastName() + ' ' + user.getFirstName() + " vous invite à l'événement : " + event.getTitle());
@@ -72,4 +72,6 @@ public class EmailService {
             mailSender.send(message);
         }
     }
+
+
 }

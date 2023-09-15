@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { EventService } from 'src/app/core/service/event/event.service';
 import { EmailDataDto } from 'src/app/share/dtos/EmailData/EmailDataDto';
 import { EventDto } from 'src/app/share/dtos/event/event-dto';
+import { GuestDto } from 'src/app/share/dtos/guest/guest-dto';
 import { UserDto } from 'src/app/share/dtos/user/user-dto';
 import { UserEventRoleDto } from 'src/app/share/dtos/userEventRole/user-event-role-dto';
 
@@ -14,114 +15,57 @@ import { UserEventRoleDto } from 'src/app/share/dtos/userEventRole/user-event-ro
   styleUrls: ['./single-event.component.css']
 })
 export class SingleEventComponent implements OnInit {
-  eventDetails: any; // Type this based on your EventDto
+
   event!: EventDto;
   user!: UserDto;
   userEventList!: UserEventRoleDto[];
   public isTaskModuleActive: boolean = false;
+  public isGiftModuleActive: boolean = false;
+  public isPhotoModuleActive: boolean = false;
   public idUser = localStorage.getItem("user");
   public userEvent!: UserEventRoleDto;
-  emailData: EmailDataDto = { to : [], 
+  emailData: EmailDataDto = {
+    to: [],
     idUser: 0,
-    idEvent: 0 } 
+    idEvent: 0
+  }
   emailForm: FormGroup = this.fb.group({});
-
   emailList: string[] = [];
   emailInvalid: boolean = false;
   emailExists: boolean = false;
   successMessage: string = ''; // message de succès
-
+  public guests!: GuestDto[];
 
 
   constructor(private route: ActivatedRoute,
     private eventService: EventService,
-    private fb: FormBuilder,) { 
-     
-        this.emailForm = this.fb.group({
-          emails: this.fb.array([]),
-        });
-    }
+    private fb: FormBuilder,) {
 
+    this.emailForm = this.fb.group({
+      emails: this.fb.array([]),
+    });
+  }
 
-    get emails() {
-      return (this.emailForm.get('emails') as FormArray);
-    }
-  
-    addEmail(email: string) {
-      this.emails.push(this.fb.control(email));
-    }
-  
-    handleInput(event: any) {
-      const value = event.target.value;
-      if (value.endsWith(' ')) {
-        this.addEmail(value.trim());
-        event.target.value = '';
-      }
-    }
-
-    handleKeyDown(event: KeyboardEvent) {
-      const input = event.target as HTMLInputElement;
-      if (event.key === 'Backspace' && !input.value) {
-        const emails = this.emails;
-        if (emails.length > 0) {
-          emails.removeAt(emails.length - 1);
-        }
-      }
-    }
 
 
   ngOnInit(): void {
+
+
     this.route.params.subscribe(params => {
-
-      //Récupération de l'évènement 
+      //Récupération de l'évènement  
+      const idUser: UserDto = JSON.parse(sessionStorage.getItem('user') || '{}');
       const idEvent = params['idEvent'];
-      if (idEvent) {
-        this.eventService.getEventById(idEvent).subscribe(
-          (response) => {
-            this.event = response;
-          },
-          (error) => {
-            console.error('Erreur lors de la récupération des détails de l\'événement:', error);
-          }
-        );
-        // Récupération de la liste des user attachés à l'Event. 
-        const idUser: UserDto = JSON.parse(sessionStorage.getItem('user') || '{}');
-        if (idUser.idUser && idEvent) {
-          this.eventService.getUserEventRole(idUser.idUser, idEvent).subscribe(
-            (response) => {
-              this.userEvent = response;
-            },
-            (error) => {
-              console.error('Erreur lors de la récupération des données utilisateur-événement:', error);
-            }
-          );
-        }
-      }
-      //Récupération de la liste des user attachés à l'Event. 
-      if (idEvent) {
-        this.eventService.getUserEventRoleList(idEvent).subscribe(
-          (response) => {
-            this.userEventList = response;
-
-            console.log(this.userEventList)
-
-          },
-          (error) => {
-            console.error('Erreur lors de la récupération de la liste des utilisateurs:', error);
-          }
-        )
-
-      }
-
+      if (idEvent) { this.getEvent(idEvent);}
+      if (idUser.idUser && idEvent) {this.getUserEventRole(idUser.idUser, idEvent) }
+      if (idEvent) { this.getUserEventRoleList(idEvent) }
     });
 
-
-    // Récupération du current User 
     const idUser: UserDto = JSON.parse(sessionStorage.getItem('user') || '{}');
     this.user = idUser;
-
     this.isTaskModuleActive = localStorage.getItem('isTaskModuleActive') === 'true';
   }
+
+  // CURRENT USER OR EVENT  REALTED QUERY 
 
 
   getUsersByRole(role: string): UserDto[] {
@@ -135,89 +79,205 @@ export class SingleEventComponent implements OnInit {
     return users;
   }
 
-  activateTaskModule() {
-    this.isTaskModuleActive = true;
-    localStorage.setItem('isTaskModuleActive', 'true');
-    console.log(this.isTaskModuleActive);
-  }
-
-  activateGiftModule() { }
-  activatePhotosModule() { }
-
-
-  onModuleDeleted() {
-    this.isTaskModuleActive = false;
-  }
-
-
-  dataEmail() {  
-    const idUser: UserDto = JSON.parse(sessionStorage.getItem('user') || '{}');
-      if (idUser.idUser  && this.event) {
-        this.emailData.idUser = idUser.idUser;
-        this.emailData.idEvent = this.event.idEvent;
-        console.log(this.emailData)
-      } else {
-        // Gérer le cas où les valeurs sont indéfinies
-        console.error("idUser ou idEvent est indéfini");
+  getEvent(idEvent: number) {
+    this.eventService.getEventById(idEvent).subscribe(
+      (response) => {
+        this.event = response;
+        this.addingGuest()
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des détails de l\'événement:', error);
       }
+    );
   }
 
-sendEmail(): void {
-  this.emailData.to = [...this.emailList];
-  console.log(this.emailData)
-  this.eventService.addGuest(this.emailData).subscribe(
-    (response) => {
-      this.successMessage = "E-mails envoyés avec succès !";
-      
-    },
-    (error) => {
-      this.successMessage = "Erreur lors de l'envoi des e-mails.";
-      // Vous pouvez choisir de ne pas fermer la modale ici
-    }
-  );
-  document.getElementById('emailModal')?.click(); // Ferme la modale
-}
+  getUserEventRoleList(idEvent:number){
+    this.eventService.getUserEventRoleList(idEvent).subscribe(
+      (response) => {
+        this.userEventList = response;
+        console.log(this.userEventList)
 
-
-
-checkEmail(event: KeyboardEvent, inputEmail: string, inputElement: HTMLInputElement): void {
-  this.emailInvalid = false;
-  this.emailExists = false;
-
-   // Supprimer les espaces en début et en fin de chaîne
-   inputEmail = inputEmail.trim();
-
-     // Gérer le cas de la touche Backspace
-  if (event.code === 'Backspace') {
-    if (inputEmail === '') {
-      this.emailList.pop();
-    }
-    return;
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération de la liste des utilisateurs:', error);
+      }
+    )
   }
 
-  if (event.code === 'Space' || event.code === 'Enter') {
-    event.preventDefault(); // Ajouté cette ligne pour empêcher le comportement par défaut
+  // Récupération de la liste des user attachés à l'Event. 
+  getUserEventRole(idUser: number, idEvent: number) {
 
-    // Votre code pour vérifier la validité de l'e-mail reste le même
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    if (!emailRegex.test(inputEmail)) {
-      this.emailInvalid = true;
+    this.eventService.getUserEventRole(idUser, idEvent).subscribe(
+      (response) => {
+        this.userEvent = response;
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des données utilisateur-événement:', error);
+      }
+    );
+
+  }
+
+
+  // MODULE REALTED QUERY 
+
+
+  activateTaskModule() {
+    this.eventService.updateModuleEvent(this.event.idEvent,'task').subscribe(
+      (response) => {
+        this.isTaskModuleActive = response.taskModuleActive;
+      },
+      (error) => {
+        console.error("Une erreur s'est produite lors de la mise à jour du module", error);
+      }
+    )
+  }
+
+  activateGiftModule() {
+    this.eventService.updateModuleEvent(this.event.idEvent,'gift').subscribe(
+      (response) => {
+        this.isTaskModuleActive = response.taskModuleActive;
+      },
+      (error) => {
+        console.error("Une erreur s'est produite lors de la mise à jour du module", error);
+      }
+    )
+   }
+  activatePhotosModule() {
+    this.eventService.updateModuleEvent(this.event.idEvent,'photo').subscribe(
+      (response) => {
+        this.isTaskModuleActive = response.taskModuleActive;
+      },
+      (error) => {
+        console.error("Une erreur s'est produite lors de la mise à jour du module", error);
+      }
+    )
+   }
+
+
+  onModuleDeleted(moduleName:string) {
+  if (moduleName ='task') {
+     this.activateTaskModule()
+   }
+  if (moduleName ='gift') {
+    this.activateGiftModule();
+   }
+  if (moduleName ='photo') {
+    this.activatePhotosModule()
+   }
+   
+  }
+
+
+  // MAILS REALTED QUERY 
+
+  dataEmail() {
+    const idUser: UserDto = JSON.parse(sessionStorage.getItem('user') || '{}');
+    if (idUser.idUser && this.event) {
+      this.emailData.idUser = idUser.idUser;
+      this.emailData.idEvent = this.event.idEvent;
+
+    } else {
+      // Gérer le cas où les valeurs sont indéfinies
+      console.error("idUser ou idEvent est indéfini");
+    }
+  }
+
+  sendEmail(): void {
+    this.emailData.to = [...this.emailList];
+    this.eventService.addGuest(this.emailData).subscribe(
+      (response) => {
+        this.successMessage = "E-mails envoyés avec succès !";
+        this.addingGuest()
+      },
+      (error) => {
+        this.successMessage = "E-mails envoyés avec succès !";
+        // Vous pouvez choisir de ne pas fermer la modale ici
+      }
+    );
+    console.log(this.emailData.idEvent)
+    document.getElementById('emailModal')?.click(); // Ferme la modale
+
+  }
+
+
+  get emails() {
+    return (this.emailForm.get('emails') as FormArray);
+  }
+
+  addEmail(email: string) {
+    this.emails.push(this.fb.control(email));
+  }
+
+  handleInput(event: any) {
+    const value = event.target.value;
+    if (value.endsWith(' ')) {
+      this.addEmail(value.trim());
+      event.target.value = '';
+    }
+  }
+
+  handleKeyDown(event: KeyboardEvent) {
+    const input = event.target as HTMLInputElement;
+    if (event.key === 'Backspace' && !input.value) {
+      const emails = this.emails;
+      if (emails.length > 0) {
+        emails.removeAt(emails.length - 1);
+      }
+    }
+  }
+
+
+
+
+  checkEmail(event: KeyboardEvent, inputEmail: string, inputElement: HTMLInputElement): void {
+    this.emailInvalid = false;
+    this.emailExists = false;
+
+    // Supprimer les espaces en début et en fin de chaîne
+    inputEmail = inputEmail.trim();
+
+    // Gérer le cas de la touche Backspace
+    if (event.code === 'Backspace') {
+      if (inputEmail === '') {
+        this.emailList.pop();
+      }
       return;
     }
 
-    // Votre code pour vérifier si l'e-mail existe déjà dans la liste reste le même
-    if (this.emailList.includes(inputEmail)) {
-      this.emailExists = true;
-      return;
+    if (event.code === 'Space' || event.code === 'Enter') {
+      event.preventDefault(); // Ajouté cette ligne pour empêcher le comportement par défaut
+
+      // Votre code pour vérifier la validité de l'e-mail reste le même
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+      if (!emailRegex.test(inputEmail)) {
+        this.emailInvalid = true;
+        return;
+      }
+
+      // Votre code pour vérifier si l'e-mail existe déjà dans la liste reste le même
+      if (this.emailList.includes(inputEmail)) {
+        this.emailExists = true;
+        return;
+      }
+
+      // Ajoutez l'e-mail à la liste et réinitialisez l'input
+      this.emailList.push(inputEmail);
+      inputElement.value = '';
+
     }
-
-    // Ajoutez l'e-mail à la liste et réinitialisez l'input
-    this.emailList.push(inputEmail);
-    inputElement.value = '';
-
   }
-}
-//forced commit
 
+
+  // GUESTS REALTED QUERY 
+
+  addingGuest() {
+    this.eventService.eventGuest(this.event.idEvent).subscribe(
+      (response) => {
+        this.guests = response;
+        console.log(this.guests);
+      }
+    )
+  }
 
 }

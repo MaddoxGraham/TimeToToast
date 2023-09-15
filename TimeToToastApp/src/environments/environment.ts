@@ -17,9 +17,11 @@ export const environment = {
     getUserEventRoleList:'http://localhost:8080/userEventRole/AllByEvent',
 
     sendingEmail:'http://localhost:8080/event/sendHTMLEmail',
-
+    getEventGuests: 'http://localhost:8080/guest/getEventGuests',
     verifyGuest:'http://localhost:8080/guest/verifyGuest',
     deleteGuest: 'http://localhost:8080/guest/delete/',
     addDetailsToGuest: 'http://localhost:8080/guest/addDetailsToGuest/',
+
+    updateModule:'http://localhost:8080/event/update/',
 }
   

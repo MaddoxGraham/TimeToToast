@@ -38,6 +38,9 @@ public class GuestService {
     public Guest findGuestByIdGuest(Long idGuest){
         return guestRepository.findGuestByIdGuest(idGuest).orElseThrow(() -> new UserNotFoundException("User n° " + idGuest + " was not found"));
     }
+    public  List<Guest> findGuestByEvent(Long idEvent){
+        return  guestRepository.findAllByEvent_IdEvent(idEvent);
+    }
 
     public void deleteGuest(Long idGuest){
         //guestRepository.deleteGuestByIdGuest(idGuest);

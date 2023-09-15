@@ -8,6 +8,8 @@ import { EventRoutingModule } from './event-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; // Ajouté
 import { MapComponent } from './component/map/map.component';
 import { TaskComponent } from './component/task/task.component';
+import { GiftComponent } from './component/gift/gift.component';
+import { PhotoComponent } from './component/photo/photo.component';
 
 
 
@@ -17,7 +19,9 @@ import { TaskComponent } from './component/task/task.component';
     EventUserComponent,
     SingleEventComponent,
     MapComponent,
-    TaskComponent
+    TaskComponent,
+    GiftComponent,
+    PhotoComponent
   ],
   imports: [
     CommonModule,

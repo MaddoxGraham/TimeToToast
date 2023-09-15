@@ -2,11 +2,14 @@ package com.maddoxgraham.TimeToToast.Controllers;
 
 import com.maddoxgraham.TimeToToast.Config.UserAuthProvider;
 import com.maddoxgraham.TimeToToast.DTOs.GuestDto;
+import com.maddoxgraham.TimeToToast.Models.Guest;
 import com.maddoxgraham.TimeToToast.Services.GuestService;
+import jakarta.mail.MessagingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 
 @RestController
@@ -41,5 +44,16 @@ public class GuestController {
         return new ResponseEntity<>(guestDto, HttpStatus.OK);
     }
 
+    @GetMapping("/getGuestByMail")
+    public ResponseEntity getGuestByMail(@RequestBody GuestDto guestDto) throws MessagingException {
+        GuestDto guest = guestService.findByEmail(guestDto.getEmail());
+        return new ResponseEntity<>(guest, HttpStatus.OK);
+    }
+
+    @GetMapping("getEventGuests/{idEvent}")
+    public  ResponseEntity<List<Guest>> getEventGuests(@PathVariable Long idEvent){
+    List<Guest> guests = guestService.findGuestByEvent(idEvent);
+    return new ResponseEntity<>(guests,HttpStatus.OK);
+    }
 
 }

@@ -1,12 +1,15 @@
 package com.maddoxgraham.TimeToToast.Controllers;
 
 import com.maddoxgraham.TimeToToast.DTOs.EmailDataDto;
+import com.maddoxgraham.TimeToToast.DTOs.GuestDto;
 import com.maddoxgraham.TimeToToast.Models.EmailData;
 import com.maddoxgraham.TimeToToast.Models.Event;
+import com.maddoxgraham.TimeToToast.Models.Guest;
 import com.maddoxgraham.TimeToToast.Models.User;
 import com.maddoxgraham.TimeToToast.Repository.UserRepository;
 import com.maddoxgraham.TimeToToast.Services.EmailService;
 import com.maddoxgraham.TimeToToast.Services.EventService;
+import com.maddoxgraham.TimeToToast.Services.GuestService;
 import com.maddoxgraham.TimeToToast.Services.UserService;
 import jakarta.mail.MessagingException;
 import org.springframework.http.HttpStatus;
@@ -24,10 +27,12 @@ public class EventController {
     private final EmailService emailService;
     private final UserService userService;
 
+
     public EventController(EventService eventService,EmailService emailService,UserService userService ) {
         this.eventService = eventService;
         this.emailService = emailService;
         this.userService = userService;
+
     }
 
     @GetMapping("/all")
@@ -54,32 +59,42 @@ public class EventController {
         return new ResponseEntity<>(updateEvent, HttpStatus.OK);
     }
 
+    @PutMapping("/update/{idEvent}/{moduleName}")
+    public ResponseEntity<Event> updateModuleBoolean(@PathVariable("idEvent") Long idEvent,@PathVariable("moduleName") String moduleName ){
+        Event event = eventService.findEventByIdEvent(idEvent);
+        if("task".equals(moduleName)){
+            event.setTaskModuleActive(!event.isTaskModuleActive());
+        }
+        else if ("gift".equals(moduleName)) {
+             event.setGiftModuleActive(!event.isGiftModuleActive());
+        }
+        else if ("photo".equals(moduleName)) {
+            event.setPhotoModuleActive(!event.isPhotoModuleActive());
+        }
+        eventService.updateEvent(event);
+        return new ResponseEntity<>(event, HttpStatus.OK);
+    }
+
     @DeleteMapping("/delete/{idEvent}")
     public ResponseEntity<?> deleteEvent(@PathVariable("idEvent") Long idEvent){
         eventService.deleteEvent(idEvent);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-//    @PostMapping("/sendEmail")
-//    public String sendTestEmail(@RequestBody EmailDataDto emailDataDto) {
-//        emailService.sendingMail(emailDataDto.getTo(), emailDataDto.getSubject(), emailDataDto.getBody());
-//        return "Email sent successfully!";
-//    }
+
 
     @PostMapping("/sendHTMLEmail")
-    public String sendHTMLEmail(@RequestBody EmailDataDto emailDataDto) throws MessagingException {
+    public ResponseEntity sendHTMLEmail(@RequestBody EmailDataDto emailDataDto) throws MessagingException {
         User user = userService.findUserByIdUser(emailDataDto.getIdUser());
         Event event = eventService.findEventByIdEvent(emailDataDto.getIdEvent());
-
         try {
             emailService.sendHtmlEmail(emailDataDto.getTo(),user, event);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
 
-        return "Email sent successfully!";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }
 
 

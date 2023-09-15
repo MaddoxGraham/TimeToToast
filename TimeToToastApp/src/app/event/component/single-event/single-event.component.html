@@ -74,7 +74,13 @@
   <ul>
     <li *ngFor="let user of getUsersByRole('INVITE')">
       {{ user.lastName  }} {{ user.firstName | uppercase }}
-    </li>
+
+    </li>      
+  
+    <li *ngFor="let guest of guests">
+        <p *ngIf="guest.firstName">{{ guest.firstName }} {{ guest.lastName }} </p>
+        <p *ngIf="!guest.firstName"> {{ guest.email }}</p>
+      </li>
   </ul>
 </div>
 
@@ -92,7 +98,7 @@ maps desc border-bottom et modules si existants.
 
 
 <!-- localstorage check :-->
-<div class="container text-center row my-5"> <span class="display-4 col-12">Cet événement n'a aucun module  </span> 
+<div *ngIf="isTaskModuleActive==false && isGiftModuleActive==false && isPhotoModuleActive==false" class="container text-center row my-5"> <span class="display-4 col-12">Cet événement n'a aucun module  </span> 
   
   <span *ngIf="userEvent?.role == 'CREATEUR'"  class="col-12 display-6">Séléctionnez votre premier module pour débuter </span>
   <span *ngIf="userEvent?.role != 'CREATEUR'"  class="col-12 display-6">Patientez, le créateur de cet événement va peut être en rajouter ! </span> 
@@ -101,9 +107,20 @@ maps desc border-bottom et modules si existants.
 <app-task *ngIf="isTaskModuleActive" 
           [userEvent]="userEvent" 
           [event]="event" 
-          (moduleDeleted)="onModuleDeleted()">
+          (moduleDeleted)="onModuleDeleted('task')">
 </app-task>
 
+<app-gift *ngIf="isGiftModuleActive" 
+          [userEvent]="userEvent" 
+          [event]="event" 
+          (moduleDeleted)="onModuleDeleted('gift')">
+</app-gift>
+
+<app-photo *ngIf="isPhotoModuleActive" 
+          [userEvent]="userEvent" 
+          [event]="event" 
+          (moduleDeleted)="onModuleDeleted('photo')">
+</app-photo>
 
 
       </div>

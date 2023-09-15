@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { EmailDataDto } from 'src/app/share/dtos/EmailData/EmailDataDto';
 import { EventDto } from 'src/app/share/dtos/event/event-dto';
+import { GuestDto } from 'src/app/share/dtos/guest/guest-dto';
 import { UserEventRoleDto } from 'src/app/share/dtos/userEventRole/user-event-role-dto';
 import { UserEventsDto } from 'src/app/share/dtos/userEvents/user-events-dto';
 import { environment } from 'src/environments/environment';
@@ -24,7 +25,6 @@ export class EventService {
       return this.httpClient.get<EventDto>(url);
     }
 
-
     addUserEventRole(data: { idEvent: number, idUser: number, role: string }): Observable<UserEventRoleDto> {
       return this.httpClient.post<UserEventRoleDto>(environment.addUserEventRole, data);
     }
@@ -41,7 +41,15 @@ export class EventService {
       return this.httpClient.get<UserEventRoleDto[]>(`${environment.getUserEventRoleList}/${idEvent}`);
     }
 
-    addGuest(emailData: EmailDataDto) {
+    addGuest(emailData: EmailDataDto): Observable<GuestDto> {
       return this.httpClient.post<any>(`${environment.sendingEmail}`, emailData);
+    }
+
+    eventGuest(idEvent:number):Observable<GuestDto[]>{
+      return this.httpClient.get<GuestDto[]>(`${environment.getEventGuests}/${idEvent}`);
+    }
+
+    updateModuleEvent(idEvent: number, moduleName: string): Observable<EventDto> {
+      return this.httpClient.put<EventDto>(`${environment.updateModule}${idEvent}/${moduleName}`, {});
     }
   }

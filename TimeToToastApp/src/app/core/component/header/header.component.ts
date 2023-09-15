@@ -18,13 +18,19 @@ export class HeaderComponent implements OnInit, OnDestroy{
   constructor(private router: Router,
               protected authService: AuthenticationService) {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {     
+    console.log(localStorage);
     this.subscription = this.authService.isLoggedIn.subscribe(isLoggedin => {
+
       this.items = this.getRoutesBasedOnRole();
       this.connected = isLoggedin;
-      this.activeItem = this.items[0];
+      this.activeItem = this.items[0]; 
+      if (!this.activeItem) {
+        localStorage.clear();
+      }
+           
     })
-    
+
     
   }
 

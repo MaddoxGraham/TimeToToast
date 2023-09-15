@@ -16,8 +16,6 @@ import java.time.LocalDate;
 @Entity
 public class Task implements Serializable {
 
-    private boolean taskModulActive;
-
     private String description;
 
     @Temporal(TemporalType.DATE)
