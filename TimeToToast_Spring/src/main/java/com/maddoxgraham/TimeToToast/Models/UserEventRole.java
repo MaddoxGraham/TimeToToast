@@ -17,10 +17,10 @@ public class UserEventRole implements Serializable {
     @EmbeddedId
     private UserEventKey userEventKey;
 
-    @MapsId("idPerson")
+    @MapsId("idUser")
     @ManyToOne
-    @JoinColumn(name = "idPerson")
-    private Person person;
+    @JoinColumn(name = "idUser")
+    private User user;
 
     @MapsId("idEvent")
     @ManyToOne

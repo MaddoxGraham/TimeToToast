@@ -7,9 +7,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GuestDto extends PersonDto {
-    Long id;
+public class GuestDto {
+    Long idGuest;
     String token;
     Long idEvent;
+    String role;
+    String email;
+    String firstName;
+    String lastName;
     Boolean isPresent;
 }

@@ -18,9 +18,12 @@ public class HiddenUserTask {
     private Long hiddenUserTaskKey;
 
     @ManyToOne
-    @JoinColumn(name = "idPerson")
-    private Person person;
+    @JoinColumn(name = "idGuest")
+    private Guest guest;
 
+    @ManyToOne
+    @JoinColumn(name = "idUser")
+    private User user;
 
     @MapsId("idTask")
     @ManyToOne

@@ -26,7 +26,10 @@ public class GiftContribution implements Serializable {
     private Gift gift;
 
     @ManyToOne
-    @JoinColumn(name="idPerson")
-    private Person person;
+    @JoinColumn(name="idUser")
+    private User user;
 
+    @ManyToOne
+    @JoinColumn(name="idGuest")
+    private Guest guest;
 }

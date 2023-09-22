@@ -3,7 +3,6 @@ package com.maddoxgraham.TimeToToast.Mappers;
 import com.maddoxgraham.TimeToToast.DTOs.GuestDto;
 import com.maddoxgraham.TimeToToast.Models.Enums.Role;
 import com.maddoxgraham.TimeToToast.Models.Guest;
-import com.maddoxgraham.TimeToToast.Models.Person;
 
 public class GuestMapper {
 
@@ -13,8 +12,7 @@ public class GuestMapper {
         }
 
         GuestDto dto = new GuestDto();
-
-        dto.setId(guest.getId());
+        dto.setIdGuest(guest.getIdGuest());
         dto.setToken(guest.getToken());
         dto.setEmail(guest.getEmail());
         dto.setFirstName(guest.getFirstName());
@@ -32,13 +30,15 @@ public class GuestMapper {
         }
 
         Guest guest = new Guest();
-        guest.setId(dto.getId());
+        guest.setIdGuest(dto.getIdGuest());
         guest.setToken(dto.getToken());
         guest.setEmail(dto.getEmail());
         guest.setFirstName(dto.getFirstName());
         guest.setLastName(dto.getLastName());
         guest.setIsPresent(dto.getIsPresent());
         guest.setRole(dto.getRole() != null ? Role.valueOf(dto.getRole()) : null);
+        // Note: You'll need to populate the Event object, perhaps via another mapper or service
+        // guest.setEvent(...);
 
         return guest;
     }
