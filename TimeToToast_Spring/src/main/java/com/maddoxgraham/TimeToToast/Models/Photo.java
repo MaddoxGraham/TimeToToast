@@ -22,12 +22,8 @@ public class Photo {
     private Long idPhoto;
 
     @ManyToOne
-    @JoinColumn(name = "idUser", nullable = true)
-    private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "idGuest", nullable = true)
-    private Guest guest;
+    @JoinColumn(name = "idPerson", nullable = true)
+    private Person person;
 
     @ManyToOne
     @JoinColumn(name = "idEvent", nullable = false)

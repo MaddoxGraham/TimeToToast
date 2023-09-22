@@ -13,7 +13,7 @@ import java.util.Set;
 @Setter
 @Getter
 @Data
-@ToString(exclude =  {"guests", "userEventRoles", "photos", "gifts","comments","tasks"})
+@ToString(exclude =  {"persons", "userEventRoles", "photos", "gifts","comments","tasks"})
 @Entity
 public class Event implements Serializable {
     @Id
@@ -45,7 +45,7 @@ public class Event implements Serializable {
     private Set<UserEventRole> userEventRoles;
 
     @OneToMany(mappedBy = "event")
-    private Set<Guest> guests;
+    private Set<Person> persons;
 
     @OneToMany(mappedBy = "event")
     private Set<Photo> photos;

@@ -1,39 +1,25 @@
 package com.maddoxgraham.TimeToToast.Controllers;
 
 import com.maddoxgraham.TimeToToast.DTOs.EmailDataDto;
-import com.maddoxgraham.TimeToToast.DTOs.GuestDto;
-import com.maddoxgraham.TimeToToast.Models.EmailData;
 import com.maddoxgraham.TimeToToast.Models.Event;
-import com.maddoxgraham.TimeToToast.Models.Guest;
-import com.maddoxgraham.TimeToToast.Models.User;
-import com.maddoxgraham.TimeToToast.Repository.UserRepository;
 import com.maddoxgraham.TimeToToast.Services.EmailService;
 import com.maddoxgraham.TimeToToast.Services.EventService;
-import com.maddoxgraham.TimeToToast.Services.GuestService;
-import com.maddoxgraham.TimeToToast.Services.UserService;
 import jakarta.mail.MessagingException;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/event")
+@AllArgsConstructor
 public class EventController {
 
     private final EventService eventService;
     private final EmailService emailService;
-    private final UserService userService;
 
-
-    public EventController(EventService eventService,EmailService emailService,UserService userService ) {
-        this.eventService = eventService;
-        this.emailService = emailService;
-        this.userService = userService;
-
-    }
 
     @GetMapping("/all")
     public ResponseEntity<List<Event>> getAllEvent() {
@@ -83,18 +69,18 @@ public class EventController {
 
 
 
-    @PostMapping("/sendHTMLEmail")
-    public ResponseEntity sendHTMLEmail(@RequestBody EmailDataDto emailDataDto) throws MessagingException {
-        User user = userService.findUserByIdUser(emailDataDto.getIdUser());
-        Event event = eventService.findEventByIdEvent(emailDataDto.getIdEvent());
-        try {
-            emailService.sendHtmlEmail(emailDataDto.getTo(),user, event);
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+//    @PostMapping("/sendHTMLEmail")
+//    public ResponseEntity sendHTMLEmail(@RequestBody EmailDataDto emailDataDto) throws MessagingException {
+//        User user = userService.findUserByIdUser(emailDataDto.getIdUser());
+//        Event event = eventService.findEventByIdEvent(emailDataDto.getIdEvent());
+//        try {
+//            emailService.sendHtmlEmail(emailDataDto.getTo(),user, event);
+//        } catch (MessagingException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 }
 
 

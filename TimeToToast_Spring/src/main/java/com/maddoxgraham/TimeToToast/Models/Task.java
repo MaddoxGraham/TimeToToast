@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Setter
 @Getter
 @Data
-@ToString(exclude = {"event", "creator", "assigneeUser", "assigneeGuest"})
+@ToString(exclude = {"event", "creator", "assignee"})
 @Entity
 public class Task implements Serializable {
 
@@ -35,14 +35,9 @@ public class Task implements Serializable {
 
     @ManyToOne
     @JoinColumn(name="idCreator", nullable=false)
-    private User creator;
+    private Person creator;
 
     @ManyToOne
-    @JoinColumn(name="idAssigneeUser")
-    private User assigneeUser;
-
-
-    @ManyToOne
-    @JoinColumn(name="idAssigneeGuest")
-    private Guest assigneeGuest;
+    @JoinColumn(name="assignee")
+    private Person assignee;
 }

@@ -10,17 +10,17 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@ToString(exclude = {"user","event"})
+@ToString(exclude = {"person","event"})
 @Entity
 public class UserEventRole implements Serializable {
 
     @EmbeddedId
     private UserEventKey userEventKey;
 
-    @MapsId("idUser")
+    @MapsId("idPerson")
     @ManyToOne
-    @JoinColumn(name = "idUser")
-    private User user;
+    @JoinColumn(name = "idPerson")
+    private Person person;
 
     @MapsId("idEvent")
     @ManyToOne

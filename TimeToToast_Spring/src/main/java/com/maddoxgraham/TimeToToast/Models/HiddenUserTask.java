@@ -3,14 +3,16 @@ package com.maddoxgraham.TimeToToast.Models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@ToString(exclude = {"user","event"})
+@ToString(exclude = {"person","task"})
 @Entity
-public class HiddenUserTask {
+public class HiddenUserTask implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,12 +20,8 @@ public class HiddenUserTask {
     private Long hiddenUserTaskKey;
 
     @ManyToOne
-    @JoinColumn(name = "idGuest")
-    private Guest guest;
-
-    @ManyToOne
-    @JoinColumn(name = "idUser")
-    private User user;
+    @JoinColumn(name = "idPerson")
+    private Person person;
 
     @MapsId("idTask")
     @ManyToOne
