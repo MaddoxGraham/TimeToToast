@@ -5,7 +5,6 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.maddoxgraham.TimeToToast.DTOs.PersonDto;
-import com.maddoxgraham.TimeToToast.DTOs.UserDto;
 import com.maddoxgraham.TimeToToast.Models.Event;
 import com.maddoxgraham.TimeToToast.Models.Person;
 import com.maddoxgraham.TimeToToast.Services.PersonService;
@@ -57,10 +56,10 @@ public class UserAuthProvider {
         Date validity = new Date(now.getTime() + 3_600_000);
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
-        String userType = ((UserDto) userDto).getRole();
-        String first_name = ((UserDto) userDto).getFirstName();
-        String last_name = ((UserDto) userDto).getLastName();
-        String login = ((UserDto) userDto).getLogin();
+        String userType = ((PersonDto) userDto).getRole();
+        String first_name = ((PersonDto) userDto).getFirstName();
+        String last_name = ((PersonDto) userDto).getLastName();
+        String login = ((PersonDto) userDto).getLogin();
 
         return JWT.create()
                 .withIssuer(userType)
@@ -102,7 +101,7 @@ public class UserAuthProvider {
         Date validity = new Date(now.getTime() + 86400000); //1 jour
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
-        String userType = ((UserDto) userDto).getRole();
+        String userType = ((PersonDto) userDto).getRole();
 
         return JWT.create()
                 .withIssuer(userType)
@@ -112,80 +111,78 @@ public class UserAuthProvider {
     }
 
 
-//    public String refreshAccessToken(String refreshToken) {
-//        Algorithm algorithm = Algorithm.HMAC256(secretKey);
-//        JWTVerifier verifier = JWT.require(algorithm).build();
-//        DecodedJWT decoded = verifier.verify(refreshToken);
-//        String userType = decoded.getIssuer();
-//
-//        Object userDto;
-//
-//        UserDto user = userService.findByRefreshToken(refreshToken);
-//        userDto = user;
-//
-//        return createAccessToken(userDto);
-//    }
+    public String refreshAccessToken(String refreshToken) {
+        Algorithm algorithm = Algorithm.HMAC256(secretKey);
+        JWTVerifier verifier = JWT.require(algorithm).build();
+        DecodedJWT decoded = verifier.verify(refreshToken);
+        String userType = decoded.getIssuer();
 
-//    public Authentication validateToken(String token) {
-//        Algorithm algorithm = Algorithm.HMAC256(secretKey);
-//
-//        JWTVerifier verifier = JWT.require(algorithm).build();
-//
-//        DecodedJWT decoded = verifier.verify(token);
-//        String userType = decoded.getIssuer();
-//        String login = decoded.getClaim("login").asString();
-//        String email = decoded.getClaim("email").asString();
-//
-//        if(userType.equals("USER")){
-//            Object userDto;
-//            userDto = userService.findByLogin(login);
-//
-//            return new UsernamePasswordAuthenticationToken(userDto, null, Collections.emptyList());
-//        }
-//        if(userType.equals("GUEST")){
-//
-//            Object guestDto;
-//            guestDto = guestService.findByEmail(email);
-//
-//            return new UsernamePasswordAuthenticationToken(guestDto, null, Collections.emptyList());
-//        }
-//        return  null;
-//    }
+        Object userDto;
+
+        userDto = personService.findByRefreshToken(refreshToken);
+
+        return createAccessToken(userDto);
+    }
+
+    public Authentication validateToken(String token) {
+        Algorithm algorithm = Algorithm.HMAC256(secretKey);
+
+        JWTVerifier verifier = JWT.require(algorithm).build();
+
+        DecodedJWT decoded = verifier.verify(token);
+        String userType = decoded.getIssuer();
+        String login = decoded.getClaim("login").asString();
+        String email = decoded.getClaim("email").asString();
+
+        if(userType.equals("USER")){
+            Object personDto;
+            personDto = personService.findByLogin(login);
+
+            return new UsernamePasswordAuthenticationToken(personDto, null, Collections.emptyList());
+        }
+        if(userType.equals("GUEST")){
+
+            Object personDto;
+            personDto = personService.findByEmail(email);
+
+            return new UsernamePasswordAuthenticationToken(personDto, null, Collections.emptyList());
+        }
+        return  null;
+    }
 
 
-//    public Authentication validateTokenStrongly(String token) {
-//        Algorithm algorithm = Algorithm.HMAC256(secretKey);
-//
-//        JWTVerifier verifier = JWT.require(algorithm).build();
-//
-//        DecodedJWT decoded = verifier.verify(token);
-//        String userType = decoded.getIssuer();
-//        String login = decoded.getClaim("login").asString();
-//        String email = decoded.getClaim("email").asString();
-//
-//        if(userType.equals("USER")){
-//            Object userDto;
-//            userDto = userService.findByLogin(login);
-//
-//            return new UsernamePasswordAuthenticationToken(userDto, null, Collections.emptyList());
-//        }
-//        if(userType.equals("GUEST")){
-//
-//            Object guestDto;
-//            guestDto = guestService.findByEmail(email);
-//
-//            return new UsernamePasswordAuthenticationToken(guestDto, null, Collections.emptyList());
-//        }
-//        return  null;
-//
-//    }
+    public Authentication validateTokenStrongly(String token) {
+        Algorithm algorithm = Algorithm.HMAC256(secretKey);
+
+        JWTVerifier verifier = JWT.require(algorithm).build();
+
+        DecodedJWT decoded = verifier.verify(token);
+        String userType = decoded.getIssuer();
+        String login = decoded.getClaim("login").asString();
+        String email = decoded.getClaim("email").asString();
+
+        if(userType.equals("USER")){
+            Object userDto;
+            userDto = personService.findByLogin(login);
+
+            return new UsernamePasswordAuthenticationToken(userDto, null, Collections.emptyList());
+        }
+        if(userType.equals("GUEST")){
+
+            Object guestDto;
+            guestDto = personService.findByEmail(email);
+
+            return new UsernamePasswordAuthenticationToken(guestDto, null, Collections.emptyList());
+        }
+        return  null;
+
+    }
 
     public String verifyGuest(String token) {
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
         JWTVerifier verifier = JWT.require(algorithm).build();
         DecodedJWT decoded = verifier.verify(token);
 
-        String email = decoded.getClaim("email").asString();
-        return email;
+        return decoded.getClaim("email").asString();
     }
 }

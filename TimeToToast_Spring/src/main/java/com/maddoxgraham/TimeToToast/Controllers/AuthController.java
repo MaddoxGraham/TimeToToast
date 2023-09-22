@@ -25,8 +25,10 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<PersonDto> login(@RequestBody CredentialsDto credentialsDto){
         PersonDto person = personService.login(credentialsDto);
-        Map<String, String> tokens = userAuthProvider.createTokens(person);
-        person.setToken(tokens.get("accessToken"));
+        if(person.getRole().equals("USER")) {
+            Map<String, String> tokens = userAuthProvider.createTokens(person);
+            person.setToken(tokens.get("accessToken"));
+        }
        return ResponseEntity.ok(person);
     }
 
@@ -36,36 +38,35 @@ public class AuthController {
         return ResponseEntity.created(URI.create("/users/" + personDto.getIdPerson())).body(personDto);
     }
 
-//    @PostMapping("/refresh-token")
-//    public ResponseEntity<Map<String, String>> refreshToken(@RequestBody RefreshTokenRequestDto request) {
-//        String refreshToken = request.getRefreshToken();
-//        if(refreshToken == null || refreshToken.isEmpty()) {
-//            return ResponseEntity.badRequest().body(Collections.singletonMap("error", "Refresh token est manquant"));
-//        }
-//
-//        String newAuthToken;
-//        try {
-//            newAuthToken = userAuthProvider.refreshAccessToken(refreshToken);
-//        } catch (IllegalArgumentException e) {
-//            return ResponseEntity.badRequest().body(Collections.singletonMap("error", "Refresh token invalid"));
-//        }
-//
-//        Map<String, String> reponse = new HashMap<>();
-//        reponse.put("token", newAuthToken);
-//        return ResponseEntity.ok(reponse);
-//    }
+    @PostMapping("/refresh-token")
+    public ResponseEntity<Map<String, String>> refreshToken(@RequestBody RefreshTokenRequestDto request) {
+        String refreshToken = request.getRefreshToken();
+        if(refreshToken == null || refreshToken.isEmpty()) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", "Refresh token est manquant"));
+        }
 
-//    @PostMapping("/logout")
-//    public ResponseEntity<?> logout(@RequestBody Map<String, String> tokens) {
-//        String refreshToken = tokens.get("refreshToken");
-//        UserDto user = personService.findByRefreshToken(refreshToken);
-//
-//        if(user != null) {
-//            personService.clearTokens(user);
-//            return ResponseEntity.ok().body("Admin déconnecté avec succès");
-//        } else {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token Invalid");
-//        }
-//
-//    }
+        String newAuthToken;
+        try {
+            newAuthToken = userAuthProvider.refreshAccessToken(refreshToken);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", "Refresh token invalid"));
+        }
+
+        Map<String, String> reponse = new HashMap<>();
+        reponse.put("token", newAuthToken);
+        return ResponseEntity.ok(reponse);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestBody Map<String, String> tokens) {
+        String refreshToken = tokens.get("refreshToken");
+        PersonDto personDto = personService.findByRefreshToken(refreshToken);
+
+        if(personDto != null) {
+            personService.clearTokens(personDto);
+            return ResponseEntity.ok().body("Admin déconnecté avec succès");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token Invalid");
+        }
+    }
 }

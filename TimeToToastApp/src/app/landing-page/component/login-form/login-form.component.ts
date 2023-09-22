@@ -101,8 +101,4 @@ export class LoginFormComponent implements OnInit{
         }
     }
 
-    onSubmitRegister(): void {
-        const registrationData = this.registerForm.value;
-        // Traiter l'inscription
-    }
 }
