@@ -1,11 +1,8 @@
 package com.maddoxgraham.TimeToToast.Controllers;
 
 import com.maddoxgraham.TimeToToast.Config.UserAuthProvider;
-import com.maddoxgraham.TimeToToast.DTOs.CredentialsDto;
-import com.maddoxgraham.TimeToToast.DTOs.RefreshTokenRequestDto;
-import com.maddoxgraham.TimeToToast.DTOs.UserDto;
-import com.maddoxgraham.TimeToToast.DTOs.SignUpDto;
-//import com.maddoxgraham.TimeToToast.Services.UserService;
+import com.maddoxgraham.TimeToToast.DTOs.*;
+import com.maddoxgraham.TimeToToast.Services.PersonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,23 +19,23 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthController {
 
-//    private  final UserService userService;
-//    private final UserAuthProvider userAuthProvider;
-//
-//    @PostMapping("/login")
-//    public ResponseEntity<UserDto> login(@RequestBody CredentialsDto credentialsDto){
-//        UserDto user = userService.login(credentialsDto);
-//        Map<String, String> tokens = userAuthProvider.createTokens(user);
-//        user.setToken(tokens.get("accessToken"));
-//       return ResponseEntity.ok(user);
-//    }
-//
-//    @PostMapping("/register")
-//    public ResponseEntity<UserDto> register(@RequestBody SignUpDto signUpDto){
-//        UserDto user = userService.register(signUpDto);
-//        return ResponseEntity.created(URI.create("/users/" + user.getIdUser())).body(user);
-//    }
-//
+    private  final PersonService personService;
+    private final UserAuthProvider userAuthProvider;
+
+    @PostMapping("/login")
+    public ResponseEntity<PersonDto> login(@RequestBody CredentialsDto credentialsDto){
+        PersonDto person = personService.login(credentialsDto);
+        Map<String, String> tokens = userAuthProvider.createTokens(person);
+        person.setToken(tokens.get("accessToken"));
+       return ResponseEntity.ok(person);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<PersonDto> register(@RequestBody SignUpDto signUpDto){
+        PersonDto personDto = personService.register(signUpDto);
+        return ResponseEntity.created(URI.create("/users/" + personDto.getIdPerson())).body(personDto);
+    }
+
 //    @PostMapping("/refresh-token")
 //    public ResponseEntity<Map<String, String>> refreshToken(@RequestBody RefreshTokenRequestDto request) {
 //        String refreshToken = request.getRefreshToken();
@@ -57,14 +54,14 @@ public class AuthController {
 //        reponse.put("token", newAuthToken);
 //        return ResponseEntity.ok(reponse);
 //    }
-//
+
 //    @PostMapping("/logout")
 //    public ResponseEntity<?> logout(@RequestBody Map<String, String> tokens) {
 //        String refreshToken = tokens.get("refreshToken");
-//        UserDto user = userService.findByRefreshToken(refreshToken);
+//        UserDto user = personService.findByRefreshToken(refreshToken);
 //
 //        if(user != null) {
-//            userService.clearTokens(user);
+//            personService.clearTokens(user);
 //            return ResponseEntity.ok().body("Admin déconnecté avec succès");
 //        } else {
 //            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token Invalid");
