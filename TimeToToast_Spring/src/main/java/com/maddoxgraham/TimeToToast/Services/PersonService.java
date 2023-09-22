@@ -61,7 +61,29 @@ public class PersonService {
         return  personMapper.toPersonDto(updatedPerson);
     }
 
+    public PersonDto findByRefreshToken(String refreshToken) {
+        Person person = personRepository.findByRefreshToken(refreshToken)
+                .orElseThrow(() -> new AppException("Personne avec ce refreshToken inconnu", HttpStatus.NOT_FOUND));
+        return personMapper.toPersonDto(person);
+    }
 
+    public PersonDto findByLogin(String login) {
+        Person person = personRepository.findUserByLogin(login)
+                .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
+        return personMapper.toPersonDto(person);
+    }
+
+    public void clearTokens(PersonDto personDto) {
+        personDto.setToken(null);
+        personDto.setRefreshToken(null);
+        save(personDto);
+    }
 
     // SERVICE RELATIF AUX GUESTS
+
+    public PersonDto findByEmail(String email) {
+        Person person = personRepository.findGuestByEmail(email)
+                .orElseThrow(() -> new AppException("Unknown guest", HttpStatus.NOT_FOUND));
+        return personMapper.toPersonDto(person);
+    }
 }
