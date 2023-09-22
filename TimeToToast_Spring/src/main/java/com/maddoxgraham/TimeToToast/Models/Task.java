@@ -28,7 +28,6 @@ public class Task implements Serializable {
     @Column(nullable = false, updatable = false)
     private Long idTask;
 
-
     @ManyToOne
     @JoinColumn(name="idEvent", nullable=false)
     private Event event;

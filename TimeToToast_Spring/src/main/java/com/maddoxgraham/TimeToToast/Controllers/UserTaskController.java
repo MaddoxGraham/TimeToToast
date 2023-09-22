@@ -16,7 +16,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/hiddenUserTask")
 @AllArgsConstructor
-public class HiddenUserTaskController {
+public class UserTaskController {
 
     //private final HiddenUserTaskService hiddenUserTaskService;
 

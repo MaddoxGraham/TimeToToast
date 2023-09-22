@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class HiddenUserTaskDto {
+public class UserTaskDto {
     private Long hiddenUserKey;
     private Long idGuest;
     private Long idUser;

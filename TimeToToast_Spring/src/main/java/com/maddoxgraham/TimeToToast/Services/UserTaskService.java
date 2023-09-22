@@ -1,9 +1,9 @@
 package com.maddoxgraham.TimeToToast.Services;
 
-import com.maddoxgraham.TimeToToast.DTOs.HiddenUserTaskDto;
-import com.maddoxgraham.TimeToToast.Mappers.HiddenUserTaskMapper;
+import com.maddoxgraham.TimeToToast.DTOs.UserTaskDto;
+import com.maddoxgraham.TimeToToast.Mappers.UserTaskMapper;
 import com.maddoxgraham.TimeToToast.Models.*;
-import com.maddoxgraham.TimeToToast.Repository.HiddenUserTaskRepository;
+import com.maddoxgraham.TimeToToast.Repository.UserTaskRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class HiddenUserTaskService {
+public class UserTaskService {
 
-    private final HiddenUserTaskRepository hiddenUserTaskRepository;
+    private final UserTaskRepository userTaskRepository;
     //private final UserService userService;
     private final TaskService taskService;
     //private final GuestService guestService;
@@ -41,14 +41,14 @@ public class HiddenUserTaskService {
 //    }
 
     // Supprimer une tâche de la table si elle n'est plus cachée pour personne
-    public boolean deleteTaskIfNoMoreHidden(Long idTask) {
-        List<HiddenUserTask> hiddenUserTasks = hiddenUserTaskRepository.findAllByTaskIdTask(idTask);
-        if (hiddenUserTasks.isEmpty()) {
-            hiddenUserTaskRepository.deleteByTaskIdTask(idTask);
-            return true;
-        }
-        return false;
-    }
+//    public boolean deleteTaskIfNoMoreHidden(Long idTask) {
+//        List<UserTask> hiddenUserTasks = userTaskRepository.findAllByTaskIdTask(idTask);
+//        if (hiddenUserTasks.isEmpty()) {
+//            userTaskRepository.deleteByTaskIdTask(idTask);
+//            return true;
+//        }
+//        return false;
+//    }
 
     // Modifier pour qui cette tâche est cachée
 //    public void updateHiddenUsersForTask(Long idTask, List<HiddenUserTaskDto> hiddenUserTaskDtos) {

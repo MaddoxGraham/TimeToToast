@@ -12,13 +12,14 @@ import java.io.Serializable;
 @Data
 @ToString(exclude = {"person","task"})
 @Entity
-public class HiddenUserTask implements Serializable {
+public class UserTask implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, updatable = false)
-    private Long hiddenUserTaskKey;
+    @EmbeddedId
+    private UserTaskKey userTaskKey;
 
+    private Boolean isInvisible;
+
+    @MapsId("idPerson")
     @ManyToOne
     @JoinColumn(name = "idPerson")
     private Person person;

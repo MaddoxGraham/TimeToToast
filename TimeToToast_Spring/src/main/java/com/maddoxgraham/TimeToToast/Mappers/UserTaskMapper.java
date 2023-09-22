@@ -5,7 +5,7 @@ package com.maddoxgraham.TimeToToast.Mappers;
 //import com.maddoxgraham.TimeToToast.Services.GuestService;
 //import com.maddoxgraham.TimeToToast.Services.TaskService;
 //import com.maddoxgraham.TimeToToast.Services.UserService;
-public class HiddenUserTaskMapper {
+public class UserTaskMapper {
 
     // Convertir DTO en entité
 //    public static HiddenUserTask toEntity(HiddenUserTaskDto dto, UserService userService, TaskService taskService, GuestService guestService) {
