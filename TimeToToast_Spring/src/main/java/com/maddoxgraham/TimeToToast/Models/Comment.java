@@ -20,12 +20,8 @@ public class Comment implements Serializable {
     private Long idComment;
 
     @ManyToOne
-    @JoinColumn(name="idUser")
-    private User user;
-
-    @ManyToOne
-    @JoinColumn(name="idGuest")
-    private Guest guest;
+    @JoinColumn(name="idPerson")
+    private Person person;
 
     @ManyToOne
     @JoinColumn(name="idEvent")

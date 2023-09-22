@@ -1,152 +1,213 @@
 <div id="accordion mt-4">
-    <div class="card">
-        <div class="card-header">
-            <div class="mb-0 d-flex flex-row nowrap justify-content-between">
+  <div class="card">
+    <div class="card-header">
+      <div class="mb-0 d-flex flex-row nowrap justify-content-between">
 
 
-                <h4> Module Tâches </h4>
-                <div>
-                    <button class="btn btn-link toggle-btn" [attr.aria-expanded]="isOpen" (click)="isOpen = !isOpen">
-                        <i [ngClass]="{'fa-chevron-down': !isOpen, 'fa-chevron-up': isOpen}" class="fa"></i>
-                    </button>
+        <h2> Module Tâches </h2>
+        <div>
+          <button class="btn btn-link toggle-btn" [attr.aria-expanded]="isOpen" (click)="isOpen = !isOpen">
+            <i [ngClass]="{'fa-chevron-down': !isOpen, 'fa-chevron-up': isOpen}" class="fa"></i>
+          </button>
 
-                    <button  class="btn" (click)="deleteModule()">
-                        <i class="fa fa-trash"></i>
-                    </button>
-                </div>
-
-            </div>
+          <button class="btn" (click)="deleteModule()">
+            <i class="fa fa-trash"></i>
+          </button>
         </div>
-        <div id="collapseOne" class="collapse" [ngClass]="{'show': isOpen}">
-            <div class="card-body">WARNING - il faudra vérifier que le user est créateur pour qu'il puisse créer une tache<br>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Tâches</a>
-      <div>
-        <button  (click)="displayMode = 'all'"  class="btn btn-outline-primary me-2">Toutes les tâches</button>
-        <button (click)="displayMode = 'mine'" class="btn btn-outline-secondary me-2">Voir mes tâches</button>
-        <button *ngIf="userEvent.role == 'CREATEUR'" (click)="displayMode = 'create'" class="btn btn-outline-success">Créer une tâche</button>
+
       </div>
     </div>
-  </nav>
-
-
-  <!-- Vue pour toutes les tâches -->
-<div *ngIf="displayMode === 'all'">
-    <div class="container mt-4">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Description</th>
-              <th scope="col">Urgence</th>
-              <th scope="col">Date d'exécution</th>
-              <th scope="col">Assigné à</th>
-              <th scope="col">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Faire les courses</td>
-              <td><span class="badge bg-danger">Haute</span></td>
-              <td>2023-09-15</td>
-              <td>Moi, Alice</td>
-              <td>
-                <!-- Visibles seulement si userEvent?.role == 'CREATEUR' -->
-                <button class="btn btn-light me-2"><i class="fa-solid fa-eye-slash"></i></button> <!-- Oeil barré -->
-                <button *ngIf="userEvent.role == 'CREATEUR'" class="btn btn-primary"><i class="fa fa-pencil"></i></button> <!-- Edit -->
-                <button *ngIf="userEvent.role == 'CREATEUR'" class="btn btn-danger  ms-2"><i class="fa-regular fa-trash-can"></i></button>  <!-- Poubelle -->
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    
-  </div>
-  
-  <!-- Vue pour mes tâches -->
-
-
-  <div *ngIf="displayMode === 'mine'">
-    <div class="container mt-4">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Description</th>
-              <th scope="col">Urgence</th>
-              <th scope="col">Date d'exécution</th>
-              <th scope="col">Assigné à</th>
-              <th scope="col">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Faire les courses</td>
-              <td><span class="badge bg-danger">Haute</span></td>
-              <td>2023-09-15</td>
-              <td>CHANGE</td>
-              <td>
-                <!-- Visibles seulement si userEvent?.role == 'CREATEUR' -->
-                <button class="btn btn-light me-2"><i class="fa-solid fa-eye-slash"></i></button> <!-- Oeil barré -->
-                <button *ngIf="userEvent.role == 'CREATEUR'" class="btn btn-primary"><i class="fa fa-pencil"></i></button> <!-- Edit -->
-                <button *ngIf="userEvent.role == 'CREATEUR'" class="btn btn-danger  ms-2"><i class="fa-regular fa-trash-can"></i></button>  <!-- Poubelle -->
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      
-  </div>
-  
-  <!-- Vue pour créer une tâche -->
-  <div *ngIf="displayMode === 'create'">
-    <form (submit)="createTask()" >
-        <div class="mb-3">      <label for="description" class="form-label">Description</label>
-            <input type="text" class="form-control" id="description" formControlName="description">
+    <div id="collapseOne" class="collapse" [ngClass]="{'show': isOpen}">
+      <div class="card-body">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <div class="container-fluid">
+            <div>
+              <button (click)="displayMode = 'all'" class="btn btn-outline-primary me-2">Toutes les tâches</button>
+              <button *ngIf="Tasks" (click)="displayMode = 'mine'" class="btn btn-outline-secondary me-2">Voir mes
+                tâches</button>
+              <button *ngIf="userEvent.role == 'CREATEUR'" (click)="displayMode = 'create'"
+                class="btn btn-outline-success">Créer une tâche</button>
+            </div>
           </div>
-
-          <div class="mb-3 d-flex flex-row ">
-
-          <div> 
-            
-            <label for="dueDate" class="form-label">Date d'exécution</label>
-            <input type="date" class="form-control" id="dueDate" formControlName="dueDate">
-        </div> 
-            <div> 
-            <label for="urgency" class="form-label">Urgence</label>
-            <select class="form-control" id="urgency" formControlName="urgency">
-              <option value="Haute">Haute</option>
-              <option value="Moyenne">Moyenne</option>
-              <option value="Basse">Basse</option>
-            </select> 
-        </div> 
-
-          </div>
-
-          <div class="mb-3">
-            <label for="assignee" class="form-label">Assigné à</label>
-          <select class="form-control" id="urgency" formControlName="urgency">
-              <option value="user">user</option>
-              <option value="Moyenne">Moyenne</option>
-              <option value="Basse">Basse</option>
-            </select> 
-          </div>
-
-        <button type="submit" class="btn btn-primary">Créer</button>
-    </form>
-  </div>
+        </nav>
 
 
-  
-  
+        <!-- Vue pour toutes les tâches -->
+        <div *ngIf="displayMode === 'all'">
+          <div class="container mt-4">
 
-WARNING - Ca veux dire qu'il faudra display les tâches aprés <br>
+            <div *ngIf="!Tasks" class="textInfosTask">
+              <div *ngIf="userEvent.role == 'CREATEUR'">
+                <p> Ici vous pouvez créer et assigner des tâches pour vous ou pour vos convives. <br> <br>
+                  Demander à un invité de ramener les chips n'as jamais été aussi simple !
+                  Vous aurez également la possibilité de rendre certaines tâches invisibles pour certains !
+                  Faites en sorte que Mathis apporte le gâteaux d'anniverssaire sans en informer Julie ! </p>
 
-                
+                <p class="txt-handwritting"> Debutez des maintenant en creant votre premiere tache. Cliquez simplement
+                  sur le boutton "creer une tache" !</p>
+              </div>
+
+              <div *ngIf="userEvent.role != 'CREATEUR'">
+                <p> Le créateur de cet événement en surement en train d'ajouter de nouvelles tâches ! <br> <br>
+                Patientez encore un peu ! Le créateur de cet événement vient d'activer le module tâche ! 
+                Vous verrez surement apparaitre des tâches pour vous ou pou d'autres invités ! 
+                </p>
+
+                <p class="txt-handwritting">N'hesitez pas a faire savoir a votre hote si vous avez des idees de taches ! </p>
+              </div>
 
 
             </div>
+
+            <table *ngIf="Tasks" class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Description</th>
+                  <th scope="col">Urgence</th>
+                  <th scope="col">Date d'exécution</th>
+                  <th scope="col">Assigné à</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Faire les courses</td>
+                  <td><span class="badge bg-danger">Haute</span></td>
+                  <td>2023-09-15</td>
+                  <td>Moi, Alice</td>
+                  <td>
+                    <!-- Visibles seulement si userEvent?.role == 'CREATEUR' -->
+                    <button class="btn btn-light me-2"><i class="fa-solid fa-eye-slash"></i></button>
+                    <!-- Oeil barré -->
+                    <button *ngIf="userEvent.role == 'CREATEUR'" class="btn btn-primary"><i
+                        class="fa fa-pencil"></i></button> <!-- Edit -->
+                    <button *ngIf="userEvent.role == 'CREATEUR'" class="btn btn-danger  ms-2"><i
+                        class="fa-regular fa-trash-can"></i></button> <!-- Poubelle -->
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
         </div>
+
+        <!-- Vue pour mes tâches -->
+
+
+        <div *ngIf="displayMode === 'mine'">
+          <div class="container mt-4">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Description</th>
+                  <th scope="col">Urgence</th>
+                  <th scope="col">Date d'exécution</th>
+                  <th scope="col">Assigné à</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Faire les courses</td>
+                  <td><span class="badge bg-danger">Haute</span></td>
+                  <td>2023-09-15</td>
+                  <td>CHANGE</td>
+                  <td>
+                    <!-- Visibles seulement si userEvent?.role == 'CREATEUR' -->
+                    <button class="btn btn-light me-2"><i class="fa-solid fa-eye-slash"></i></button>
+                    <!-- Oeil barré -->
+                    <button *ngIf="userEvent.role == 'CREATEUR'" class="btn btn-primary"><i
+                        class="fa fa-pencil"></i></button> <!-- Edit -->
+                    <button *ngIf="userEvent.role == 'CREATEUR'" class="btn btn-danger  ms-2"><i
+                        class="fa-regular fa-trash-can"></i></button> <!-- Poubelle -->
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+
+        </div>
+
+        <!-- Vue pour créer une tâche -->
+        <div *ngIf="displayMode === 'create'">
+
+          <form [formGroup]="taskForm" (submit)="createTask()">
+            <div class="mb-3"> <label for="description" class="form-label">Description</label>
+              <input type="text" class="form-control" id="description" formControlName="description">
+            </div>
+
+            <div class="mb-3 d-flex flex-row ">
+
+              <div>
+
+
+                <label for="dueDate" class="form-label">Date d'exécution</label>
+                <input type="date" class="form-control" id="dueDate" [min]="minDate" [max]="maxDate" formControlName="dueDate">
+              </div>
+              <div>
+                <label for="urgency" class="form-label">Urgence</label>
+                <select class="form-control" id="urgency" formControlName="urgency">
+                  <option value="3">Haute</option>
+                  <option value="2">Moyenne</option>
+                  <option value="1">Basse</option>
+                </select>
+              </div>
+
+            </div>
+
+            <div class="mb-3">
+              <label for="assignee" class="form-label">Assigné à</label>
+              <select class="form-control" id="assignee" formControlName="assignee">
+                <option *ngFor="let guest of guests" [value]="guest.idGuest">          
+                  <p *ngIf="guest.firstName">{{ guest.firstName }} {{ guest.lastName }} </p>
+                  <p *ngIf="!guest.firstName"> {{ guest.email }}</p>
+                </option>
+              </select>
+              
+            </div>
+
+
+
+            <div class="mb-3">
+
+<div > 
+<label class="me-2">Voulez-vous rendre cette tâche invisible pour certains invités ?</label>
+<input type="radio" id="yes" name="displaySelect" (click)="showSelect = true">
+<label class="me-2" for="yes">Oui</label>
+<input type="radio" id="no" name="displaySelect" (click)="showSelect = false" checked>
+<label for="no">Non</label>
+</div>
+<!-- Exemple de ce que vous pouvez afficher conditionnellement -->
+<div *ngIf="showSelect">
+  <div class="mb-3">
+    <label for="assignee" class="form-label">Selectionner l'invité pour qui la tâche sera invisible</label>
+    <select class="form-control" id="assignee" formControlName="assignee">
+      <option *ngFor="let guest of guests" [value]="guest.idGuest">
+        <p *ngIf="guest.firstName">{{ guest.firstName }} {{ guest.lastName }} </p>
+        <p *ngIf="!guest.firstName"> {{ guest.email }}</p>
+      </option>
+    </select>
+  </div>
+</div>
+
+
+<ul>
+  <li *ngFor="let guest of hiddenGuest">
+    {{ guest.firstName ? guest.firstName + ' ' + guest.lastName : guest.email }} <button (click)="removeGuest(guest)">-</button>
+  </li>
+</ul>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Créer</button>
+          </form>
+        </div>
+
+
+
+
+      </div>
     </div>
+  </div>
 </div>

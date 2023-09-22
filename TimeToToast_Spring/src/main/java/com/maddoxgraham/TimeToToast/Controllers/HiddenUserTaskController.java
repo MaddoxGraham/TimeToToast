@@ -10,72 +10,58 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 @RestController
 @RequestMapping("/hiddenUserTask")
 @AllArgsConstructor
 public class HiddenUserTaskController {
 
     private final HiddenUserTaskService hiddenUserTaskService;
-    private final UserService userService;
-    private final TaskService taskService;
 
+    // Trouver toutes les tâches cachées pour un idUser ou idGuest donné
+    @GetMapping("/findTasks")
+    public ResponseEntity<List<HiddenUserTask>> findTasks(
+            @RequestParam("id") Long id,
+            @RequestParam("type") String type) {  // type = "user" ou "guest"
 
+        List<HiddenUserTask> hiddenTasks = "user".equals(type) ?
+                hiddenUserTaskService.findTasksByUserId(id) :
+                hiddenUserTaskService.findTasksByGuestId(id);
 
-
-    @GetMapping("/find/{idUser}")
-    public ResponseEntity<List<HiddenUserTaskDto>> findTasksByUserId(@PathVariable("idUser") Long idUser) {
-        // Utilisation du service pour trouver la liste des HiddenUserTasks par idUser
-        List<HiddenUserTaskDto> hiddenUserTaskDtos = hiddenUserTaskService.findTasksByUserId(idUser);
-
-        // Vérification si la liste est vide ou non
-        if (!hiddenUserTaskDtos.isEmpty()) {
-            return new ResponseEntity<>(hiddenUserTaskDtos, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return hiddenTasks.isEmpty() ?
+                new ResponseEntity<>(HttpStatus.NOT_FOUND) :
+                new ResponseEntity<>(hiddenTasks, HttpStatus.OK);
     }
 
-
-    @GetMapping("/findTask/{idUser}/{idTask}")
-    public ResponseEntity<HiddenUserTask> getHiddenUserTask(@PathVariable("idUser") Long idUser,@PathVariable("idTask") Long idTask) {
-        HiddenUserTaskKey hiddenUserTaskKey = new HiddenUserTaskKey(idUser, idTask);
-        Optional<HiddenUserTask> optionalHiddenUserTask = hiddenUserTaskService.findByHiddenUserTaskKey(hiddenUserTaskKey);
-
-        // Vérification si l'objet existe
-        if (optionalHiddenUserTask.isPresent()) {
-            return new ResponseEntity<>(optionalHiddenUserTask.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
+    // Ajouter un ou plusieurs users/guests pour une tâche donnée
     @PostMapping("/add")
-    public ResponseEntity<HiddenUserTask> addHiddenUserTask(@RequestBody HiddenUserTaskDto hiddenUserTaskDto){
-        HiddenUserTask newHiddenUserTask = hiddenUserTaskService.addHiddenUserTask(hiddenUserTaskDto);
-        return new ResponseEntity<>(newHiddenUserTask, HttpStatus.CREATED);
+    public ResponseEntity<Void> addHiddenUsers(
+            @RequestBody List<HiddenUserTaskDto> hiddenUserTaskDtos) {
+
+        hiddenUserTaskService.addHiddenUsersForTask(hiddenUserTaskDtos);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    // Mettre à jour une tâche cachée
-//    @PutMapping("/update")
-//    public ResponseEntity<HiddenUserTask> updateHiddenUserTask(@RequestBody HiddenUserTask hiddenUserTask) {
-//        HiddenUserTask updatedHiddenUserTask = hiddenUserTaskService.updateHiddenUserTask(hiddenUserTask);
-//        return new ResponseEntity<>(updatedHiddenUserTask, HttpStatus.OK);
-//    }
-
-
-
-    @DeleteMapping("/delete")
-    public ResponseEntity<Void> deleteHiddenUserTask(@RequestBody HiddenUserTaskDto dto) {
-        if (hiddenUserTaskService.deleteByHiddenUserTaskKey(dto, userService, taskService)) {  // Removed semicolon
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    // Supprimer une tâche de la table si elle n'est plus cachée pour personne
+    @DeleteMapping("/deleteTask/{idTask}")
+    public ResponseEntity<Void> deleteTaskIfNoMoreHidden(@PathVariable Long idTask) {
+        boolean deleted = hiddenUserTaskService.deleteTaskIfNoMoreHidden(idTask);
+        return deleted ?
+                ResponseEntity.noContent().build() :
+                ResponseEntity.notFound().build();
     }
 
+    // Modifier pour qui cette tâche est cachée
+    @PutMapping("/update/{idTask}")
+    public ResponseEntity<Void> updateHiddenUsers(
+            @PathVariable Long idTask,
+            @RequestBody List<HiddenUserTaskDto> hiddenUserTaskDtos) {
 
+        hiddenUserTaskService.updateHiddenUsersForTask(idTask, hiddenUserTaskDtos);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }
+

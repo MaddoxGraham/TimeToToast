@@ -38,8 +38,8 @@ public class Event implements Serializable {
     private String cp;
 
     private boolean taskModuleActive;
-    private boolean GiftModuleActive;
-    private boolean PhotoModuleActive;
+    private boolean giftModuleActive;
+    private boolean photoModuleActive;
 
     @OneToMany(mappedBy = "event")
     private Set<UserEventRole> userEventRoles;

@@ -12,13 +12,15 @@ import lombok.*;
 @Entity
 public class HiddenUserTask {
 
-    @EmbeddedId
-    private HiddenUserTaskKey hiddenUserTaskKey;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, updatable = false)
+    private Long hiddenUserTaskKey;
 
-    @MapsId("idUser")
     @ManyToOne
-    @JoinColumn(name = "idUser")
-    private User user;
+    @JoinColumn(name = "idPerson")
+    private Person person;
+
 
     @MapsId("idTask")
     @ManyToOne

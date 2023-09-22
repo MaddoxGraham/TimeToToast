@@ -23,5 +23,7 @@ export const environment = {
     addDetailsToGuest: 'http://localhost:8080/guest/addDetailsToGuest/',
 
     updateModule:'http://localhost:8080/event/update/',
+
+    addTask:'http://localhost:8080/task/add',
 }
   

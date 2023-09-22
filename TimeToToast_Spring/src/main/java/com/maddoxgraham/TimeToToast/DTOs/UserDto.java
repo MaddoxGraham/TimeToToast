@@ -13,11 +13,9 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDto {
+public class UserDto extends PersonDto{
 
-    private Long idUser;
-    private String firstName;
-    private String lastName;
+    private Long id;
 
     private String adresse;
     private String cp;
@@ -25,12 +23,9 @@ public class UserDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
     private String avatar;
-    private String email;
     private String phone;
-
     private String login;
     private String token;
     private String refreshToken;
-    private String role;
 
 }

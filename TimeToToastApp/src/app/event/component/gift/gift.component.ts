@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { EventDto } from 'src/app/share/dtos/event/event-dto';
 import { UserEventRoleDto } from 'src/app/share/dtos/userEventRole/user-event-role-dto';
 
@@ -7,9 +7,12 @@ import { UserEventRoleDto } from 'src/app/share/dtos/userEventRole/user-event-ro
   templateUrl: './gift.component.html',
   styleUrls: ['./gift.component.css']
 })
-export class GiftComponent {
+export class GiftComponent implements OnInit {
   @Output() moduleDeleted = new EventEmitter<void>();
   @Input() userEvent!: UserEventRoleDto;
   @Input() event!: EventDto;
 
+  ngOnInit(): void {
+    console.log('gift component works!')
+  }
 }

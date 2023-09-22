@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 import { EventService } from 'src/app/core/service/event/event.service';
+import { SharedService } from 'src/app/core/service/shared/shared.service';
 import { EmailDataDto } from 'src/app/share/dtos/EmailData/EmailDataDto';
 import { EventDto } from 'src/app/share/dtos/event/event-dto';
 import { GuestDto } from 'src/app/share/dtos/guest/guest-dto';
@@ -35,15 +37,19 @@ export class SingleEventComponent implements OnInit {
   emailExists: boolean = false;
   successMessage: string = ''; // message de succès
   public guests!: GuestDto[];
+  public guestsSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+
 
 
   constructor(private route: ActivatedRoute,
     private eventService: EventService,
-    private fb: FormBuilder,) {
+    private fb: FormBuilder,
+    private sharedService: SharedService,) {
 
     this.emailForm = this.fb.group({
       emails: this.fb.array([]),
     });
+
   }
 
 
@@ -62,7 +68,6 @@ export class SingleEventComponent implements OnInit {
 
     const idUser: UserDto = JSON.parse(sessionStorage.getItem('user') || '{}');
     this.user = idUser;
-    this.isTaskModuleActive = localStorage.getItem('isTaskModuleActive') === 'true';
   }
 
   // CURRENT USER OR EVENT  REALTED QUERY 
@@ -83,6 +88,9 @@ export class SingleEventComponent implements OnInit {
     this.eventService.getEventById(idEvent).subscribe(
       (response) => {
         this.event = response;
+        this.isTaskModuleActive = response.taskModuleActive; // Supposant que taskModuleActive est un champ dans ton EventDto
+        this.isGiftModuleActive = response.giftModuleActive;
+        this.isPhotoModuleActive = response.photoModuleActive;
         this.addingGuest()
       },
       (error) => {
@@ -95,7 +103,6 @@ export class SingleEventComponent implements OnInit {
     this.eventService.getUserEventRoleList(idEvent).subscribe(
       (response) => {
         this.userEventList = response;
-        console.log(this.userEventList)
 
       },
       (error) => {
@@ -118,6 +125,13 @@ export class SingleEventComponent implements OnInit {
 
   }
 
+  
+  formatStartTime(startTime: string): string {
+    const hours = startTime.substr(0, 2);
+    const minutes = startTime.substr(2, 2);
+    return `${hours} H ${minutes} min`;
+  }
+
 
   // MODULE REALTED QUERY 
 
@@ -128,7 +142,7 @@ export class SingleEventComponent implements OnInit {
         this.isTaskModuleActive = response.taskModuleActive;
       },
       (error) => {
-        console.error("Une erreur s'est produite lors de la mise à jour du module", error);
+        console.error("Le module Tâche est indisponible pour le moment", error);
       }
     )
   }
@@ -136,20 +150,22 @@ export class SingleEventComponent implements OnInit {
   activateGiftModule() {
     this.eventService.updateModuleEvent(this.event.idEvent,'gift').subscribe(
       (response) => {
-        this.isTaskModuleActive = response.taskModuleActive;
+        this.isGiftModuleActive = response.giftModuleActive;
+
+       
       },
       (error) => {
-        console.error("Une erreur s'est produite lors de la mise à jour du module", error);
+        console.error("Le module Cadeaux est indisponible pour le moment", error);
       }
     )
    }
   activatePhotosModule() {
     this.eventService.updateModuleEvent(this.event.idEvent,'photo').subscribe(
       (response) => {
-        this.isTaskModuleActive = response.taskModuleActive;
+        this.isPhotoModuleActive = response.photoModuleActive;
       },
       (error) => {
-        console.error("Une erreur s'est produite lors de la mise à jour du module", error);
+        console.error("Le module Photos est indisponible pour le moment", error);
       }
     )
    }
@@ -195,7 +211,6 @@ export class SingleEventComponent implements OnInit {
         // Vous pouvez choisir de ne pas fermer la modale ici
       }
     );
-    console.log(this.emailData.idEvent)
     document.getElementById('emailModal')?.click(); // Ferme la modale
 
   }
@@ -275,7 +290,9 @@ export class SingleEventComponent implements OnInit {
     this.eventService.eventGuest(this.event.idEvent).subscribe(
       (response) => {
         this.guests = response;
-        console.log(this.guests);
+        this.guestsSubject.next(this.guests); // Met à jour la valeur du BehaviorSubject
+
+        this.sharedService.updateGuests(this.guests);
       }
     )
   }

@@ -13,6 +13,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class UserEventKey implements Serializable {
-    private Long idUser;
+    private Long idPerson;
     private Long idEvent;
 }

@@ -19,7 +19,6 @@ export class HeaderComponent implements OnInit, OnDestroy{
               protected authService: AuthenticationService) {}
 
   ngOnInit(): void {     
-    console.log(localStorage);
     this.subscription = this.authService.isLoggedIn.subscribe(isLoggedin => {
 
       this.items = this.getRoutesBasedOnRole();

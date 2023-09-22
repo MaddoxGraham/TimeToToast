@@ -1,9 +1,7 @@
 package com.maddoxgraham.TimeToToast.Services;
 
 import com.maddoxgraham.TimeToToast.DTOs.HiddenUserTaskDto;
-import com.maddoxgraham.TimeToToast.DTOs.UserEventRoleDTO;
 import com.maddoxgraham.TimeToToast.Mappers.HiddenUserTaskMapper;
-import com.maddoxgraham.TimeToToast.Mappers.UserEventRoleMapper;
 import com.maddoxgraham.TimeToToast.Models.*;
 import com.maddoxgraham.TimeToToast.Repository.HiddenUserTaskRepository;
 import lombok.AllArgsConstructor;
@@ -18,49 +16,57 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class HiddenUserTaskService {
 
-    @Autowired
     private final HiddenUserTaskRepository hiddenUserTaskRepository;
     private final UserService userService;
     private final TaskService taskService;
+    private final GuestService guestService;
 
-    // Trouver un HiddenUserTask par sa clé composite
-    public Optional<HiddenUserTask> findByHiddenUserTaskKey(HiddenUserTaskKey hiddenUserTaskKey) {
-        return hiddenUserTaskRepository.findByHiddenUserTaskKey(hiddenUserTaskKey);
+    // Trouver tous les HiddenUserTasks par UserId
+    public List<HiddenUserTask> findTasksByUserId(Long idUser) {
+        return hiddenUserTaskRepository.findAllByUserIdUser(idUser);
     }
 
-
-    // Trouver tous les HiddenUserTasks
-    public List<HiddenUserTask> getAllHiddenUserTasks() {
-        return hiddenUserTaskRepository.findAll();
+    // Trouver tous les HiddenUserTasks par GuestId
+    public List<HiddenUserTask> findTasksByGuestId(Long idGuest) {
+        return hiddenUserTaskRepository.findAllByGuestIdGuest(idGuest);
     }
 
-    public List<HiddenUserTaskDto> findTasksByUserId(Long idUser) {
-        List<HiddenUserTask> hiddenUserTasks = hiddenUserTaskRepository.findAllByUserIdUser(idUser);
-        List<HiddenUserTaskDto> hiddenUserTaskDtos = hiddenUserTasks.stream()
-                .map(HiddenUserTaskMapper::toDto)
+    // Ajouter des HiddenUserTasks pour une tâche
+    public void addHiddenUsersForTask(List<HiddenUserTaskDto> hiddenUserTaskDtos) {
+        List<HiddenUserTask> hiddenUserTasks = hiddenUserTaskDtos.stream()
+                .map(dto -> HiddenUserTaskMapper.toEntity(dto, userService, taskService, guestService))
                 .collect(Collectors.toList());
 
-        return hiddenUserTaskDtos;
+        hiddenUserTaskRepository.saveAll(hiddenUserTasks);
     }
 
-    public HiddenUserTask addHiddenUserTask(HiddenUserTaskDto hiddenUserTaskDto){
-        HiddenUserTask hiddenUserTask = HiddenUserTaskMapper.toEntity(hiddenUserTaskDto, userService, taskService);
-        return hiddenUserTaskRepository.save(hiddenUserTask);
-    }
-
-
-    // Supprimer un HiddenUserTask par sa clé composite
-    public boolean deleteByHiddenUserTaskKey(HiddenUserTaskDto dto, UserService userService, TaskService taskService ) {
-        HiddenUserTask hiddenUserTask = HiddenUserTaskMapper.toEntity(dto,userService,taskService);
-        HiddenUserTaskKey key = hiddenUserTask.getHiddenUserTaskKey();
-        if (hiddenUserTaskRepository.existsById(key)){
-            hiddenUserTaskRepository.deleteByHiddenUserTaskKey(key);
+    // Supprimer une tâche de la table si elle n'est plus cachée pour personne
+    public boolean deleteTaskIfNoMoreHidden(Long idTask) {
+        List<HiddenUserTask> hiddenUserTasks = hiddenUserTaskRepository.findAllByTaskIdTask(idTask);
+        if (hiddenUserTasks.isEmpty()) {
+            hiddenUserTaskRepository.deleteByTaskIdTask(idTask);
             return true;
-        }else{
-            return false;
         }
-
+        return false;
     }
 
+    // Modifier pour qui cette tâche est cachée
+    public void updateHiddenUsersForTask(Long idTask, List<HiddenUserTaskDto> hiddenUserTaskDtos) {
+        // Supprimer tous les anciens enregistrements pour cette tâche
+        hiddenUserTaskRepository.deleteByTaskIdTask(idTask);
 
+        // Ajouter les nouveaux
+        List<HiddenUserTask> newHiddenUserTasks = hiddenUserTaskDtos.stream()
+                .filter(dto -> dto.getIdTask().equals(idTask)) // S'assurer que le ID de la tâche correspond
+                .map(dto -> HiddenUserTaskMapper.toEntity(dto, userService, taskService, guestService))
+                .collect(Collectors.toList());
+
+        if (!newHiddenUserTasks.isEmpty()) {
+            hiddenUserTaskRepository.saveAll(newHiddenUserTasks);
+        } else {
+            // Si la liste est vide, c'est peut-être une indication que la tâche ne doit pas être cachée pour personne.
+            // Vous pouvez gérer cela comme vous le souhaitez, peut-être en supprimant la tâche ?
+            deleteTaskIfNoMoreHidden(idTask);
+        }
+    }
 }

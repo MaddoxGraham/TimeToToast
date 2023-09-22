@@ -21,3 +21,8 @@
   .fa-trash{
 color: rgb(172, 16, 16);
   }
+
+  p {
+    letter-spacing: 1px;
+    color: #474644;
+  }

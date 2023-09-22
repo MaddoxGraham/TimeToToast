@@ -27,7 +27,7 @@ public class EventDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate EventDate;
     private boolean taskModuleActive;
-    private boolean GiftModuleActive;
-    private boolean PhotoModuleActive;
+    private boolean giftModuleActive;
+    private boolean photoModuleActive;
 
 }

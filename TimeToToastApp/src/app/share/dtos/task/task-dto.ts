@@ -3,7 +3,6 @@ import { UserDto } from "../user/user-dto";
 
 export interface TaskDto {
     idTask?:number,
-    taskModuleActive?:boolean,
     description?:String,
     urgence?:number,
     dateTask?:Date,

@@ -4,141 +4,154 @@
 
   <div class="row">
 
-        <!-- infos sur le user -->
-<!-- infos sur le user -->
-<div class="col-md-2 bg-light p-4 "> 
+    <!-- infos sur le user -->
+    <!-- infos sur le user -->
+    <div class="col-md-2 bg-light p-4 ">
 
 
-  <!-- Bouton pour ouvrir la modale -->
-  <button *ngIf="userEvent?.role == 'CREATEUR'" data-bs-toggle="modal" (click)="dataEmail()" data-bs-target="#emailModal" class="btn"> Ajouter un Invité <i class="fa fa-plus"></i> </button>
+      <!-- Bouton pour ouvrir la modale -->
+      <button *ngIf="userEvent?.role == 'CREATEUR'" data-bs-toggle="modal" (click)="dataEmail()"
+        data-bs-target="#emailModal" class="btn"> Ajouter un Invité <i class="fa fa-plus"></i> </button>
 
-<!-- Modale -->
-<div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="emailModalLabel">Envoyez des invitation </h5>
-        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Fermer">
-          <span aria-hidden="true">&times;</span>
-        </button>
+      <!-- Modale -->
+      <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="emailModalLabel">Envoyez des invitation </h5>
+              <button type="button" class="close" data-bs-dismiss="modal" aria-label="Fermer">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+
+              <!-- Formulaire ici   [formGroup]="emailForm"  [disabled]="!emailForm.valid" -->
+              <form (ngSubmit)="sendEmail()" [formGroup]="emailForm">
+                <div formArrayName="emails">
+                  <!-- Pour afficher les e-mails validés -->
+                  <div *ngFor="let email of emailList" class="email-chip">
+                    {{ email }}
+                  </div>
+
+                </div>
+                <!-- Input pour entrer l'e-mail -->
+                <label for="email"> Rentrez les emails de vos invités </label>
+                <input name="email" id="email" type="text" class="form-control"
+                  (keyup)="checkEmail($event, emailInput.value, emailInput)" (keydown.enter)="$event.preventDefault()"
+                  #emailInput />
+                <div *ngIf="emailInvalid" class="invalid-feedback d-block">
+                  L'adresse e-mail entrée n'est pas valide.
+                </div>
+                <div *ngIf="emailExists" class="invalid-feedback d-block">
+                  Cette adresse e-mail existe déjà dans la liste.
+                </div>
+
+                <button type="submit" [disabled]="emailList.length === 0" class="btn btn-primary">Envoyer</button>
+              </form>
+
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="modal-body">
 
-        <!-- Formulaire ici   [formGroup]="emailForm"  [disabled]="!emailForm.valid" -->
-        <form (ngSubmit)="sendEmail()" [formGroup]="emailForm">
-          <div formArrayName="emails">
-        <!-- Pour afficher les e-mails validés -->
-<div *ngFor="let email of emailList" class="email-chip">
-  {{ email }}
-</div>
+      <div *ngIf="successMessage" class="alert alert-success">
+        {{ successMessage }}
+      </div>
+
+      <h3> Créateur </h3>
+      <ul>
+        <li *ngFor="let user of getUsersByRole('CREATEUR')">
+          {{ user.lastName }} {{ user.firstName | uppercase }}
+        </li>
+      </ul>
+
+      <h3> Invités </h3>
+      <ul>
+        <li *ngFor="let user of getUsersByRole('INVITE')">
+          {{ user.lastName }} {{ user.firstName | uppercase }}
+
+        </li>
+
+        <li *ngFor="let guest of guests">
+          <p *ngIf="guest.firstName">{{ guest.firstName }} {{ guest.lastName }} </p>
+          <p *ngIf="!guest.firstName"> {{ guest.email }}</p>
+        </li>
+      </ul>
+    </div>
+
+
+
+    <!-- corps de l'event  -->
+    <div class="col-md-8 EventTop pb-4">
+      <div class="EventTitle ">
+        <div class=" my-4 moduleEventInfos mx-2">
+          <h2>{{ event.title }}</h2>
+          <p>{{ event.description }}</p>
+
+          <h4> Des Informations importantes : </h4>
+          <div class="mb-4">
+            <p class="mb-0 pb-0">
+              Votre événement aura lieu le
+              <i class="fa-solid fa-calendar-days"></i>
+              {{ event.eventDate | date:'d MMM y' }} à<i class="ms-2 fa-solid fa-clock"></i> {{
+              formatStartTime(event.startTime) }}
+            </p>
+            <p class="mt-0 pt-0"> A l'adresse : <i class="fa-solid fa-location-dot"></i> {{ event.adresse }}, {{
+              event.cp }} {{ event.ville }}</p>
+
+            <div class="box-shadow map-container">
+              <app-map [completeAddress]="event.adresse + ' ' + event.ville + ' ' + event.cp"
+                [completeAddress]="event.ville + ' ' + event.cp" [eventId]="event.idEvent"></app-map>
+            </div>
 
           </div>
-         <!-- Input pour entrer l'e-mail -->
-         <label for="email"> Rentrez les emails de vos invités </label>
-         <input
-         name="email"
-         id="email"
-         type="text"
-         class="form-control"
-         (keyup)="checkEmail($event, emailInput.value, emailInput)"
-         (keydown.enter)="$event.preventDefault()"
-         #emailInput
-       />
-       <div *ngIf="emailInvalid" class="invalid-feedback d-block">
-         L'adresse e-mail entrée n'est pas valide.
-       </div>
-       <div *ngIf="emailExists" class="invalid-feedback d-block">
-         Cette adresse e-mail existe déjà dans la liste.
-       </div>
-
-          <button type="submit" [disabled]="emailList.length === 0" class="btn btn-primary">Envoyer</button>
-        </form>
-        
-      </div>
-    </div>
-  </div>
-</div>
-
-<div *ngIf="successMessage" class="alert alert-success">
-  {{ successMessage }}
-</div>
-
-  <h3> Créateur </h3>
-  <ul>
-    <li *ngFor="let user of getUsersByRole('CREATEUR')">
-      {{ user.lastName }} {{ user.firstName | uppercase  }}
-    </li>
-  </ul>
-  
-  <h3> Invités </h3>
-  <ul>
-    <li *ngFor="let user of getUsersByRole('INVITE')">
-      {{ user.lastName  }} {{ user.firstName | uppercase }}
-
-    </li>      
-  
-    <li *ngFor="let guest of guests">
-        <p *ngIf="guest.firstName">{{ guest.firstName }} {{ guest.lastName }} </p>
-        <p *ngIf="!guest.firstName"> {{ guest.email }}</p>
-      </li>
-  </ul>
-</div>
 
 
+          <!-- Module Activation check :-->
+          <div *ngIf="isTaskModuleActive==false && isGiftModuleActive==false && isPhotoModuleActive==false"
+            class="container text-center row my-5"> <span class="display-4 col-12">Cet événement n'a aucun module
+            </span>
 
-        <!-- corps de l'event  -->
-    <div class="col-md-8">
-      <div class="">
-        <div class=" my-4 moduleEventInfos mx-2">
-        <h2>{{ event.title }}</h2>
-        <p>{{ event.description }}</p>
-maps desc border-bottom et modules si existants. 
+            <span *ngIf="userEvent?.role == 'CREATEUR'" class="col-12 display-6">Séléctionnez votre premier module pour
+              débuter </span>
+            <span *ngIf="userEvent?.role != 'CREATEUR'" class="col-12 display-6">Patientez, le créateur de cet événement
+              va peut être en rajouter ! </span>
+          </div>
+
+          <app-task *ngIf="isTaskModuleActive"  [userEvent]="userEvent" [event]="event"
+            (moduleDeleted)="onModuleDeleted('task')">
+          </app-task>
+
+          <app-gift *ngIf="isGiftModuleActive" [userEvent]="userEvent" [event]="event"
+            (moduleDeleted)="onModuleDeleted('gift')">
+          </app-gift>
+
+          <app-photo *ngIf="isPhotoModuleActive" [userEvent]="userEvent" [event]="event"
+            (moduleDeleted)="onModuleDeleted('photo')">
+          </app-photo>
+
 
         </div>
 
 
-<!-- localstorage check :-->
-<div *ngIf="isTaskModuleActive==false && isGiftModuleActive==false && isPhotoModuleActive==false" class="container text-center row my-5"> <span class="display-4 col-12">Cet événement n'a aucun module  </span> 
-  
-  <span *ngIf="userEvent?.role == 'CREATEUR'"  class="col-12 display-6">Séléctionnez votre premier module pour débuter </span>
-  <span *ngIf="userEvent?.role != 'CREATEUR'"  class="col-12 display-6">Patientez, le créateur de cet événement va peut être en rajouter ! </span> 
-</div>
-
-<app-task *ngIf="isTaskModuleActive" 
-          [userEvent]="userEvent" 
-          [event]="event" 
-          (moduleDeleted)="onModuleDeleted('task')">
-</app-task>
-
-<app-gift *ngIf="isGiftModuleActive" 
-          [userEvent]="userEvent" 
-          [event]="event" 
-          (moduleDeleted)="onModuleDeleted('gift')">
-</app-gift>
-
-<app-photo *ngIf="isPhotoModuleActive" 
-          [userEvent]="userEvent" 
-          [event]="event" 
-          (moduleDeleted)="onModuleDeleted('photo')">
-</app-photo>
-
-
       </div>
-     
-
-    </div> 
+    </div>
     <!-- modules gestion -->
-    <div *ngIf="userEvent?.role == 'CREATEUR'" class="col-md-2 bg-light rightModule ">
-      <h6 class="p-4"> Ajouter le module  :</h6>
-      <button (click)="activateTaskModule()" class="p-2 m-0 box-shadow border-bottom w-100 d-flex flex-row nowrap justify-content-between moduleBtn">
-         <div>Tâches </div> <i class="fa fa-plus my-auto "></i>
+    <div *ngIf="userEvent?.role == 'CREATEUR'" class="col-md-2 bg-light rightModule pb-4 ">
+      <h6 class="p-4"> Ajouter le module :</h6>
+      <button (click)="activateTaskModule()"
+        class="p-2 m-0 box-shadow border-bottom w-100 d-flex flex-row nowrap justify-content-between moduleBtn">
+        <div>Tâches </div> <i class="fa fa-plus my-auto "></i>
       </button>
-      <button (click)="activatePhotosModule()" class="p-2 m-0 box-shadow border-bottom w-100 d-flex flex-row nowrap justify-content-between moduleBtn">
+      <button (click)="activatePhotosModule()"
+        class="p-2 m-0 box-shadow border-bottom w-100 d-flex flex-row nowrap justify-content-between moduleBtn">
         <div>Photos </div> <i class="fa fa-plus my-auto "></i>
-     </button>
-     <button (click)="activateGiftModule()" class="p-2 m-0 box-shadow border-bottom w-100 d-flex flex-row nowrap justify-content-between moduleBtn">
-      <div>Cadeaux </div> <i class="fa fa-plus my-auto "></i>
-   </button>
+      </button>
+      <button (click)="activateGiftModule()"
+        class="p-2 m-0 box-shadow border-bottom w-100 d-flex flex-row nowrap justify-content-between moduleBtn">
+        <div>Cadeaux </div> <i class="fa fa-plus my-auto "></i>
+      </button>
     </div>
   </div>
 </div>

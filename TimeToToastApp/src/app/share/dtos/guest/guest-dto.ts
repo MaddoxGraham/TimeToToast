@@ -1,10 +1,10 @@
-export interface GuestDto {
+import { Person } from "../../models/person.interface";
+
+export interface GuestDto extends Person{
     idGuest: number,
+    
     idEvent: number,
     role: string,
-    email: string,
-    firstName: string,
-    lastName: string,
     isPresent: boolean,
     token: string,
 }
