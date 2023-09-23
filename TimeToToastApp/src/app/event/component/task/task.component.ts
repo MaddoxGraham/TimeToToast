@@ -91,7 +91,7 @@ private formatDate(date: Date): string {
 }
 
 addGuest(selectedValue: string) {
-    const guest = this.guests.find(g => g.idGuest === Number(selectedValue));
+    const guest = this.guests.find(g => g.idPerson === Number(selectedValue));
     if (guest) {
       this.hiddenGuest.push(guest);
     }

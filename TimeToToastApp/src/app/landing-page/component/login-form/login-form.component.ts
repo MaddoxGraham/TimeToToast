@@ -55,7 +55,7 @@ export class LoginFormComponent implements OnInit{
     onSubmit(form: FormGroup): void {
       console.log(this.guest.role == 'GUEST')
       if(this.guest.role == 'GUEST'){
-        this.userService.deleteGuest(this.guest.idGuest).subscribe();
+        this.userService.deleteGuest(this.guest.idPerson).subscribe();
       }
       if(this.authService.getAuthToken() !== null) {
         window.localStorage.removeItem("auth_token");

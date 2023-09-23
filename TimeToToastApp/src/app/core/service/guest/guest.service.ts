@@ -19,8 +19,8 @@ export class GuestService {
     return this.httpClient.post<GuestDto>(environment.verifyGuest, token, { headers: headers });
   }
 
-  addDetailsToGuest({lastName, firstName}: {lastName: string, firstName: string}, idGuest: number): Observable<GuestDto> {
+  addDetailsToGuest({lastName, firstName}: {lastName: string, firstName: string}, idPerson: number): Observable<GuestDto> {
     const data = {lastName, firstName};
-    return this.httpClient.put<GuestDto>(`${environment.addDetailsToGuest}${idGuest}`, data)
+    return this.httpClient.put<GuestDto>(`${environment.addDetailsToGuest}${idPerson}`, data)
   }
 }

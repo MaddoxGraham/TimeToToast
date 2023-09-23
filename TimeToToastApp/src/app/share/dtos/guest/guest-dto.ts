@@ -1,9 +1,9 @@
 import { Person } from "../../models/person.interface";
 
 export interface GuestDto extends Person{
-    idGuest: number,
+    idPerson: number,
     
-    idEvent: number,
+    eventId: number,
     role: string,
     isPresent: boolean,
     token: string,

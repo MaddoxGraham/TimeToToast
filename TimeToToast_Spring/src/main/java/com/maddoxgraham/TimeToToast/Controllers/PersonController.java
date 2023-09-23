@@ -52,6 +52,12 @@ public class PersonController {
         return new ResponseEntity<>(guestDto, HttpStatus.OK);
     }
 
+    @PutMapping("/addDetailsToGuest/{idPerson}")
+    public ResponseEntity<PersonDto> addDetailsToGuest(@PathVariable Long idPerson, @RequestBody PersonDto guestDetailsDto) {
+        PersonDto personDto = personService.addDetailsToGuest(idPerson, guestDetailsDto.getFirstName(), guestDetailsDto.getLastName());
+        return new ResponseEntity<>(personDto, HttpStatus.OK);
+    }
+
 //    @PutMapping("/update/{idUser}")
 //    public ResponseEntity<UserDto> updateUser(@PathVariable("idUser") Long idUser, @RequestBody UserUpdateDto user) {
 //        UserDto updateUser = userService.updateUser(idUser, user);

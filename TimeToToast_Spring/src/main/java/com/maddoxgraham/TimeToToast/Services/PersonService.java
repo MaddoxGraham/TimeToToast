@@ -52,6 +52,19 @@ public class PersonService {
         return personMapper.toPersonDto(person);
     }
 
+    public PersonDto addDetailsToGuest(Long idPerson, String firstName, String lastName) {
+        Optional<Person> personOpt = personRepository.findByidPerson(idPerson);
+        if(personOpt.isPresent()){
+            Person person = personOpt.get();
+            person.setFirstName(firstName);
+            person.setLastName(lastName);
+            personRepository.save(person);
+            PersonDto personDto = personMapper.toPersonDto(person);
+            return personDto;
+        }
+        return null;
+    }
+
     // update a person
 //    public void updatePerson(Long idPerson, PersonDto dto) {
 //        Optional<Person> existingPersonOpt = personRepository.findById(idPerson);
@@ -131,9 +144,12 @@ public class PersonService {
     // SERVICE RELATIF AUX GUESTS
 
     public PersonDto findByEmail(String email) {
-        Person person = personRepository.findByEmail(email)
-                .orElseThrow(() -> new AppException("Personne inconnue", HttpStatus.NOT_FOUND));
-        return personMapper.toPersonDto(person);
+        Optional<Person> personOpt = personRepository.findByEmail(email);
+        if(personOpt.isPresent()){
+            Person person = personOpt.get();
+            return personMapper.toPersonDto(person);
+        }
+        return null;
     }
 
     public List<PersonDto> findGuestByEvent(Long idEvent) {

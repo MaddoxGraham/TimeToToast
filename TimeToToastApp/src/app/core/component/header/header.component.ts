@@ -40,7 +40,7 @@ export class HeaderComponent implements OnInit, OnDestroy{
 
   get isGuest(): Boolean {
     const user = JSON.parse(sessionStorage.getItem("user") || `{}`);
-    this.idEvent = user.idEvent;
+    this.idEvent = user.eventId;
     return user.role === 'GUEST'
   }
   

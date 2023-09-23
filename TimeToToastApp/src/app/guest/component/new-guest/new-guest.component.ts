@@ -39,6 +39,7 @@ export class NewGuestComponent implements OnInit{
     if(this.token) {
       this.guestService.verifyGuest(this.token).subscribe((response: GuestDto) => {
         this.guest = response;
+        console.log (this.guest)
         sessionStorage.setItem('user',JSON.stringify(this.guest));
         window.localStorage.setItem("auth_token", this.guest.token);
         this.authService.isLoggedIn.next(true);
@@ -71,10 +72,10 @@ export class NewGuestComponent implements OnInit{
         {
           lastName: this.userForm.value.lastName,
           firstName: this.userForm.value.firstName 
-        }, this.guest.idGuest).subscribe((response: GuestDto) => {
+        }, this.guest.idPerson).subscribe((response: GuestDto) => {
           this.guest = response;
           console.log(this.guest)
-          this.router.navigateByUrl(`/event/singleEvent/${this.guest.idEvent}`)
+          this.router.navigateByUrl(`/event/singleEvent/${this.guest.eventId}`)
           //localStorage.setItem('guestInfo', JSON.stringify(this.guest));
       })
     }

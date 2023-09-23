@@ -160,7 +160,7 @@
             <div class="mb-3">
               <label for="assignee" class="form-label">Assigné à</label>
               <select class="form-control" id="assignee" formControlName="assignee">
-                <option *ngFor="let guest of guests" [value]="guest.idGuest">          
+                <option *ngFor="let guest of guests" [value]="guest.idPerson">          
                   <p *ngIf="guest.firstName">{{ guest.firstName }} {{ guest.lastName }} </p>
                   <p *ngIf="!guest.firstName"> {{ guest.email }}</p>
                 </option>
@@ -184,7 +184,7 @@
   <div class="mb-3">
     <label for="assignee" class="form-label">Selectionner l'invité pour qui la tâche sera invisible</label>
     <select class="form-control" id="assignee" formControlName="assignee">
-      <option *ngFor="let guest of guests" [value]="guest.idGuest">
+      <option *ngFor="let guest of guests" [value]="guest.idPerson">
         <p *ngIf="guest.firstName">{{ guest.firstName }} {{ guest.lastName }} </p>
         <p *ngIf="!guest.firstName"> {{ guest.email }}</p>
       </option>
