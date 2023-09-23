@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserTaskDto {
-    private Long hiddenUserKey;
-    private Long idGuest;
-    private Long idUser;
+    private Long idPerson;
     private Long idTask;
+    private Boolean isInvisible;
+
 }

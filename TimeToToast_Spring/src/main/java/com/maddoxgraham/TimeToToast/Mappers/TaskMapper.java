@@ -2,6 +2,7 @@ package com.maddoxgraham.TimeToToast.Mappers;
 
 
 import com.maddoxgraham.TimeToToast.DTOs.TaskDto;
+import com.maddoxgraham.TimeToToast.Models.Event;
 import com.maddoxgraham.TimeToToast.Models.Task;
 
 
@@ -23,24 +24,15 @@ public class TaskMapper {
     }
 
     public static Task toEntity(TaskDto dto) {
-        if (dto == null ){
+        if (dto == null) {
             return null;
         }
         Task task = new Task();
         task.setIdTask(dto.getIdTask());
         task.setDateTask(dto.getDateTask());
-        task.setEvent();
-        task.setCreator(dto.getCreator().getIdPerson());
-        task.setAssignee(dto.getAssignee().getIdPerson());
         task.setUrgence(dto.getUrgence());
         task.setDescription(dto.getDescription());
-
-//           public static UserEventRole toEntity(UserEventRoleDto dto, PersonService personService, EventService eventService) {
-//        UserEventKey key = new UserEventKey(dto.getIdPerson(), dto.getIdEvent());
-//        Person person = personService.findPersonByIdPerson(dto.getIdPerson());
-//        Event event = eventService.findEventByIdEvent(dto.getIdEvent());
-//        return new UserEventRole(key, person, event, dto.getRole());
-//    }
+        return task;
     }
 
 

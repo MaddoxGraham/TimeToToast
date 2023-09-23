@@ -1,48 +1,42 @@
 package com.maddoxgraham.TimeToToast.Mappers;
 
-//import com.maddoxgraham.TimeToToast.DTOs.HiddenUserTaskDto;
-//import com.maddoxgraham.TimeToToast.Models.*;
-//import com.maddoxgraham.TimeToToast.Services.GuestService;
-//import com.maddoxgraham.TimeToToast.Services.TaskService;
-//import com.maddoxgraham.TimeToToast.Services.UserService;
+import com.maddoxgraham.TimeToToast.DTOs.UserTaskDto;
+import com.maddoxgraham.TimeToToast.Models.Person;
+import com.maddoxgraham.TimeToToast.Models.Task;
+import com.maddoxgraham.TimeToToast.Models.UserTask;
+import com.maddoxgraham.TimeToToast.Models.UserTaskKey;
+import com.maddoxgraham.TimeToToast.Services.PersonService;
+import com.maddoxgraham.TimeToToast.Services.TaskService;
+
 public class UserTaskMapper {
 
     // Convertir DTO en entité
-//    public static HiddenUserTask toEntity(HiddenUserTaskDto dto, UserService userService, TaskService taskService, GuestService guestService) {
-//        HiddenUserTask hiddenUserTask = new HiddenUserTask();
-//
-//        hiddenUserTask.setHiddenUserTaskKey(dto.getHiddenUserKey());
-//
-//        // Récupération des objets User, Task et Guest en utilisant les services
-//        User user = userService.findUserByIdUser(dto.getIdUser());
-//        Task task = taskService.findTaskByIdTask(dto.getIdTask());
-//        Guest guest = guestService.findGuestByIdGuest(dto.getIdGuest());
-//
-//        hiddenUserTask.setUser(user);
-//        hiddenUserTask.setTask(task);
-//        hiddenUserTask.setGuest(guest);
-//
-//        return hiddenUserTask;
-//    }
+    public static UserTask toEntity(UserTaskDto dto, PersonService personService, TaskService taskService) {
+        UserTask userTask = new UserTask();
+        UserTaskKey key = new UserTaskKey(dto.getIdPerson(), dto.getIdTask());
+        userTask.setUserTaskKey(key);
 
-    // Convertir entité en DTO
-//    public static HiddenUserTaskDto toDto(HiddenUserTask entity) {
-//        HiddenUserTaskDto dto = new HiddenUserTaskDto();
-//
-//        dto.setHiddenUserKey(entity.getHiddenUserTaskKey());
-//
-//        if (entity.getUser() != null) {
-//            dto.setIdUser(entity.getUser().getIdUser());
-//        }
-//
-//        if (entity.getTask() != null) {
-//            dto.setIdTask(entity.getTask().getIdTask());
-//        }
-//
-//        if (entity.getGuest() != null) {
-//            dto.setIdGuest(entity.getGuest().getIdGuest());
-//        }
-//
-//        return dto;
-//    }
+        Person person = personService.findPersonByIdPerson(dto.getIdPerson());
+        Task task = taskService.findTaskByIdTask(dto.getIdTask());
+
+       userTask.setPerson(person);
+       userTask.setTask(task);
+       userTask.setIsInvisible(dto.getIsInvisible());
+
+        return userTask;
+    }
+
+   //  Convertir entité en DTO
+   public static UserTaskDto toDto(UserTask entity) {
+       UserTaskDto dto = new UserTaskDto();
+
+       // Déconstruire la clé composite et définir ses propriétés dans le DTO
+       UserTaskKey key = entity.getUserTaskKey();
+       dto.setIdPerson(key.getIdPerson());
+       dto.setIdTask(key.getIdTask());
+
+       dto.setIsInvisible(entity.getIsInvisible());
+
+       return dto;
+   }
 }
