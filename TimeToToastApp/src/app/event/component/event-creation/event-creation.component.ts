@@ -56,7 +56,7 @@ export class EventCreationComponent implements OnInit {
       const date = new Date();
       this.minDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
 
-
+      
   }
 
     updateCategorie() {
@@ -117,17 +117,13 @@ export class EventCreationComponent implements OnInit {
   onContinue(){ 
       this.previewData = [];
     this.previewData.push(this.createEvent.value);
-
-    console.log(this.previewData)
-    console.log(this.step)
     this.step ++;
-
     }
 
   onValidate(){ 
     this.previewData = [];
     this.previewData.push(this.createEvent.value);
-    console.log('validate')  }
+  }
 
   toggleInput() {
     this.useCustomCategory = !this.useCustomCategory;
@@ -172,8 +168,9 @@ export class EventCreationComponent implements OnInit {
           const userString = sessionStorage.getItem("user");
           if (userString) {
             this.user = JSON.parse(userString) as UserDto;
-            if (this.user.idUser !== undefined) { // Vérification ici
-              this.addUserEventRole(response.idEvent, this.user.idUser);
+            console.log(this.user)
+            if (this.user.idPerson !== undefined) { 
+              this.addUserEventRole(response.idEvent, this.user.idPerson);
             } else {
               console.error('ID utilisateur non défini.');
             }
@@ -187,8 +184,9 @@ export class EventCreationComponent implements OnInit {
   }
 
   addUserEventRole(idEvent: number, idUser: number) {
+    console.log(idUser)
     this.eventService.addUserEventRole({
-      idUser: idUser,
+      idPerson: idUser,
       idEvent: idEvent,
       role: 'CREATEUR'
     }).subscribe(

@@ -28,8 +28,8 @@ export class EventUserComponent implements OnInit {
 
   loadUserEventRoles() {
     const user: UserDto = JSON.parse(sessionStorage.getItem('user') || '{}');
-    if (user?.idUser) {
-      this.eventService.getUserRolesByUserId(user.idUser).subscribe(
+    if (user?.idPerson) {
+      this.eventService.getUserRolesByUserId(user.idPerson).subscribe(
         (userEventRoles: UserEventsDto[]) => {
           this.userEventsList = userEventRoles;
           // Appeler la méthode pour obtenir les détails de chaque événement

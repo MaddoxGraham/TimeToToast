@@ -26,7 +26,7 @@ export class EventService {
       return this.httpClient.get<EventDto>(url);
     }
 
-    addUserEventRole(data: { idEvent: number, idUser: number, role: string }): Observable<UserEventRoleDto> {
+    addUserEventRole(data: { idEvent: number, idPerson: number, role: string }): Observable<UserEventRoleDto> {
       return this.httpClient.post<UserEventRoleDto>(environment.addUserEventRole, data);
     }
 

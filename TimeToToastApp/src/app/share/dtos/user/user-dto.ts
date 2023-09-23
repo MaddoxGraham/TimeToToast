@@ -4,7 +4,7 @@ import { TaskDto } from "../task/task-dto";
 import { UserEventRoleDto } from "../userEventRole/user-event-role-dto";
 
 export interface UserDto extends Person {
-    idUser?:number,
+    idPerson?:number,
 
     adresse?:string;
     cp?:string;
