@@ -243,8 +243,6 @@ export class SingleEventComponent implements OnInit {
   }
 
 
-
-
   checkEmail(event: KeyboardEvent, inputEmail: string, inputElement: HTMLInputElement): void {
     this.emailInvalid = false;
     this.emailExists = false;

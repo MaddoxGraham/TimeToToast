@@ -1,6 +1,5 @@
 package com.maddoxgraham.TimeToToast.Services;
 
-import com.maddoxgraham.TimeToToast.TimeToToastApplication;
 import com.maddoxgraham.TimeToToast.Exception.UserNotFoundException;
 import com.maddoxgraham.TimeToToast.Models.Comment;
 import com.maddoxgraham.TimeToToast.Repository.CommentRepository;
