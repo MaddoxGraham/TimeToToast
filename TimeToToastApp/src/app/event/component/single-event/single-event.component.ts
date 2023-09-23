@@ -62,7 +62,7 @@ export class SingleEventComponent implements OnInit {
       const idUser: UserDto = JSON.parse(sessionStorage.getItem('user') || '{}');
       const idEvent = params['idEvent'];
       if (idEvent) { this.getEvent(idEvent);}
-      if (idUser.idUser && idEvent) {this.getUserEventRole(idUser.idUser, idEvent) }
+      if (idUser.idPerson && idEvent) {this.getUserEventRole(idUser.idPerson, idEvent) }
       if (idEvent) { this.getUserEventRoleList(idEvent) }
     });
 
@@ -189,8 +189,8 @@ export class SingleEventComponent implements OnInit {
 
   dataEmail() {
     const idUser: UserDto = JSON.parse(sessionStorage.getItem('user') || '{}');
-    if (idUser.idUser && this.event) {
-      this.emailData.idUser = idUser.idUser;
+    if (idUser.idPerson && this.event) {
+      this.emailData.idUser = idUser.idPerson;
       this.emailData.idEvent = this.event.idEvent;
 
     } else {

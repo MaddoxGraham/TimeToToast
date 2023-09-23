@@ -62,9 +62,9 @@ export class UserUpdateComponent implements OnInit {
     if(updateForm.valid) {
       this.updatedUser = this.updateForm.value
       console.log(this.updatedUser)
-      console.log(this.user.idUser)
-      if (this.user.idUser) {
-        this.userService.updateUser(this.user.idUser, this.updatedUser).subscribe(
+      console.log(this.user.idPerson)
+      if (this.user.idPerson) {
+        this.userService.updateUser(this.user.idPerson, this.updatedUser).subscribe(
             success => {
               sessionStorage.setItem('user', JSON.stringify(success));
             },
