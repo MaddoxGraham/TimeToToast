@@ -16,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.CharBuffer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -44,26 +46,32 @@ public class PersonService {
         }
     }
 
-    // update a person
-    public void updatePerson(Long idPerson, PersonDto dto) {
-        Optional<Person> existingPersonOpt = personRepository.findById(idPerson);
-        if (existingPersonOpt.isPresent()) {
-            Person person = existingPersonOpt.get();
-            if (person.getRole().equals("USER")){
-                person.setFirstName(dto.getFirstName());
-                person.setLastName(dto.getLastName());
-                person.setEmail(dto.getEmail());
-            }
-
-            // Mettez à jour les propriétés de la personne existante avec les valeurs de personDto
-             //   person.setName(dto.getName());
-           // person.setEmail(dto.getEmail());
-            // Ajoutez d'autres mises à jour si nécessaire
-
-            // Enregistrez la personne mise à jour dans la base de données
-            personRepository.save(existingPerson);
-        }
+    public PersonDto verifyGuest(String email) {
+        Person person = personRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException("Personne inconnue", HttpStatus.NOT_FOUND));
+        return personMapper.toPersonDto(person);
     }
+
+    // update a person
+//    public void updatePerson(Long idPerson, PersonDto dto) {
+//        Optional<Person> existingPersonOpt = personRepository.findById(idPerson);
+//        if (existingPersonOpt.isPresent()) {
+//            Person person = existingPersonOpt.get();
+//            if (person.getRole().equals("USER")){
+//                person.setFirstName(dto.getFirstName());
+//                person.setLastName(dto.getLastName());
+//                person.setEmail(dto.getEmail());
+//            }
+//
+//            // Mettez à jour les propriétés de la personne existante avec les valeurs de personDto
+//             //   person.setName(dto.getName());
+//           // person.setEmail(dto.getEmail());
+//            // Ajoutez d'autres mises à jour si nécessaire
+//
+//            // Enregistrez la personne mise à jour dans la base de données
+//            personRepository.save(existingPerson);
+//        }
+//    }
 
     // SERVICE RELATIF AUX USERS
     public PersonDto login(CredentialsDto credentialsDto){
@@ -123,9 +131,19 @@ public class PersonService {
     // SERVICE RELATIF AUX GUESTS
 
     public PersonDto findByEmail(String email) {
-        Person person = personRepository.findGuestByEmail(email)
-                .orElseThrow(() -> new AppException("Unknown guest", HttpStatus.NOT_FOUND));
+        Person person = personRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException("Personne inconnue", HttpStatus.NOT_FOUND));
         return personMapper.toPersonDto(person);
+    }
+
+    public List<PersonDto> findGuestByEvent(Long idEvent) {
+        List<Person> personList = personRepository.findByEvent_IdEvent(idEvent);
+        List<PersonDto> personDtos = new ArrayList<>();
+        for(Person person: personList) {
+            PersonDto personDto = personMapper.toPersonDto(person);
+            personDtos.add(personDto);
+        }
+        return personDtos;
     }
 
 }

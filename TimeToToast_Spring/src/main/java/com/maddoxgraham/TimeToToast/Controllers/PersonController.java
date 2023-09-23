@@ -1,5 +1,6 @@
 package com.maddoxgraham.TimeToToast.Controllers;
 
+import com.maddoxgraham.TimeToToast.Config.UserAuthProvider;
 import com.maddoxgraham.TimeToToast.DTOs.PersonDto;
 import com.maddoxgraham.TimeToToast.Models.Person;
 import com.maddoxgraham.TimeToToast.Services.PersonService;
@@ -8,12 +9,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/person")
 @AllArgsConstructor
 public class PersonController {
 
     private final PersonService personService;
+    private final UserAuthProvider userAuthProvider;
 
     // PERSON Methods
 
@@ -30,9 +34,22 @@ public class PersonController {
     return new ResponseEntity<>(person,HttpStatus.OK);
     }
 
-    @PostMapping("/update/{idUser}")
-    public ResponseEntity<PersonDto> updateUser(@PathVariable("idUser") Long idUser, @RequestBody PersonDto person){
+//    @PostMapping("/update/{idUser}")
+//    public ResponseEntity<PersonDto> updateUser(@PathVariable("idUser") Long idUser, @RequestBody PersonDto person){
+//
+//    }
 
+    @GetMapping("getEventGuests/{idEvent}")
+    public  ResponseEntity<List<PersonDto>> getEventGuests(@PathVariable Long idEvent){
+    List<PersonDto> guests = personService.findGuestByEvent(idEvent);
+    return new ResponseEntity<>(guests,HttpStatus.OK);
+    }
+
+    @PostMapping("/verifyGuest")
+    public ResponseEntity<PersonDto> verifyGuest(@RequestBody String token){
+        String email = userAuthProvider.verifyGuest(token);
+        PersonDto guestDto = personService.verifyGuest(email);
+        return new ResponseEntity<>(guestDto, HttpStatus.OK);
     }
 
 //    @PutMapping("/update/{idUser}")

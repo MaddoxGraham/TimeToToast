@@ -28,7 +28,7 @@ export class SingleEventComponent implements OnInit {
   public userEvent!: UserEventRoleDto;
   emailData: EmailDataDto = {
     to: [],
-    idUser: 0,
+    idPerson: 0,
     idEvent: 0
   }
   emailForm: FormGroup = this.fb.group({});
@@ -190,7 +190,7 @@ export class SingleEventComponent implements OnInit {
   dataEmail() {
     const idUser: UserDto = JSON.parse(sessionStorage.getItem('user') || '{}');
     if (idUser.idPerson && this.event) {
-      this.emailData.idUser = idUser.idPerson;
+      this.emailData.idPerson = idUser.idPerson;
       this.emailData.idEvent = this.event.idEvent;
 
     } else {

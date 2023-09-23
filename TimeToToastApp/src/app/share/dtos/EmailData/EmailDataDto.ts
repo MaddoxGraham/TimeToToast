@@ -2,6 +2,6 @@ export interface EmailDataDto {
   to: string[];
   // subject: string;
   // body: string;
-  idUser: number;
+  idPerson: number;
   idEvent: number;
 }

@@ -171,6 +171,7 @@ public class UserAuthProvider {
 
             Object guestDto;
             guestDto = personService.findByEmail(email);
+            System.out.println(guestDto);
 
             return new UsernamePasswordAuthenticationToken(guestDto, null, Collections.emptyList());
         }
