@@ -15,6 +15,10 @@ import java.time.LocalDate;
 @ToString(exclude = {"event", "creator", "assignee"})
 @Entity
 public class Task implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, updatable = false)
+    private Long idTask;
 
     private String description;
 
@@ -22,11 +26,6 @@ public class Task implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateTask;
     private Long urgence;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, updatable = false)
-    private Long idTask;
 
     @ManyToOne
     @JoinColumn(name="idEvent", nullable=false)

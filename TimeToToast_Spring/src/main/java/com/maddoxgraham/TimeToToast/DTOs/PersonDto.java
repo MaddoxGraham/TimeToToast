@@ -20,6 +20,7 @@ public class PersonDto {
     private String email;
     private String token;
     private String role;
+    // User field
     private String adresse;
     private String cp;
     private String ville;
@@ -29,6 +30,7 @@ public class PersonDto {
     private String login;
     private String password;
     private String refreshToken;
+    // Guest field
     private Boolean isPresent;
     private Long eventId;
 }

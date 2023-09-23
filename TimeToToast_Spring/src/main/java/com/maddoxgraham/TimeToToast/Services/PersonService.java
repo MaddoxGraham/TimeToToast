@@ -4,6 +4,7 @@ import com.maddoxgraham.TimeToToast.DTOs.CredentialsDto;
 import com.maddoxgraham.TimeToToast.DTOs.PersonDto;
 import com.maddoxgraham.TimeToToast.DTOs.SignUpDto;
 import com.maddoxgraham.TimeToToast.Exception.AppException;
+import com.maddoxgraham.TimeToToast.Exception.UserNotFoundException;
 import com.maddoxgraham.TimeToToast.Mappers.PersonMapper;
 import com.maddoxgraham.TimeToToast.Models.Enums.Role;
 import com.maddoxgraham.TimeToToast.Models.Person;
@@ -23,6 +24,13 @@ public class PersonService {
     private final PersonRepository personRepository;
     private final PasswordEncoder passwordEncoder;
     private final PersonMapper personMapper;
+
+
+    //find a person
+    public Person findPersonByIdPerson(Long idPerson) {
+        return personRepository.findByidPerson(idPerson).orElseThrow(() -> new UserNotFoundException("User n° " + idPerson + " was not found"));
+    }
+
 
     // SERVICE RELATIF AUX USERS
     public PersonDto login(CredentialsDto credentialsDto){
@@ -86,4 +94,5 @@ public class PersonService {
                 .orElseThrow(() -> new AppException("Unknown guest", HttpStatus.NOT_FOUND));
         return personMapper.toPersonDto(person);
     }
+
 }

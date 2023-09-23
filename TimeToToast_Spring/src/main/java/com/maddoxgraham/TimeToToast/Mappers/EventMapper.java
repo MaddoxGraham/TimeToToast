@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EventMapper {
+
     public static EventDto toDto(Event event) {
         if (event == null) {
             return null;

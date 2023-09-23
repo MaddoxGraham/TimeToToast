@@ -11,8 +11,8 @@ import java.util.List;
 @AllArgsConstructor
 @Setter
 @Getter
-public class UserEventRoleDTO {
-    private Long idUser;
+public class UserEventRoleDto {
+    private Long idPerson;
     private Long idEvent;
     private String role;
 }

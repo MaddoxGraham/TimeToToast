@@ -13,13 +13,12 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 public class TaskDto {
-    private long description;
+    private long idTask;
+    private String description;
     private long urgence;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateTask;
     private long event;
     private long creator;
-    private long assigneeUser;
-    private long assigneeGuest;
-
+    private long assignee;
 }

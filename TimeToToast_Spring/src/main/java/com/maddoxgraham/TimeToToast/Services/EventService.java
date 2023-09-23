@@ -31,7 +31,7 @@ public class EventService {
     }
 
     public Event findEventByIdEvent(Long idEvent){
-        return eventRepository.findEventByIdEvent(idEvent).orElseThrow(() -> new UserNotFoundException("User n° " + idEvent + " was not found"));
+        return eventRepository.findEventByIdEvent(idEvent).orElseThrow(() -> new UserNotFoundException("Event n° " + idEvent + " was not found"));
     }
     public void deleteEvent(Long idEvent){
         eventRepository.deleteEventByIdEvent(idEvent);

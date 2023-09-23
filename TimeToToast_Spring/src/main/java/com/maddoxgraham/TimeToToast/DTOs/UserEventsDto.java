@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class UserEventsDto {
-    private Long userId;
+    private Long idPerson;
     private String role;
     private EventDto events[];
-    private UserDto users[]; // Ajout de ce champ
+    private PersonDto persons[];
 }

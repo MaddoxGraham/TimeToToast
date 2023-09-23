@@ -1,7 +1,6 @@
 package com.maddoxgraham.TimeToToast.Repository;
 
-import com.maddoxgraham.TimeToToast.Models.UserEventKey;
-import com.maddoxgraham.TimeToToast.Models.UserEventRole;
+import com.maddoxgraham.TimeToToast.Models.Task;
 import com.maddoxgraham.TimeToToast.Models.UserTask;
 import com.maddoxgraham.TimeToToast.Models.UserTaskKey;
 import org.springframework.data.jpa.repository.JpaRepository;
