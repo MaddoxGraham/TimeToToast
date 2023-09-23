@@ -2,6 +2,7 @@ package com.maddoxgraham.TimeToToast.Controllers;
 
 import com.maddoxgraham.TimeToToast.Models.Gift;
 import com.maddoxgraham.TimeToToast.Services.GiftService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,13 +11,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/gift")
+@AllArgsConstructor
 public class GiftController {
 
     private final GiftService giftService;
-
-    public GiftController(GiftService giftService) {
-        this.giftService = giftService;
-    }
 
     @GetMapping("/all")
     public ResponseEntity<List<Gift>> getAllGift() {

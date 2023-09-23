@@ -28,6 +28,4 @@ public class UserTask implements Serializable {
     @ManyToOne
     @JoinColumn(name = "idTask")
     private Task task;
-
-
 }

@@ -16,9 +16,6 @@
 //
 //    private final UserService userService;
 //
-//    public UserController(UserService userService) {
-//        this.userService = userService;
-//    }
 //
 //    //On veux une méthode qui retourne tous les employés donc on veux utiliser http c'est à cela que sert ResponseEntity
 //    @GetMapping("/all")

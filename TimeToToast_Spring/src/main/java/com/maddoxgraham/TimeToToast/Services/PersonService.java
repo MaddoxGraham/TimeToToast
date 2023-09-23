@@ -9,6 +9,7 @@ import com.maddoxgraham.TimeToToast.Mappers.PersonMapper;
 import com.maddoxgraham.TimeToToast.Models.Enums.Role;
 import com.maddoxgraham.TimeToToast.Models.Person;
 import com.maddoxgraham.TimeToToast.Repository.PersonRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,6 +32,41 @@ public class PersonService {
         return personRepository.findByidPerson(idPerson).orElseThrow(() -> new UserNotFoundException("User n° " + idPerson + " was not found"));
     }
 
+    // Delete a person by ID and return the deleted person
+    public Person deletePersonByIdPerson(Long idPerson){
+        Optional<Person> personOptional = personRepository.findById(idPerson);
+        if (personOptional.isPresent()) {
+            Person personToDelete = personOptional.get();
+            personRepository.deleteById(idPerson);
+            return personToDelete;
+        } else {
+            throw new EntityNotFoundException("Person with ID " + idPerson + " not found");
+        }
+    }
+
+    // update a person
+    public void updatePerson(Long idPerson, PersonDto dto) {
+        Optional<Person> existingPersonOpt = personRepository.findById(idPerson);
+        if (existingPersonOpt.isPresent()) {
+            Person person = existingPersonOpt.get();
+            if (person.getRole().equals("USER")){
+                person.setFirstName(dto.getFirstName());
+                person.setLastName(dto.getLastName());
+            }
+            if (person.getRole().equals("GUEST")){
+                person.setEmail(dto.getEmail());
+                person.setFirstName(dto.getFirstName());
+                person.setLastName(dto.getLastName());
+            }
+            // Mettez à jour les propriétés de la personne existante avec les valeurs de personDto
+             //   person.setName(dto.getName());
+           // person.setEmail(dto.getEmail());
+            // Ajoutez d'autres mises à jour si nécessaire
+
+            // Enregistrez la personne mise à jour dans la base de données
+            personRepository.save(existingPerson);
+        }
+    }
 
     // SERVICE RELATIF AUX USERS
     public PersonDto login(CredentialsDto credentialsDto){

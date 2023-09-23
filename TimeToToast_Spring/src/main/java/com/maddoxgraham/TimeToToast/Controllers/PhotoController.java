@@ -2,6 +2,7 @@ package com.maddoxgraham.TimeToToast.Controllers;
 
 import com.maddoxgraham.TimeToToast.Models.Photo;
 import com.maddoxgraham.TimeToToast.Services.PhotoService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,13 +11,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/photo")
+@AllArgsConstructor
 public class PhotoController {
 
     private final PhotoService photoService;
-
-    public PhotoController(PhotoService photoService) {
-        this.photoService = photoService;
-    }
 
     @GetMapping("/all")
     public ResponseEntity<List<Photo>> getAllPhoto() {

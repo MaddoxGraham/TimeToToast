@@ -1,22 +1,23 @@
 package com.maddoxgraham.TimeToToast.Services;
 
-import com.maddoxgraham.TimeToToast.TimeToToastApplication;
+
 import com.maddoxgraham.TimeToToast.Exception.UserNotFoundException;
 import com.maddoxgraham.TimeToToast.Models.Task;
+import com.maddoxgraham.TimeToToast.Models.UserTask;
 import com.maddoxgraham.TimeToToast.Repository.TaskRepository;
+import com.maddoxgraham.TimeToToast.Repository.UserTaskRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class TaskService {
-    private final TaskRepository taskRepository;
 
-    @Autowired
-    public TaskService(TaskRepository taskRepository) {
-        this.taskRepository = taskRepository;
-    }
+    private final TaskRepository taskRepository;
+    private final UserTaskRepository userTaskRepository;
 
     public Task addTask(Task task){
         return taskRepository.save(task);
@@ -34,7 +35,11 @@ public class TaskService {
         return taskRepository.findTaskByIdTask(idTask).orElseThrow(() -> new UserNotFoundException("User n° " + idTask + " was not found"));
     }
 
-    public void deleteTask(Long idTask){
-        taskRepository.deleteTaskByIdTask(idTask);
+    public void deleteTask(Long idTask) {
+        // Supprimez d'abord les UserTask associés à cette tâche
+        List<UserTask> userTasks = userTaskRepository.findByUserTaskKey_IdTask(idTask);
+        userTaskRepository.deleteAll(userTasks);
+        taskRepository.deleteById(idTask);
     }
+
 }
