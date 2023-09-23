@@ -52,12 +52,9 @@ public class PersonService {
             if (person.getRole().equals("USER")){
                 person.setFirstName(dto.getFirstName());
                 person.setLastName(dto.getLastName());
-            }
-            if (person.getRole().equals("GUEST")){
                 person.setEmail(dto.getEmail());
-                person.setFirstName(dto.getFirstName());
-                person.setLastName(dto.getLastName());
             }
+
             // Mettez à jour les propriétés de la personne existante avec les valeurs de personDto
              //   person.setName(dto.getName());
            // person.setEmail(dto.getEmail());
