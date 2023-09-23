@@ -27,7 +27,7 @@ public class UserTaskService {
     private final TaskMapper taskMapper;
 
     public List<TaskDto> getTasksByIdPerson(Long idPerson) {
-        List<UserTask> userTasksByPerson = userTaskRepository.findByIdPerson(idPerson);
+        List<UserTask> userTasksByPerson = userTaskRepository.findByUserTaskKey_IdPerson(idPerson);
         List<TaskDto> taskDtoList = new ArrayList<>();
         for (UserTask userTask : userTasksByPerson) {
             Optional<Task> taskOpt = taskRepository.findById(userTask.getUserTaskKey().getIdTask());
@@ -48,7 +48,7 @@ public class UserTaskService {
     }
 
     public List<Person> getPersonsByIdTask(Long idTask) {
-        List<UserTask> userTasks = userTaskRepository.findByIdTask(idTask);
+        List<UserTask> userTasks = userTaskRepository.findByUserTaskKey_IdTask(idTask);
         List<Person> persons = new ArrayList<>();
         for (UserTask userTask : userTasks) {
             persons.add(userTask.getPerson());
@@ -69,7 +69,7 @@ public class UserTaskService {
     // Modifier pour qui cette tâche est cachée
     public void updateHiddenUsersForTask(Long idTask, List<UserTaskDto> hiddenUserTaskDtos) {
        // Supprimer tous les anciens enregistrements pour cette tâche
-       userTaskRepository.deleteByIdTask(idTask);
+       userTaskRepository.deleteByUserTaskKey_IdTask(idTask);
 
        // Ajouter les nouveaux
        List<UserTask> newHiddenUserTasks = hiddenUserTaskDtos.stream()

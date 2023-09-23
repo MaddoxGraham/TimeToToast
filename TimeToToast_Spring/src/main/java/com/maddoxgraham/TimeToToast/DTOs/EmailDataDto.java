@@ -8,9 +8,7 @@ import lombok.*;
 @Builder
 public class EmailDataDto {
     private String[] to;
-    private Long idUser;
+    private Long idPerson;
     private Long idEvent;
-//    private String subject;
-//    private String body;
 
 }

@@ -1,10 +1,8 @@
 package com.maddoxgraham.TimeToToast.Controllers;
 
-//import com.maddoxgraham.TimeToToast.DTOs.HiddenUserTaskDto;
-//import com.maddoxgraham.TimeToToast.Models.*;
-//import com.maddoxgraham.TimeToToast.Services.HiddenUserTaskService;
-//import com.maddoxgraham.TimeToToast.Services.TaskService;
-
+import com.maddoxgraham.TimeToToast.DTOs.TaskDto;
+import com.maddoxgraham.TimeToToast.Models.UserTask;
+import com.maddoxgraham.TimeToToast.Services.UserTaskService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,24 +16,22 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserTaskController {
 
-    //private final HiddenUserTaskService hiddenUserTaskService;
+    private final UserTaskService userTaskService;
 
     // Trouver toutes les tâches cachées pour un idUser ou idGuest donné
-//    @GetMapping("/findTasks")
-//    public ResponseEntity<List<HiddenUserTask>> findTasks(
-//            @RequestParam("id") Long id,
-//            @RequestParam("type") String type) {  // type = "user" ou "guest"
-//
-//        List<HiddenUserTask> hiddenTasks = "user".equals(type) ?
-//                hiddenUserTaskService.findTasksByUserId(id) :
-//                hiddenUserTaskService.findTasksByGuestId(id);
-//
-//        return hiddenTasks.isEmpty() ?
-//                new ResponseEntity<>(HttpStatus.NOT_FOUND) :
-//                new ResponseEntity<>(hiddenTasks, HttpStatus.OK);
-//    }
+    @GetMapping("/findTasks")
+    public ResponseEntity<List<TaskDto>> findTasks(
+            @RequestParam("id") Long id,
+            @RequestParam("type") String type) {  // type = "user" ou "guest"
 
-    // Ajouter un ou plusieurs users/guests pour une tâche donnée
+        List<TaskDto> hiddenTasks = userTaskService.getTasksByIdPerson(id);
+
+        return hiddenTasks.isEmpty() ?
+                new ResponseEntity<>(HttpStatus.NOT_FOUND) :
+                new ResponseEntity<>(hiddenTasks, HttpStatus.OK);
+    }
+
+//    // Ajouter un ou plusieurs users/guests pour une tâche donnée
 //    @PostMapping("/add")
 //    public ResponseEntity<Void> addHiddenUsers(
 //            @RequestBody List<HiddenUserTaskDto> hiddenUserTaskDtos) {

@@ -4,8 +4,9 @@ package com.maddoxgraham.TimeToToast.Mappers;
 import com.maddoxgraham.TimeToToast.DTOs.TaskDto;
 import com.maddoxgraham.TimeToToast.Models.Event;
 import com.maddoxgraham.TimeToToast.Models.Task;
+import org.springframework.stereotype.Component;
 
-
+@Component
 public class TaskMapper {
 
     public static TaskDto toDto(Task task) {

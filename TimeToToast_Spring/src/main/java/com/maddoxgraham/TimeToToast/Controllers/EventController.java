@@ -2,8 +2,10 @@ package com.maddoxgraham.TimeToToast.Controllers;
 
 import com.maddoxgraham.TimeToToast.DTOs.EmailDataDto;
 import com.maddoxgraham.TimeToToast.Models.Event;
+import com.maddoxgraham.TimeToToast.Models.Person;
 import com.maddoxgraham.TimeToToast.Services.EmailService;
 import com.maddoxgraham.TimeToToast.Services.EventService;
+import com.maddoxgraham.TimeToToast.Services.PersonService;
 import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,7 @@ public class EventController {
 
     private final EventService eventService;
     private final EmailService emailService;
+    private final PersonService personService;
 
 
     @GetMapping("/all")
@@ -69,18 +72,18 @@ public class EventController {
 
 
 
-//    @PostMapping("/sendHTMLEmail")
-//    public ResponseEntity sendHTMLEmail(@RequestBody EmailDataDto emailDataDto) throws MessagingException {
-//        User user = userService.findUserByIdUser(emailDataDto.getIdUser());
-//        Event event = eventService.findEventByIdEvent(emailDataDto.getIdEvent());
-//        try {
-//            emailService.sendHtmlEmail(emailDataDto.getTo(),user, event);
-//        } catch (MessagingException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
+    @PostMapping("/sendHTMLEmail")
+    public ResponseEntity sendHTMLEmail(@RequestBody EmailDataDto emailDataDto) throws MessagingException {
+        Person person = personService.findPersonByIdPerson(emailDataDto.getIdPerson());
+        Event event = eventService.findEventByIdEvent(emailDataDto.getIdEvent());
+        try {
+            emailService.sendHtmlEmail(emailDataDto.getTo(),person, event);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
 
 

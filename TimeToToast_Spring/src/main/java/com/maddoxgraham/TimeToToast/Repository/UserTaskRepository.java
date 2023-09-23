@@ -14,10 +14,9 @@ public interface UserTaskRepository extends JpaRepository<UserTask, UserTaskKey>
 
     void deleteByUserTaskKey(UserTaskKey userTaskKey);
     Optional<UserTask> findByUserTaskKey(UserTaskKey userTaskKey);
-    List<UserTask> findByIdTask(Long idTask);
-    List<UserTask> findByIdPerson(Long idPerson);
+    List<UserTask> findByUserTaskKey_IdTask(Long idTask);
+    List<UserTask> findByUserTaskKey_IdPerson(Long idPerson);
 
-    List<UserTask> deleteByIdTask(Long idTask);
-    List<UserTask> deleteByIdPerson(Long idPerson);
-
+    void deleteByUserTaskKey_IdTask(Long idTask);
+    void deleteByUserTaskKey_IdPerson(Long idPerson);
 }
