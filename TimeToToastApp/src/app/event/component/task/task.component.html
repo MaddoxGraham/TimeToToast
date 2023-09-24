@@ -130,10 +130,46 @@
 
         </div>
 
-        <!-- Vue pour créer une tâche -->
+       <!--   Vue pour créer une tâche -->
+       <form [formGroup]="taskForm" (submit)="createTask()" class="p-3">
         <div *ngIf="displayMode === 'create'">
+          <p-card header="Créez une tâche" class="mb-4">
+            <!-- Textarea pour la description de la tâche -->
+            <div class="card flex p-float-label justify-content-center mb-3">
+              <textarea id="float-input" rows="5" cols="30" pInputTextarea [autoResize]="true" class="form-control"></textarea>
+              <label for="float-input" class="form-label">Décrivez en quelques mots votre nouvelle tâche</label>
+            </div>
+                      <!-- Multiselect pour les assignés -->
+          
+            <div class="card flex justify-content-center mb-3">
+            <p-multiSelect [options]="guests" [(ngModel)]="Assignee" (ngModelChange)="saveAssignees()" defaultLabel="Avez-vous une personne en tête pour cette tâche ?" optionLabel="displayLabel" display="chip"></p-multiSelect>
+          </div>
+      
+          <!-- Toggle Button pour cacher la tâche -->
+          <div class="d-flex align-items-center mb-3">
+            <span class="me-2">Cacher la tâche pour certain(e)s</span>
+            <p-toggleButton [(ngModel)]="showInvisibleToggle" onLabel="Yes" offLabel="No"></p-toggleButton>
+          </div>
+                <!-- Multiselect pour les invités pour qui la tâche est invisible -->
+          <div *ngIf="showInvisibleToggle" class="card flex justify-content-center">
+            <p-multiSelect [options]="filteredGuests" [(ngModel)]="InvisibleTo" (ngModelChange)="saveInvisibleTo()" defaultLabel="Rendre invisible pour" optionLabel="displayLabel" display="chip"></p-multiSelect>
+          </div>
+          </p-card>
+      
+        <!-- Bouton pour créer la tâche -->
+        <div class="d-flex justify-content-center mb-3">
+          <button type="submit" class="btn btn-primary">Créer une tâche</button>
+        </div>
 
-          <form [formGroup]="taskForm" (submit)="createTask()">
+        </div>
+      
+
+      </form>
+      
+      
+
+<!--  
+         <form [formGroup]="taskForm" (submit)="createTask()">
             <div class="mb-3"> <label for="description" class="form-label">Description</label>
               <input type="text" class="form-control" id="description" formControlName="description">
             </div>
@@ -179,7 +215,7 @@
 <input type="radio" id="no" name="displaySelect" (click)="showSelect = false" checked>
 <label for="no">Non</label>
 </div>
-<!-- Exemple de ce que vous pouvez afficher conditionnellement -->
+Exemple de ce que vous pouvez afficher conditionnellement 
 <div *ngIf="showSelect">
   <div class="mb-3">
     <label for="assignee" class="form-label">Selectionner l'invité pour qui la tâche sera invisible</label>
@@ -203,7 +239,7 @@
             <button type="submit" class="btn btn-primary">Créer</button>
           </form>
         </div>
-
+-->
 
 
 

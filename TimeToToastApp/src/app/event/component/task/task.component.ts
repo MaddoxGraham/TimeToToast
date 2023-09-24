@@ -8,6 +8,8 @@ import { Subscription } from 'rxjs';
 import { SharedService } from 'src/app/core/service/shared/shared.service';
 import { EventService } from 'src/app/core/service/event/event.service';
 
+
+
 @Component({
   selector: 'app-task',
   templateUrl: './task.component.html',
@@ -26,9 +28,14 @@ export class TaskComponent implements OnInit{
   public maxDate: string = '';  // La date maximale
   private guestsSubscription!: Subscription;
   guests!: GuestDto[];
+  showInvisibleToggle: boolean = false;
 
-  public showSelect: boolean = false; // Ajoutez cette ligne
-  hiddenGuest: GuestDto[] = [];
+
+  Assignee: GuestDto[] = [];
+  InvisibleTo: GuestDto[] = [];
+
+  filteredGuests: GuestDto[] = [];
+
 
 
   isOpen = true;  // Accordéon ouvert par défaut
@@ -39,69 +46,94 @@ export class TaskComponent implements OnInit{
 
 
   ngOnInit(): void {   
-     this.initializeDateRange();
+    //  this.initializeDateRange();
     this.taskForm = this.fb.group({
       description: ['', [Validators.required]],
       urgency: ['', [Validators.required]],
       dueDate: [''],
-      assignee: ['', [Validators.required]]
     });
     this.guestsSubscription = this.sharedService.guests$.subscribe(guests => {
       this.guests = guests;
-      console.log(this.guests + 'guest dans task');
+      this.guests = this.guests.map(guest => ({
+      ...guest,
+      displayLabel: guest.firstName ? guest.firstName : guest.email
+    }));
+    this.updateFilteredGuests();
     });
+
 }
 
-ngOnDestroy() {
-  this.guestsSubscription.unsubscribe();
+updateFilteredGuests() {
+  this.filteredGuests = this.guests.filter(guest => !this.Assignee.includes(guest));
 }
 
+saveAssignees() {
+  // Votre logique pour enregistrer les assignés
+  this.updateFilteredGuests();
+}
+
+saveInvisibleTo() {
+  // Votre logique pour enregistrer les invités pour qui la tâche est invisible
+}
+
+
+createTask() {
+  const taskData = this.taskForm.value;
+  console.log(this.taskForm.value); }
+
+// ngOnDestroy() {
+//   this.guestsSubscription.unsubscribe();
+// }
+
+//Gere la suppression du module en BDD
   deleteModule() {
     localStorage.setItem('isTaskModuleActive', 'false');
     this.moduleDeleted.emit();
   }
 
-  createTask() {  
-  if (this.taskForm.valid) {  
-    const taskData = this.taskForm.value;
+  // createTask() {  
+  // if (this.taskForm.valid) {  
+  //   const taskData = this.taskForm.value;
 
-    const data = {
-      description: taskData.description,
-      dateTask: new Date(taskData.dueDate),
-      urgence: taskData.urgence,
+  //   // au click : création de la lache puis envoie des data qui permettent de faire une entrée dans user task. 
+  //   // userTask (ceux qui ont la tache sont dans un tableau : isVisible[] . UserTask (ceux qui ne voient pas la tâche sont dans un tableau isInvisible[]))
+  //   const data = {
+  //     description: taskData.description,
+  //     dateTask: new Date(taskData.dueDate),
+  //     urgence: taskData.urgence,
 
-    }
-    console.log(this.taskForm.value);
-  }
-}
-initializeDateRange(): void {
-  if (this.event && this.event.eventDate) {
-    const eventDate = new Date(this.event.eventDate);
-    this.maxDate = this.formatDate(eventDate);
-  }
-  const currentDate = new Date();
-  this.minDate = this.formatDate(currentDate);
-}
+  //   }
+  //   console.log(this.taskForm.value);
+  // }
+// }
+// initializeDateRange(): void {
+//   if (this.event && this.event.eventDate) {
+//     const eventDate = new Date(this.event.eventDate);
+//     this.maxDate = this.formatDate(eventDate);
+//   // }
+//   const currentDate = new Date();
+//   this.minDate = this.formatDate(currentDate);
+// }
 
-private formatDate(date: Date): string {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
+// private formatDate(date: Date): string {
+//   const year = date.getFullYear();
+//   const month = String(date.getMonth() + 1).padStart(2, '0');
+//   const day = String(date.getDate()).padStart(2, '0');
+//   return `${year}-${month}-${day}`;
+// }
 
-addGuest(selectedValue: string) {
-    const guest = this.guests.find(g => g.idPerson === Number(selectedValue));
-    if (guest) {
-      this.hiddenGuest.push(guest);
-    }
-  }
+// addGuest(selectedValue: string) {
+//     const guest = this.guests.find(g => g.idPerson === Number(selectedValue));
+//     if (guest) {
+//       this.hiddenGuest.push(guest);
+//     }
+//   }
 
-  removeGuest(guest: GuestDto) {
-    const index = this.hiddenGuest.indexOf(guest);
-    if (index > -1) {
-      this.hiddenGuest.splice(index, 1);
-    }
-  }
+//   removeGuest(guest: GuestDto) {
+//     const index = this.hiddenGuest.indexOf(guest);
+//     if (index > -1) {
+//       this.hiddenGuest.splice(index, 1);
+//     }
+//   }
 
 }

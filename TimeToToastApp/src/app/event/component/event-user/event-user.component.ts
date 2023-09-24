@@ -73,6 +73,7 @@ export class EventUserComponent implements OnInit {
         accept: () => {
             this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted' });
             console.log(idEvent)
+            //ici le delete event 
         },
         reject: (type: ConfirmEventType) => {
             switch (type) {
