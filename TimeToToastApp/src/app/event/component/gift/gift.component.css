@@ -1,0 +1,28 @@
+.btn-link:hover, .btn-link:focus {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .btn-link:hover, .btn-link:focus, .btn-link:active {
+    text-decoration: none;
+    color: inherit;
+    outline: none;
+  }
+
+  .toggle-btn:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  
+  .fa-chevron-up, .fa-chevron-down {
+    cursor: pointer;
+  }
+
+  .fa-trash{
+color: rgb(172, 16, 16);
+  }
+
+  p {
+    letter-spacing: 1px;
+    color: #474644;
+  }

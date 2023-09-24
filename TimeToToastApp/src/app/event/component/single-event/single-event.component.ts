@@ -151,7 +151,6 @@ export class SingleEventComponent implements OnInit {
     this.eventService.updateModuleEvent(this.event.idEvent,'gift').subscribe(
       (response) => {
         this.isGiftModuleActive = response.giftModuleActive;
-
        
       },
       (error) => {
