@@ -51,6 +51,19 @@ public class UserAuthProvider {
         return tokens;
     }
 
+    public Map<String, String> createTokensForGuestToUser(Object userDto) {
+        String accessToken = createAccessToken(userDto);
+        String refreshToken = createRefreshToken(userDto);
+
+        Map<String, String> tokens = new HashMap<>();
+        tokens.put("accessToken", accessToken);
+        tokens.put("refreshToken", refreshToken);
+
+        return tokens;
+    }
+
+
+
     private String createAccessToken(Object userDto) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + 3_600_000);

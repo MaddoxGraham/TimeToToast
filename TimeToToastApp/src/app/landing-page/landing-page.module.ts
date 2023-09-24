@@ -5,6 +5,7 @@ import { ShareModule } from '../share/share.module';
 import { LandingPageComponent } from './component/landing-page/landing-page.component';
 import { LoginFormComponent } from './component/login-form/login-form.component';
 import { AboutUsComponent } from './component/about-us/about-us.component';
+import { GuestToUserFormComponent } from './component/guest-to-user-form/guest-to-user-form.component';
 
 
 
@@ -14,6 +15,7 @@ import { AboutUsComponent } from './component/about-us/about-us.component';
     LandingPageComponent,
     LoginFormComponent,
     AboutUsComponent,
+    GuestToUserFormComponent,
 
   ],
   imports: [

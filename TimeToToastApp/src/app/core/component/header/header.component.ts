@@ -49,7 +49,7 @@ export class HeaderComponent implements OnInit, OnDestroy{
       return this.userRoutes;
     } else if (this.isGuest) {
       console.log(this.idEvent);
-      return this.getGuestRoutes();
+      return this.getGuestRoutes;
     } else {
       return [];
     }
@@ -64,13 +64,11 @@ export class HeaderComponent implements OnInit, OnDestroy{
     { label: 'Se déconnecter', command: (event: any) => this.logout() }
   ];
   
-  private getGuestRoutes() {
-    return [
-      { label: 'S\'inscrire', routerLink: 'login' },
-      { label: 'Mon Evenement', routerLink: ['/event/singleEvent', this.idEvent] },
-      { label: 'Se déconnecter', command: (event: any) => this.logout() }
+  private getGuestRoutes = [
+    { label: 'S\'inscrire', routerLink: 'subscribe' },
+    { label: 'Mon Evenement', routerLink: ['/event/singleEvent', this.idEvent] },
+    { label: 'Se déconnecter', command: (event: any) => this.logout() }
     ];
-  }
   
   
   logout() {
