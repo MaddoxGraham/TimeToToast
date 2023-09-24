@@ -191,11 +191,15 @@ public class UserAuthProvider {
 
     }
 
-    public String verifyGuest(String token) {
+    public Map<String, String> verifyGuest(String token) {
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
         JWTVerifier verifier = JWT.require(algorithm).build();
         DecodedJWT decoded = verifier.verify(token);
 
-        return decoded.getClaim("email").asString();
+        Map<String, String> infos = new HashMap<>();
+        infos.put("email", decoded.getClaim("email").asString());
+        infos.put("idEvent", String.valueOf(decoded.getClaim("idEvent").asLong()));
+
+        return infos;
     }
 }

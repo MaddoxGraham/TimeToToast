@@ -2,8 +2,12 @@ package com.maddoxgraham.TimeToToast.Controllers;
 
 import com.maddoxgraham.TimeToToast.Config.UserAuthProvider;
 import com.maddoxgraham.TimeToToast.DTOs.PersonDto;
+import com.maddoxgraham.TimeToToast.Models.Event;
 import com.maddoxgraham.TimeToToast.Models.Person;
+import com.maddoxgraham.TimeToToast.Models.UserEventRole;
+import com.maddoxgraham.TimeToToast.Repository.EventRepository;
 import com.maddoxgraham.TimeToToast.Repository.PersonRepository;
+import com.maddoxgraham.TimeToToast.Repository.UserEventRoleRepository;
 import com.maddoxgraham.TimeToToast.Services.PersonService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/person")
@@ -20,6 +25,8 @@ public class PersonController {
 
     private final PersonService personService;
     private final UserAuthProvider userAuthProvider;
+    private final UserEventRoleRepository userEventRoleRepository;
+    private final EventRepository eventRepository;
 
     // PERSON Methods
 
@@ -49,8 +56,11 @@ public class PersonController {
 
     @PostMapping("/verifyGuest")
     public ResponseEntity<PersonDto> verifyGuest(@RequestBody String token){
-        String email = userAuthProvider.verifyGuest(token);
+        Map<String, String> infos = userAuthProvider.verifyGuest(token);
+        String email = infos.get("email");
+        Long idEvent = Long.parseLong(infos.get("idEvent"));
         PersonDto guestDto = personService.verifyGuest(email);
+        guestDto.setEventId(idEvent);
         return new ResponseEntity<>(guestDto, HttpStatus.OK);
     }
 
