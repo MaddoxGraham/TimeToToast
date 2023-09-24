@@ -30,15 +30,12 @@ export class TaskComponent implements OnInit{
   guests!: GuestDto[];
   showInvisibleToggle: boolean = false;
 
-
   Assignee: GuestDto[] = [];
   InvisibleTo: GuestDto[] = [];
 
   filteredGuests: GuestDto[] = [];
 
-
-
-  isOpen = false;  // Accordéon ouvert par défaut
+  isOpen = false;  // Accordéon fermé par défaut
   taskForm!: FormGroup;
 
   constructor(private fb: FormBuilder,
@@ -59,6 +56,11 @@ export class TaskComponent implements OnInit{
       displayLabel: guest.firstName ? guest.firstName : guest.email
     }));
     this.updateFilteredGuests();
+    });
+    this.taskForm = this.fb.group({
+      Assignee: [null],
+      InvisibleTo: [null],
+      // autres champs...
     });
 
 }
