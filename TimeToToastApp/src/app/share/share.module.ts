@@ -11,7 +11,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { CardModule } from 'primeng/card';
-
+import { FileUploadModule } from 'primeng/fileupload';
 
 @NgModule({
   declarations: [],
@@ -29,6 +29,7 @@ import { CardModule } from 'primeng/card';
     ToggleButtonModule,
     InputTextareaModule,
     CardModule,
+    FileUploadModule,
   ],
   exports: [
     TabMenuModule,
@@ -43,6 +44,7 @@ import { CardModule } from 'primeng/card';
     ToggleButtonModule,
     InputTextareaModule,
     CardModule,
+    FileUploadModule,
   ]
 })
 export class ShareModule { }

@@ -22,6 +22,13 @@ public class PhotoController {
         return new ResponseEntity<>(photos, HttpStatus.OK);
     }
 
+    @PostMapping("/upload")
+        public ResponseEntity<List<Photo>> uploadPhotos(){
+        //modifier findallphoto en uploadPHOTOS !!!!!!!!!!!!!!!!!!!
+        List<Photo> photos = photoService.findAllPhotos();
+        return new ResponseEntity<>(photos, HttpStatus.OK);
+        }
+
     @GetMapping("/find/{idPhoto}")
     public ResponseEntity<Photo> getPhotoById(@PathVariable("idPhoto") Long idPhoto) {
         Photo photo = photoService.findPhotoByIdPhoto(idPhoto);

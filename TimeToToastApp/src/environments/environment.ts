@@ -27,5 +27,7 @@ export const environment = {
     addTask:'http://localhost:8080/task/add',
 
     fromGuestToUser:'http://localhost:8080/person/guestToUser/',
+
+    uploadPhoto:"http://localhost:8080/photo/upload",
 }
   

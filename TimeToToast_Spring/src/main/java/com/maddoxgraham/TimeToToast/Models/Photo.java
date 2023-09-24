@@ -3,6 +3,7 @@ package com.maddoxgraham.TimeToToast.Models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Getter
@@ -14,12 +15,15 @@ import java.util.Set;
 @Entity
 public class Photo {
 
-    private boolean photosModuleActive;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)
     private Long idPhoto;
+
+    private String name;
+    private String source;
+    private LocalDate createdAt;
 
     @ManyToOne
     @JoinColumn(name = "idPerson", nullable = true)
