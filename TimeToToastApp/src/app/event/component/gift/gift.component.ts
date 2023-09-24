@@ -15,19 +15,14 @@ export class GiftComponent implements OnInit {
 
   constructor(private sharedService: SharedService) { }
 
-  
-  isOpen = true;  // Accordéon ouvert par défaut
+
+  isOpen = false;  // Accordéon ouvert par défaut
 
 
 
   ngOnInit(): void {
-    console.log('gift component works!')
+
   }
   
-  //Gere la suppression du module en BDD
-  deleteModule() {
-    localStorage.setItem('isGiftModuleActive', 'false');
-    this.moduleDeleted.emit();
-  }
 
 }

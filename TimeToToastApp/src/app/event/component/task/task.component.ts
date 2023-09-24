@@ -38,7 +38,7 @@ export class TaskComponent implements OnInit{
 
 
 
-  isOpen = true;  // Accordéon ouvert par défaut
+  isOpen = false;  // Accordéon ouvert par défaut
   taskForm!: FormGroup;
 
   constructor(private fb: FormBuilder,
@@ -85,11 +85,6 @@ createTask() {
 //   this.guestsSubscription.unsubscribe();
 // }
 
-//Gere la suppression du module en BDD
-  deleteModule() {
-    localStorage.setItem('isTaskModuleActive', 'false');
-    this.moduleDeleted.emit();
-  }
 
   // createTask() {  
   // if (this.taskForm.valid) {  
