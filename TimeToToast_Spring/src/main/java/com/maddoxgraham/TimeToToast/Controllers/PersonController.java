@@ -3,6 +3,7 @@ package com.maddoxgraham.TimeToToast.Controllers;
 import com.maddoxgraham.TimeToToast.Config.UserAuthProvider;
 import com.maddoxgraham.TimeToToast.DTOs.PersonDto;
 import com.maddoxgraham.TimeToToast.Models.Person;
+import com.maddoxgraham.TimeToToast.Repository.PersonRepository;
 import com.maddoxgraham.TimeToToast.Services.PersonService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/person")
@@ -56,6 +58,17 @@ public class PersonController {
     public ResponseEntity<PersonDto> addDetailsToGuest(@PathVariable Long idPerson, @RequestBody PersonDto guestDetailsDto) {
         PersonDto personDto = personService.addDetailsToGuest(idPerson, guestDetailsDto.getFirstName(), guestDetailsDto.getLastName());
         return new ResponseEntity<>(personDto, HttpStatus.OK);
+    }
+
+    @PutMapping("guestToUser/{idPerson}")
+    public ResponseEntity<PersonDto> guestToUser(@PathVariable Long idPerson, @RequestBody PersonDto personDto){
+        PersonDto newPersonDto = personService.fromGuestToUser(idPerson, personDto);
+        Map<String, String> tokens = userAuthProvider.createTokensForGuestToUser(newPersonDto);
+        String refreshToken = tokens.get("refreshToken");
+        newPersonDto = personService.addRefreshToken(idPerson, refreshToken);
+        newPersonDto.setToken(tokens.get("accessToken"));
+
+        return  new ResponseEntity<>(newPersonDto, HttpStatus.OK);
     }
 
 //    @PutMapping("/update/{idUser}")

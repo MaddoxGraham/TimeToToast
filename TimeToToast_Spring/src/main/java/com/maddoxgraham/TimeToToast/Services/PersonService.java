@@ -1,5 +1,6 @@
 package com.maddoxgraham.TimeToToast.Services;
 
+import com.maddoxgraham.TimeToToast.Config.UserAuthProvider;
 import com.maddoxgraham.TimeToToast.DTOs.CredentialsDto;
 import com.maddoxgraham.TimeToToast.DTOs.PersonDto;
 import com.maddoxgraham.TimeToToast.DTOs.SignUpDto;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -27,7 +29,6 @@ public class PersonService {
     private final PersonRepository personRepository;
     private final PasswordEncoder passwordEncoder;
     private final PersonMapper personMapper;
-
 
     //find a person
     public Person findPersonByIdPerson(Long idPerson) {
@@ -65,26 +66,37 @@ public class PersonService {
         return null;
     }
 
-    // update a person
-//    public void updatePerson(Long idPerson, PersonDto dto) {
-//        Optional<Person> existingPersonOpt = personRepository.findById(idPerson);
-//        if (existingPersonOpt.isPresent()) {
-//            Person person = existingPersonOpt.get();
-//            if (person.getRole().equals("USER")){
-//                person.setFirstName(dto.getFirstName());
-//                person.setLastName(dto.getLastName());
-//                person.setEmail(dto.getEmail());
-//            }
-//
-//            // Mettez à jour les propriétés de la personne existante avec les valeurs de personDto
-//             //   person.setName(dto.getName());
-//           // person.setEmail(dto.getEmail());
-//            // Ajoutez d'autres mises à jour si nécessaire
-//
-//            // Enregistrez la personne mise à jour dans la base de données
-//            personRepository.save(existingPerson);
-//        }
-//    }
+    public PersonDto fromGuestToUser(Long idPerson, PersonDto personDto) {
+        Optional<Person> personOpt = personRepository.findByidPerson(idPerson);
+        if(personOpt.isPresent()){
+            Person person = personOpt.get();
+            person.setLastName(personDto.getLastName());
+            person.setFirstName(personDto.getFirstName());
+            person.setLogin(personDto.getLogin());
+            person.setRole(Role.USER);
+            person.setPassword(personDto.getPassword());
+            person.setEmail(personDto.getEmail());
+            person.setPhone(personDto.getPhone());
+            person.setAdresse(personDto.getAdresse());
+            person.setVille(personDto.getVille());
+            person.setCp(personDto.getCp());
+            person.setBirthday(personDto.getBirthday());
+
+            return personMapper.toPersonDto(person);
+        }
+        return null;
+    }
+
+    public PersonDto addRefreshToken(Long idPerson, String refreshToken) {
+        Optional<Person> personOpt = personRepository.findByidPerson(idPerson);
+        if(personOpt.isPresent()){
+            Person person = personOpt.get();
+            person.setRefreshToken(refreshToken);
+            personRepository.save(person);
+            return personMapper.toPersonDto(person);
+        }
+        return null;
+    }
 
     // SERVICE RELATIF AUX USERS
     public PersonDto login(CredentialsDto credentialsDto){
@@ -161,5 +173,7 @@ public class PersonService {
         }
         return personDtos;
     }
+
+
 
 }

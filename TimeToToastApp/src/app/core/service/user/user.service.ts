@@ -15,6 +15,10 @@ export class UserService {
     return this.httpClient.post<UserDto>(environment.addUser, data);
   }
 
+  fromGuestToUser(id: number, data: { login: string, firstName:string, lastName:string, email:string, ville:string, cp:string, birthday:Date,phone:string, adresse:string,  password: string }): Observable<UserDto> {
+    return this.httpClient.put<UserDto>(`${environment.fromGuestToUser}${id}`, data)
+  }
+
   getUserByIdUser(id: number): Observable<UserDto> {
     const url = `${environment.getUser}/${id}`; 
     return this.httpClient.get<UserDto>(url);
@@ -22,9 +26,5 @@ export class UserService {
 
   updateUser(id: number, user: UserDto): Observable<UserDto> {
     return this.httpClient.put<UserDto>(`${environment.updateUser}${id}`, user);
-  }
-
-  deleteGuest(idGuest: number) {
-    return this.httpClient.delete(`${environment.deleteGuest}${idGuest}`);
   }
 }
