@@ -36,7 +36,7 @@ public class UserEventRoleService {
     public UserEventRole addUserEventRole(UserEventRoleDto userEventRoleDto){
         UserEventRole userEventRole = UserEventRoleMapper.toEntity(userEventRoleDto, personService, eventService);
             return userEventRoleRepository.save(userEventRole);
-        }
+    }
 
     // Find event by person id.
     public List<UserEventsDto> findEventsByPersonId(Long idPerson) {

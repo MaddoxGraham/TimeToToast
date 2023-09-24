@@ -1,10 +1,13 @@
 package com.maddoxgraham.TimeToToast.Services;
 
 import com.maddoxgraham.TimeToToast.Config.UserAuthProvider;
+import com.maddoxgraham.TimeToToast.DTOs.UserEventRoleDto;
 import com.maddoxgraham.TimeToToast.Models.Enums.Role;
 import com.maddoxgraham.TimeToToast.Models.Event;
 import com.maddoxgraham.TimeToToast.Models.Person;
+import com.maddoxgraham.TimeToToast.Models.UserEventRole;
 import com.maddoxgraham.TimeToToast.Repository.PersonRepository;
+import com.maddoxgraham.TimeToToast.Repository.UserEventRoleRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +26,12 @@ public class EmailService {
     private String body;
     private UserAuthProvider userAuthProvider;
     private PersonRepository personRepository;
+    private UserEventRoleService userEventRoleService;
 
-    public EmailService (UserAuthProvider userAuthProvider, PersonRepository personRepository ) {
+    public EmailService (UserAuthProvider userAuthProvider, PersonRepository personRepository, UserEventRoleService userEventRoleService) {
         this.userAuthProvider = userAuthProvider;
         this.personRepository = personRepository;
+        this.userEventRoleService = userEventRoleService;
     }
 
     public void sendingMail(String[] to, String subject, String body){
@@ -53,6 +58,11 @@ public class EmailService {
             guest.setEvent(event);
             guest.setToken(userAuthProvider.createGuestToken(guest, event));
             personRepository.save(guest);
+            UserEventRoleDto userEventRoleDto = new UserEventRoleDto();
+            userEventRoleDto.setIdEvent(event.getIdEvent());
+            userEventRoleDto.setIdPerson(guest.getIdPerson());
+            userEventRoleDto.setRole("INVITE");
+            userEventRoleService.addUserEventRole(userEventRoleDto);
 
           //génération d'un token et d'un lien associé
             helper.setTo(to);

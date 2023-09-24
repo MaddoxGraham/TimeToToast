@@ -55,8 +55,6 @@ export class SingleEventComponent implements OnInit {
 
 
   ngOnInit(): void {
-
-
     this.route.params.subscribe(params => {
       //Récupération de l'évènement  
       const idUser: UserDto = JSON.parse(sessionStorage.getItem('user') || '{}');
