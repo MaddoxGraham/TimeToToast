@@ -81,6 +81,7 @@ public class PersonService {
             person.setVille(personDto.getVille());
             person.setCp(personDto.getCp());
             person.setBirthday(personDto.getBirthday());
+            person.setToken("");
 
             return personMapper.toPersonDto(person);
         }
