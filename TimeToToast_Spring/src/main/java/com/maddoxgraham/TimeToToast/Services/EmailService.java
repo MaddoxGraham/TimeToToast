@@ -55,7 +55,6 @@ public class EmailService {
             guest.setEmail(to);
             guest.setIsPresent(false);
             guest.setRole(Role.GUEST);
-            guest.setEvent(event);
             guest.setToken(userAuthProvider.createGuestToken(guest, event));
             personRepository.save(guest);
             UserEventRoleDto userEventRoleDto = new UserEventRoleDto();

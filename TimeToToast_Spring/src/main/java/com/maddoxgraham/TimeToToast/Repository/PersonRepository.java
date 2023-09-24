@@ -16,9 +16,4 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     Optional<Person> findByRefreshToken(String refreshToken);
     Optional<Person> findByEmail(String email);
 
-    List<Person> findByEvent_IdEvent(Long idEvent);
-
-
-
-
 }

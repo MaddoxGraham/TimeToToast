@@ -8,8 +8,12 @@ import com.maddoxgraham.TimeToToast.Exception.AppException;
 import com.maddoxgraham.TimeToToast.Exception.UserNotFoundException;
 import com.maddoxgraham.TimeToToast.Mappers.PersonMapper;
 import com.maddoxgraham.TimeToToast.Models.Enums.Role;
+import com.maddoxgraham.TimeToToast.Models.Event;
 import com.maddoxgraham.TimeToToast.Models.Person;
+import com.maddoxgraham.TimeToToast.Models.UserEventRole;
+import com.maddoxgraham.TimeToToast.Repository.EventRepository;
 import com.maddoxgraham.TimeToToast.Repository.PersonRepository;
+import com.maddoxgraham.TimeToToast.Repository.UserEventRoleRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.*;
 import org.springframework.http.HttpStatus;
@@ -29,6 +33,8 @@ public class PersonService {
     private final PersonRepository personRepository;
     private final PasswordEncoder passwordEncoder;
     private final PersonMapper personMapper;
+    private final UserEventRoleRepository userEventRoleRepository;
+    private final EventRepository eventRepository;
 
     //find a person
     public Person findPersonByIdPerson(Long idPerson) {
@@ -166,15 +172,21 @@ public class PersonService {
     }
 
     public List<PersonDto> findGuestByEvent(Long idEvent) {
-        List<Person> personList = personRepository.findByEvent_IdEvent(idEvent);
-        List<PersonDto> personDtos = new ArrayList<>();
-        for(Person person: personList) {
-            PersonDto personDto = personMapper.toPersonDto(person);
-            personDtos.add(personDto);
+        Optional<Event> eventOpt = eventRepository.findById(idEvent);
+        if(eventOpt.isPresent()){
+            Event event = eventOpt.get();
+            List<UserEventRole> userEventRoleList = userEventRoleRepository.findByEvent(event);
+            List<PersonDto> personDtos = new ArrayList<>();
+            for(UserEventRole userEventRole: userEventRoleList){
+                Optional<Person> personOpt = personRepository.findByidPerson(userEventRole.getPerson().getIdPerson());
+                if (personOpt.isPresent()){
+                    Person person = personOpt.get();
+                    PersonDto personDto = personMapper.toPersonDto(person);
+                    personDtos.add(personDto);
+                }
+            }
+            return personDtos;
         }
-        return personDtos;
+        return null;
     }
-
-
-
 }

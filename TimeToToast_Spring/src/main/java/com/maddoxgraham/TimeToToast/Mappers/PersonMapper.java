@@ -31,7 +31,6 @@ public class PersonMapper {
         dto.setPassword(person.getPassword());
         dto.setRefreshToken(person.getRefreshToken());
         dto.setIsPresent(person.getIsPresent());
-        dto.setEventId(person.getEvent() != null ? person.getEvent().getIdEvent() : null);
 
         return dto;
     }
