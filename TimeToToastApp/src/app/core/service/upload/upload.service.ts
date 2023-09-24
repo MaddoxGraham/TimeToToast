@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class UploadService {
-  private readonly apiUrl =`${environment.uploadPhoto}`;
+  private readonly uploadUrl =`${environment.uploadPhoto}`;
 
   constructor(private http: HttpClient) {}
 
@@ -18,6 +18,11 @@ export class UploadService {
     const headers = new HttpHeaders();
     // Ajoute ici d'autres headers si nécessaire
 
-    return this.http.post(this.apiUrl, formData, { headers });
+    return this.http.post(this.uploadUrl, formData, { headers });
   }
+
+  getUploadUrl() {
+    return this.uploadUrl;
+  }
+
 }

@@ -5,6 +5,7 @@ import com.maddoxgraham.TimeToToast.Models.Photo;
 import com.maddoxgraham.TimeToToast.Repository.PhotoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -17,9 +18,14 @@ public class PhotoService {
         this.photoRepository = photoRepository;
     }
 
-    public Photo addPhoto(Photo photo){
-        return photoRepository.save(photo);
-    }
+        public Photo saveFile(MultipartFile file, Long idEvent, Long idPerson) {
+        Photo photo = new Photo();
+        photo.setName(file.getName());
+
+            // Logique pour enregistrer le fichier
+            // Créer et retourner un nouvel objet Photo
+        }
+
 
     public List<Photo> findAllPhotos(){
         return photoRepository.findAll();

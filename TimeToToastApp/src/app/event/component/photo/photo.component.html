@@ -13,10 +13,27 @@
     </div>
     <div id="collapseOne" class="collapse" [ngClass]="{'show': isOpen}">
       <div class="card-body">
+                <!-- Navbar -->
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                  <div class="container-fluid">
+                    <div>
+                      <button (click)="displayMode = 'galleria'" class="btn btn-outline-secondary me-2">Acceder à la gallerie </button>
+                      <button (click)="displayMode = 'upload'"  class="btn btn-outline-success"> Ajouter une photo</button>
+                    </div>
+                  </div>
+                </nav>
+
+<div *ngIf="displayMode==='welcome'" class="container-fluid">
+<div class="textInfo mt-2"> <p class="">Bienvenue dans le module Photos !  </p> 
+ Préservez vos plus inoubliables moments grâce au module photos.Consultez directement les photos déjà ajoutées par vous ou vos invités en selectionnant 
+  "Acceder à la gallerie"
+</div>
+<p class="txt-handwritting pt-2"> Commencez des a present en cliquant sur "Ajouter une photo" </p>
+</div>
         <!-- Début du composant d'upload -->
-        <div class="card flex justify-content-center">
+        <div *ngIf="displayMode==='upload'" class="card flex mt-2 justify-content-center">
           <p-toast></p-toast>
-          <p-fileUpload name="demo[]" url="http://localhost:8080/photo/upload" (onUpload)="onUpload($event)" [multiple]="true" accept="image/*" [maxFileSize]="maxFileSize">
+          <p-fileUpload name="demo[]" [url]="uploadUrl" (onUpload)="onUpload($event)" [multiple]="true" accept="image/*" [maxFileSize]="maxFileSize">
             <ng-template pTemplate="content">
               <ul *ngIf="uploadedFiles.length">
                 <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{ file.size.toString() }} bytes</li>  <!-- utiliser toString() -->
@@ -26,6 +43,37 @@
           </p-fileUpload>
         </div>
         <!-- Fin du composant d'upload -->
+
+
+        <!-- COMPOSANT GALLERIE -->
+        <div *ngIf="displayMode==='galleria'" class="container-fluid">
+         
+          <div class="card md:flex md:justify-content-center">
+            <div *ngIf="images" class="grid" style="max-width: 800px;">
+                <div *ngFor="let image of images; let index = index" class="col-3" key="index">
+                    <img [src]="image.thumbnailImageSrc" [alt]="image.alt" style="cursor: pointer" (click)="imageClick(index)" />
+                </div>
+            </div>
+            <p-galleria
+                [(activeIndex)]="activeIndex"
+                [responsiveOptions]="responsiveOptions"
+                [containerStyle]="{ 'max-width': '850px' }"
+                [numVisible]="7"
+                [circular]="true"
+                [fullScreen]="true"
+                [showItemNavigators]="true"
+                [showThumbnails]="false"
+            >
+                <ng-template pTemplate="item" let-item>
+                    <img [src]="item.itemImageSrc" style="width: 100%; display: block;" />
+                </ng-template>
+            </p-galleria>
+        </div>
+
+
+           </div>
+                <!-- Fin du composant gallerie -->
+
       </div>
     </div>
   </div>

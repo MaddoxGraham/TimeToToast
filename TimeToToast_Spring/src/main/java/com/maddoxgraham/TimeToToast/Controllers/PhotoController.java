@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,12 +23,15 @@ public class PhotoController {
         return new ResponseEntity<>(photos, HttpStatus.OK);
     }
 
-    @PostMapping("/upload")
-        public ResponseEntity<List<Photo>> uploadPhotos(){
-        //modifier findallphoto en uploadPHOTOS !!!!!!!!!!!!!!!!!!!
-        List<Photo> photos = photoService.findAllPhotos();
-        return new ResponseEntity<>(photos, HttpStatus.OK);
+    @PostMapping("/upload/{idEvent}/{idPerson}")
+    public ResponseEntity<?> uploadPhoto(@PathVariable("idEvent") Long idEvent , @PathVariable("idPerson") Long idPerson, @RequestParam("file") MultipartFile file) {
+        try {
+            Photo newPhoto = photoService.saveFile(file, idEvent, idPerson);
+            return new ResponseEntity<>(newPhoto, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
 
     @GetMapping("/find/{idPhoto}")
     public ResponseEntity<Photo> getPhotoById(@PathVariable("idPhoto") Long idPhoto) {
@@ -35,11 +39,11 @@ public class PhotoController {
         return new ResponseEntity<>(photo, HttpStatus.OK);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<Photo> addPhoto(@RequestBody Photo photo){
-        Photo newPhoto = photoService.addPhoto(photo);
-        return new ResponseEntity<>(newPhoto, HttpStatus.CREATED);
-    }
+//    @PostMapping("/add")
+//    public ResponseEntity<Photo> addPhoto(@RequestBody Photo photo){
+//        Photo newPhoto = photoService.addPhoto(photo);
+//        return new ResponseEntity<>(newPhoto, HttpStatus.CREATED);
+//    }
 
     @PutMapping("/update")
     public ResponseEntity<Photo> updatePhoto(@RequestBody Photo photo){
