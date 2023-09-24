@@ -64,8 +64,4 @@ public class Person implements Serializable {
     // Guest field
     private Boolean isPresent;
 
-    // Guest field
-    @ManyToOne
-    @JoinColumn(name = "idEvent", nullable = true)
-    private Event event;
 }
