@@ -24,14 +24,15 @@ public class PhotoController {
     }
 
     @PostMapping("/upload/{idEvent}/{idPerson}")
-    public ResponseEntity<?> uploadPhoto(@PathVariable("idEvent") Long idEvent , @PathVariable("idPerson") Long idPerson, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> uploadPhotos(@PathVariable("idEvent") Long idEvent, @PathVariable("idPerson") Long idPerson, @RequestParam("files") List<MultipartFile> files) {
         try {
-            Photo newPhoto = photoService.saveFile(file, idEvent, idPerson);
-            return new ResponseEntity<>(newPhoto, HttpStatus.CREATED);
+            List<Photo> newPhotos = photoService.saveFiles(files, idEvent, idPerson);
+            return new ResponseEntity<>(newPhotos, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     @GetMapping("/find/{idPhoto}")
     public ResponseEntity<Photo> getPhotoById(@PathVariable("idPhoto") Long idPhoto) {
