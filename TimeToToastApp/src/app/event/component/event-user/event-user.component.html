@@ -24,15 +24,35 @@
 </nav>
 
 <!-- Corps du component -->
-<div *ngFor="let userEvent of this.userEventsList" class="card m-2">
+<p-toast></p-toast>
+<div class="card flex justify-content-center">
+  <p-confirmDialog #cd [style]="{width: '50vw'}">
+      <ng-template pTemplate="header">
+          <h3>Header Content</h3>
+      </ng-template>
+      <ng-template pTemplate="footer">
+          <button type="button" pButton icon="pi pi-times" label="No" (click)="cd.reject()"></button>
+          <button type="button" pButton icon="pi pi-check" label="Yes" (click)="cd.accept()"></button>
+      </ng-template>
+  </p-confirmDialog>
+</div>
+<div *ngFor="let userEvent of this.userEventsList; let i = index" class="card m-2">
   <div class="row m-2 cards-row">
     <ng-container *ngFor="let event of userEvent.events">
       <div class="col-md-2 cardDistinct">
         <div class="card box-shadow bg-light">
           <div class="card-header d-flex flex-row w-100 justify-content-between">
             <div class="my-auto">
-              <div class="icon-container">
-                <i *ngIf="userEvent.role == 'CREATEUR'" class="fa-solid fa-champagne-glasses creator-icon"></i>
+              <div class="icon-container my-auto"> 
+
+
+                
+                
+                <p-button (click)="confirm1(event.idEvent)" icon="pi pi-trash"  *ngIf="userEvent.role == 'CREATEUR'"  class=" participant-icon " [style]="{backgroundColor: 'darkred'}" styleClass="p-button-danger"></p-button>
+
+             <!-- <i *ngIf="userEvent.role == 'CREATEUR'"  class="fa fa-trash me-2 participant-icon "></i> -->
+              
+               <i *ngIf="userEvent.role == 'CREATEUR'" class="fa-solid fa-champagne-glasses creator-icon"></i> 
                 <div class="creator-info">
                   <p>Créateur de cet événement</p>
                 </div>
@@ -42,8 +62,10 @@
               </div>
             </div>
             <div class="my-auto">
-              <h3 class="card-title">{{ event.title }}</h3>
+              <h3 class="card-title">{{ event.title }} </h3>
+            
             </div>
+
 
 
           </div>
@@ -69,4 +91,8 @@
       </div>
     </ng-container>
   </div>
+
+
+
+
 </div>

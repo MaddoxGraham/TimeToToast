@@ -5,6 +5,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
 
 
 @NgModule({
@@ -17,6 +19,8 @@ import { ButtonModule } from 'primeng/button';
     ProgressSpinnerModule,
     DropdownModule,
     ButtonModule,
+    ConfirmDialogModule,
+    ToastModule,
   ],
   exports: [
     TabMenuModule,
@@ -25,6 +29,8 @@ import { ButtonModule } from 'primeng/button';
     ProgressSpinnerModule,
     DropdownModule,
     ButtonModule,
+    ConfirmDialogModule,
+    ToastModule,
   ]
 })
 export class ShareModule { }

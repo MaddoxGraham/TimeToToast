@@ -5,11 +5,15 @@ import { UserEventRoleDto } from 'src/app/share/dtos/userEventRole/user-event-ro
 import { EventDto } from 'src/app/share/dtos/event/event-dto';
 import { UserEventsDto } from 'src/app/share/dtos/userEvents/user-events-dto';
 import { Router } from '@angular/router';
+import { ConfirmationService, MessageService, ConfirmEventType } from 'primeng/api';
+
+
 
 @Component({
   selector: 'app-event-user',
   templateUrl: './event-user.component.html',
-  styleUrls: ['./event-user.component.css']
+  styleUrls: ['./event-user.component.css'],
+  providers: [ConfirmationService, MessageService]
 })
 export class EventUserComponent implements OnInit {
   userEventRoles: UserEventRoleDto[] = []; // Liste des rôles utilisateur
@@ -19,7 +23,8 @@ export class EventUserComponent implements OnInit {
   selectedEvent: EventDto | null = null;
 
   constructor(private eventService: EventService,
-              private router: Router) { }
+              private router: Router,
+              private confirmationService: ConfirmationService, private messageService: MessageService) { }
 
   ngOnInit(): void {
     this.loadUserEventRoles();
@@ -59,4 +64,27 @@ export class EventUserComponent implements OnInit {
   sendToDetails(enventId: number){
     this.router.navigateByUrl(`/event/singleEvent/${enventId}`)
   }
+
+
+  confirm1(idEvent: number) {
+    this.confirmationService.confirm({
+        message: 'Are you sure that you want to proceed?',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+            this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted' });
+            console.log(idEvent)
+        },
+        reject: (type: ConfirmEventType) => {
+            switch (type) {
+                case ConfirmEventType.REJECT:
+                    this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
+                    break;
+                case ConfirmEventType.CANCEL:
+                    this.messageService.add({ severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled' });
+                    break;
+            }
+        }
+    });
+  }
+
 }
