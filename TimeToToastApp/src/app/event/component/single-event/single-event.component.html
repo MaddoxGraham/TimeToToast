@@ -58,26 +58,28 @@
       <div *ngIf="successMessage" class="alert alert-success">
         {{ successMessage }}
       </div>
+      <ng-container *ngFor="let user of this.userEventList">
 
-      <h3> Créateur </h3>
-      <ul>
-        <li *ngFor="let user of getUsersByRole('CREATEUR')">
-          {{ user.lastName }} {{ user.firstName | uppercase }}
-        </li>
-      </ul>
-
-      <h3> Invités </h3>
-      <ul>
-        <li *ngFor="let user of getUsersByRole('INVITE')">
-          {{ user.lastName }} {{ user.firstName | uppercase }}
-
-        </li>
-
-        <li *ngFor="let guest of guests">
-          <p *ngIf="guest.firstName">{{ guest.firstName }} {{ guest.lastName }} </p>
-          <p *ngIf="!guest.firstName"> {{ guest.email }}</p>
-        </li>
-      </ul>
+        <ng-container *ngIf="user.role === 'CREATEUR'">
+            <h3> Créateur </h3>
+            <ul>
+                <li *ngFor="let person of user.persons">
+                    {{ person.firstName }} {{ person.lastName | uppercase }}
+                </li>
+            </ul>
+        </ng-container>
+    
+        <ng-container *ngIf="user.role === 'INVITE'">
+            <h3> Invités </h3>
+            <ul>
+              <li *ngFor="let person of user.persons">
+                {{ person.firstName || person.lastName ? (person.firstName + ' ' + (person.lastName | uppercase)) : person.email }}
+            </li>
+            </ul>
+        </ng-container>
+        
+    </ng-container>
+    
     </div>
 
 

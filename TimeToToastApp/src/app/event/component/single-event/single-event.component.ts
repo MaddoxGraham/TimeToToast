@@ -72,11 +72,12 @@ export class SingleEventComponent implements OnInit {
 
 
   getUsersByRole(role: string): UserDto[] {
+    
     const userEvents = this.userEventList.filter(userEvent => userEvent.role === role);
     const users: UserDto[] = [];
     userEvents.forEach(userEvent => {
-      if (userEvent.users) {
-        users.push(...userEvent.users);
+      if (userEvent.persons) {
+        users.push(...userEvent.persons);
       }
     });
     return users;
@@ -101,7 +102,7 @@ export class SingleEventComponent implements OnInit {
     this.eventService.getUserEventRoleList(idEvent).subscribe(
       (response) => {
         this.userEventList = response;
-
+        console.log(this.userEventList);
       },
       (error) => {
         console.error('Erreur lors de la récupération de la liste des utilisateurs:', error);
