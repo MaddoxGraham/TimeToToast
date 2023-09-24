@@ -1,16 +1,21 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-@Component({
-  selector: 'app-task',
-  templateUrl: './task.component.html',
-  styleUrls: ['./task.component.css']
-})
-export class TaskComponent {
-  @Output() moduleDeleted = new EventEmitter();
+import { TaskComponent } from './task.component';
 
-  deleteModule() {
-    if (confirm('Êtes-vous sûr de supprimer le module ?')) {
-      this.moduleDeleted.emit();
-    }
-  }
-}
+describe('TasksComponent', () => {
+  let component: TaskComponent;
+  let fixture: ComponentFixture<TaskComponent>;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [TaskComponent]
+    });
+    fixture = TestBed.createComponent(TaskComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
