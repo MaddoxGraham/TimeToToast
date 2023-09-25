@@ -19,7 +19,6 @@ export class MapComponent implements AfterViewInit  {
     setTimeout(() => {
         this.initializeMap();
       }, 0);
-    console.log(this.eventId)
   }
 
   async initializeMap(): Promise<void> {

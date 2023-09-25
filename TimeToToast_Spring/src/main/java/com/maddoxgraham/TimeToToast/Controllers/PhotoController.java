@@ -1,13 +1,20 @@
 package com.maddoxgraham.TimeToToast.Controllers;
 
+import com.maddoxgraham.TimeToToast.DTOs.PhotoDto;
 import com.maddoxgraham.TimeToToast.Models.Photo;
 import com.maddoxgraham.TimeToToast.Services.PhotoService;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.core.io.Resource;
+import org.springframework.web.bind.annotation.PathVariable;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -16,12 +23,6 @@ import java.util.List;
 public class PhotoController {
 
     private final PhotoService photoService;
-
-    @GetMapping("/all")
-    public ResponseEntity<List<Photo>> getAllPhoto() {
-        List<Photo> photos = photoService.findAllPhotos();
-        return new ResponseEntity<>(photos, HttpStatus.OK);
-    }
 
     @PostMapping("/upload/{idEvent}/{idPerson}")
     public ResponseEntity<?> uploadPhotos(@PathVariable("idEvent") Long idEvent, @PathVariable("idPerson") Long idPerson, @RequestParam("files") List<MultipartFile> files) {
@@ -33,28 +34,42 @@ public class PhotoController {
         }
     }
 
+    @GetMapping("findEventPhoto/{idEvent}")
+    public ResponseEntity<List<String>> getPhotoByEvent(@PathVariable("idEvent") Long idEvent) {
+        List<PhotoDto> photos = photoService.findPhotoByIdEvent(idEvent);
+        List<String> pathPhotos = new ArrayList<>();
+        for (PhotoDto photo : photos){
+            Path path = Paths.get(photo.getSource());
+            Resource resource;
+            try {
+                resource = new UrlResource(path.toUri());
+                if (resource.exists() || resource.isReadable()) {
+                    //return ResponseEntity.ok().body(resource.getURI().toString());
+                    pathPhotos.add(resource.getURI().toString());
+                }
+            } catch (Exception e) {
+                // Handle exception
+            }
+            //return ResponseEntity.notFound().build();
+        }
 
-    @GetMapping("/find/{idPhoto}")
-    public ResponseEntity<Photo> getPhotoById(@PathVariable("idPhoto") Long idPhoto) {
-        Photo photo = photoService.findPhotoByIdPhoto(idPhoto);
-        return new ResponseEntity<>(photo, HttpStatus.OK);
+       return new ResponseEntity<>(pathPhotos, HttpStatus.OK);
     }
 
-//    @PostMapping("/add")
-//    public ResponseEntity<Photo> addPhoto(@RequestBody Photo photo){
-//        Photo newPhoto = photoService.addPhoto(photo);
-//        return new ResponseEntity<>(newPhoto, HttpStatus.CREATED);
-//    }
 
-    @PutMapping("/update")
-    public ResponseEntity<Photo> updatePhoto(@RequestBody Photo photo){
-        Photo updatePhoto = photoService.updatePhoto(photo);
-        return new ResponseEntity<>(updatePhoto, HttpStatus.OK);
+    @GetMapping("/uploads/{imageName}")
+    public ResponseEntity<String> getImageUrl(@PathVariable String imageName) {
+        Path path = Paths.get("uploads/" + imageName);
+        Resource resource;
+        try {
+            resource = new UrlResource(path.toUri());
+            if (resource.exists() || resource.isReadable()) {
+                return ResponseEntity.ok().body(resource.getURI().toString());
+            }
+        } catch (Exception e) {
+            // Handle exception
+        }
+        return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/delete/{idPhoto}")
-    public ResponseEntity<?> deletePhoto(@PathVariable("idPhoto") Long idPhoto){
-        photoService.deletePhoto(idPhoto);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 }

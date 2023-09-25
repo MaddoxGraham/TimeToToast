@@ -18,7 +18,7 @@
                   <div class="container-fluid">
                     <div>
                       <button (click)="displayMode = 'galleria'" class="btn btn-outline-secondary me-2">Acceder à la gallerie </button>
-                      <button (click)="displayMode = 'upload'"  class="btn btn-outline-success"> Ajouter une photo</button>
+                      <button (click)="displayMode = 'upload' ; fetchGalleria()"  class="btn btn-outline-success"> Ajouter une photo</button>
                     </div>
                   </div>
                 </nav>
@@ -30,10 +30,11 @@
 </div>
 <p class="txt-handwritting pt-2"> Commencez des a present en cliquant sur "Ajouter une photo" </p>
 </div>
-        <!-- Début du composant d'upload -->
+        <!-- Début du composant d'upload [maxFileSize]="maxFileSize  -->
         <div *ngIf="displayMode==='upload'" class="card flex mt-2 justify-content-center">
           <p-toast></p-toast>
-          <p-fileUpload name="demo[]" [url]="uploadUrl" (onUpload)="onUpload($event)" [multiple]="true" accept="image/*" [maxFileSize]="maxFileSize">
+          <p-fileUpload name="demo[]" (uploadHandler)="onUpload($event)"
+          [customUpload]="true" [multiple]="true" accept="image/*" [maxFileSize]="maxFileSize">
             <ng-template pTemplate="content">
               <ul *ngIf="uploadedFiles.length">
                 <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{ file.size.toString() }} bytes</li>  <!-- utiliser toString() -->
@@ -51,7 +52,7 @@
           <div class="card md:flex md:justify-content-center">
             <div *ngIf="images" class="grid" style="max-width: 800px;">
                 <div *ngFor="let image of images; let index = index" class="col-3" key="index">
-                    <img [src]="image.thumbnailImageSrc" [alt]="image.alt" style="cursor: pointer" (click)="imageClick(index)" />
+                    <img [src]="image"  style="cursor: pointer" (click)="imageClick(index)" />
                 </div>
             </div>
             <p-galleria
@@ -65,7 +66,7 @@
                 [showThumbnails]="false"
             >
                 <ng-template pTemplate="item" let-item>
-                    <img [src]="item.itemImageSrc" style="width: 100%; display: block;" />
+                    <img [src]="item.source" style="width: 100%; display: block;" />
                 </ng-template>
             </p-galleria>
         </div>

@@ -2,27 +2,20 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { PhotoDto } from 'src/app/share/dtos/photo/photo-dto';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UploadService {
-  private readonly uploadUrl =`${environment.uploadPhoto}`;
 
   constructor(private http: HttpClient) {}
 
-  uploadFile(file: File): Observable<any> {
-    const formData: FormData = new FormData();
-    formData.append('file', file, file.name);
-
-    const headers = new HttpHeaders();
-    // Ajoute ici d'autres headers si nécessaire
-
-    return this.http.post(this.uploadUrl, formData, { headers });
+  uploadFiles(files: FormData, idUser:number, idEvent:number): Observable<any> {
+    return this.http.post(`${environment.uploadPhoto}/${idEvent}/${idUser}`, files);
   }
 
-  getUploadUrl() {
-    return this.uploadUrl;
+  getPhotos(idEvent: number): Observable<String[]> {
+    return this.http.get<String[]>(`${environment.getPhotos}/${idEvent}`);
   }
-
 }

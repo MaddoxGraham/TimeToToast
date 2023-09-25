@@ -29,5 +29,8 @@ export const environment = {
     fromGuestToUser:'http://localhost:8080/person/guestToUser/',
 
     uploadPhoto:"http://localhost:8080/photo/upload",
+    getPhotos:"http://localhost:8080/photo/findEventPhoto",
+
+    pathImages: 'C:/Users/User/OneDrive/Documents/TimeToToast/TimeToToast_Spring/uploads/',
 }
   
