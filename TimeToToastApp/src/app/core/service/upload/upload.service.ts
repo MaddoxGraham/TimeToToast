@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { PhotoDto } from 'src/app/share/dtos/photo/photo-dto';
+import { ImportPhotoDto } from 'src/app/share/dtos/photo/import-photo-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +17,12 @@ export class UploadService {
     return this.http.post(`${environment.uploadPhoto}/${idEvent}/${idUser}`, files);
   }
 
-  getPhotos(idEvent: number): Observable<String[]> {
-    return this.http.get<String[]>(`${environment.getPhotos}/${idEvent}`);
+  getPhotos(idEvent: number): Observable<ImportPhotoDto[]> {
+    return this.http.get<ImportPhotoDto[]>(`${environment.getPhotos}/${idEvent}`).pipe(
+      map((response: ImportPhotoDto[]) => { 
+        return response })
+    )
   }
+
+
 }

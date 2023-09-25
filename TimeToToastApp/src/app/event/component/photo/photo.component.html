@@ -45,29 +45,25 @@
         </div>
         <!-- Fin du composant d'upload -->
 
+        
 
         <!-- COMPOSANT GALLERIE -->
         <div *ngIf="displayMode==='galleria'" class="container-fluid">
          
           <div class="card md:flex md:justify-content-center">
-            <div *ngIf="images" class="grid" style="max-width: 800px;">
-                <div *ngFor="let image of images; let index = index" class="col-3" key="index">
-                    <img [src]="image"  style="cursor: pointer" (click)="imageClick(index)" />
+            <div *ngIf="imagesSafeUrl" class="grid" style="max-width: 800px;">
+                <div *ngFor="let imageSafeUrl of imagesSafeUrl; let index = index" class="col-3" key="index" class="m-3">
+                    <img [src]="imageSafeUrl"  style="cursor: pointer" (click)="imageClick(index)" style="width: 200px" />
                 </div>
             </div>
-            <p-galleria
-                [(activeIndex)]="activeIndex"
-                [responsiveOptions]="responsiveOptions"
-                [containerStyle]="{ 'max-width': '850px' }"
-                [numVisible]="7"
-                [circular]="true"
-                [fullScreen]="true"
-                [showItemNavigators]="true"
-                [showThumbnails]="false"
-            >
+            <p-galleria [value]="imagesSafeUrl" [(visible)]="displayCustom" [(activeIndex)]="activeIndex" 
+            [responsiveOptions]="responsiveOptions" [containerStyle]="{ 'max-width': '850px' }" 
+            [numVisible]="7" [circular]="true" [fullScreen]="true" 
+            [showItemNavigators]="true" [showThumbnails]="false">
+
                 <ng-template pTemplate="item" let-item>
-                    <img [src]="item.source" style="width: 100%; display: block;" />
-                </ng-template>
+                  <img [src]="item" style="width: 100%; display: block;" />
+              </ng-template>
             </p-galleria>
         </div>
 

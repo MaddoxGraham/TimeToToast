@@ -1,8 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { MessageService } from 'primeng/api';
 import { PhotoService } from 'src/app/core/service/photo/photo.service';
 import { UploadService } from 'src/app/core/service/upload/upload.service';
 import { EventDto } from 'src/app/share/dtos/event/event-dto';
+import { ImportPhotoDto } from 'src/app/share/dtos/photo/import-photo-dto';
 import { UserDto } from 'src/app/share/dtos/user/user-dto';
 import { UserEventRoleDto } from 'src/app/share/dtos/userEventRole/user-event-role-dto';
 
@@ -24,17 +26,18 @@ export class PhotoComponent implements OnInit {
   @Input() userEvent!: UserEventRoleDto;
   @Input() event!: EventDto;
   @Input() user! : UserDto;
-
   public displayMode: 'welcome' | 'galleria' | 'upload' = 'welcome';
-  uploadedFiles: any[] = []; // Ajouté ici
+
+  imagesSafeUrl: SafeUrl[] = [];
+
+  uploadedFiles: any[] = [];
   maxFileSize: number = 4000000;  // 1 MB
   uploadUrl!: string;
 
-  displayCustom: boolean | undefined;
-
+  displayCustom: boolean = false;
   activeIndex: number = 0;
+  isOpen = false;
 
-  images!: String[] ;
 
   responsiveOptions: any[] = [
       {
@@ -55,11 +58,19 @@ export class PhotoComponent implements OnInit {
       }
   ];
 
-  constructor(private uploadService:UploadService, private messageService: MessageService,private photoService: PhotoService ) {
+  constructor(private uploadService:UploadService, 
+              private messageService: MessageService,
+              private sanitizer: DomSanitizer ) {
   }
+
+  ngOnInit() {
+
+    this.fetchGalleria();
+   
+}
  
   
-  isOpen = false;
+  
 
 //gestion de l'upload
 
@@ -89,22 +100,24 @@ if (this.user.idPerson && this.event.idEvent) {
 }
   //gestion de la gallerie
 
-  ngOnInit() {
+  
 
-    this.fetchGalleria();
-   
-}
 fetchGalleria() {
   this.uploadService.getPhotos(this.event.idEvent).subscribe(
-    (images) => {
-      this.images = images;
-      console.log(this.images)
+    (data: ImportPhotoDto[]) => {
+      data.forEach((image: ImportPhotoDto) => {
+        let imageUrl = 'data:image/jpeg;base64,' + image.content;
+        // Ajoutez l'URL sécurisée à imagesSafeUrl
+        this.imagesSafeUrl.push(this.sanitizer.bypassSecurityTrustUrl(imageUrl));
+      });
     },
     (error) => {
       console.error("Une erreur s'est produite :", error);
     }
   );
 }
+
+
 imageClick(index: number) {
     this.activeIndex = index;
     this.displayCustom = true;

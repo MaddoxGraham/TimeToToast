@@ -42,33 +42,22 @@ public class PhotoService {
         this.personService = personService;
     }
 
-    public List<Photo> saveFiles(List<MultipartFile> files, Long idEvent, Long idPerson) throws IOException, FileTooLargeException, InvalidFileTypeException {
+    public List<Photo> saveFiles(List<MultipartFile> files, Long idEvent, Long idPerson) throws IOException {
         List<Photo> savedPhotos = new ArrayList<>();
-        final long MAX_SIZE = 5 * 1024 * 1024; // 5MB, ajuste selon tes besoins
 
         for (MultipartFile file : files) {
-            // Validation de la taille du fichier
-            if (file.getSize() > MAX_SIZE) {
-                throw new FileTooLargeException("File is too large");
-            }
-
-            // Validation du type du fichier
-            String contentType = file.getContentType();
-            if (!contentType.equals("image/jpeg") && !contentType.equals("image/png") && !contentType.endsWith(".jpg")) {
-                throw new InvalidFileTypeException("Invalid file type");
-            }
-
             Photo photo = new Photo();
-            // Récupération ou création des objets Event et Person
+            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+
+            photo.setName(fileName);
+            // Composez correctement le chemin de la source
+            photo.setSource("static/images/" + fileName);
+            photo.setCreatedAt(LocalDate.now());
+
             photo.setEvent(eventService.findEventByIdEvent(idEvent));
             photo.setPerson(personService.findPersonByIdPerson(idPerson));
 
-            String fileName = + idEvent + idPerson + System.currentTimeMillis() + "_" + file.getOriginalFilename() ;
-            photo.setName(fileName);
-            photo.setSource(uploadDir + fileName);
-            photo.setCreatedAt(LocalDate.now());
-
-            // Sauvegarde du fichier sur disque
+            // Assurez-vous que le chemin complet est correct
             Path filePath = Paths.get(uploadDir + fileName);
             Files.write(filePath, file.getBytes());
 
@@ -80,6 +69,7 @@ public class PhotoService {
 
         return savedPhotos;
     }
+
 
 
     public List<PhotoDto> findPhotoByIdEvent(Long idEvent) {
