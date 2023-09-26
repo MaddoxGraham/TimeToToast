@@ -1,75 +1,80 @@
 <div id="accordion mt-4">
   <div class="card">
-    <div class="card-header"> 
+    <div class="card-header">
       <button class="btn w-100 toggle-btn" [attr.aria-expanded]="isOpen" (click)="isOpen = !isOpen">
-      <div class="mb-0 d-flex flex-row nowrap justify-content-between">
-        <h2> Module Photos </h2>
-        <div>
-       
+        <div class="mb-0 d-flex flex-row nowrap justify-content-between">
+          <h2> Module Photos </h2>
+          <div>
+
             <i [ngClass]="{'fa-chevron-down': !isOpen, 'fa-chevron-up': isOpen}" class="fa"></i>
-        
+
+          </div>
         </div>
-      </div>  </button>
+      </button>
     </div>
     <div id="collapseOne" class="collapse" [ngClass]="{'show': isOpen}">
       <div class="card-body">
-                <!-- Navbar -->
-                <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                  <div class="container-fluid">
-                    <div>
-                      <button (click)="displayMode = 'galleria'" class="btn btn-outline-secondary me-2">Acceder à la gallerie </button>
-                      <button (click)="displayMode = 'upload' ; fetchGalleria()"  class="btn btn-outline-success"> Ajouter une photo</button>
-                    </div>
-                  </div>
-                </nav>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <div class="container-fluid">
+            <div>
+              <button (click)="displayMode = 'galleria'" class="btn btn-outline-secondary me-2">Acceder à la gallerie
+              </button>
+              <button (click)="displayMode = 'upload' ; fetchGalleria()" class="btn btn-outline-success"> Ajouter une
+                photo</button>
+            </div>
+          </div>
+        </nav>
 
-<div *ngIf="displayMode==='welcome'" class="container-fluid">
-<div class="textInfo mt-2"> <p class="">Bienvenue dans le module Photos !  </p> 
- Préservez vos plus inoubliables moments grâce au module photos.Consultez directement les photos déjà ajoutées par vous ou vos invités en selectionnant 
-  "Acceder à la gallerie"
-</div>
-<p class="txt-handwritting pt-2"> Commencez des a present en cliquant sur "Ajouter une photo" </p>
-</div>
+        <div *ngIf="displayMode==='welcome'" class="container-fluid">
+          <div class="textInfo mt-2">
+            <p class="">Bienvenue dans le module Photos ! </p>
+            Préservez vos plus inoubliables moments grâce au module photos.Consultez directement les photos déjà
+            ajoutées par vous ou vos invités en selectionnant
+            "Acceder à la gallerie"
+          </div>
+          <p class="txt-handwritting pt-2"> Commencez des a present en cliquant sur "Ajouter une photo" </p>
+        </div>
         <!-- Début du composant d'upload [maxFileSize]="maxFileSize  -->
         <div *ngIf="displayMode==='upload'" class="card flex mt-2 justify-content-center">
           <p-toast></p-toast>
-          <p-fileUpload name="demo[]" (uploadHandler)="onUpload($event)"
-          [customUpload]="true" [multiple]="true" accept="image/*" [maxFileSize]="maxFileSize">
+          <p-fileUpload name="demo[]" (uploadHandler)="onUpload($event)" [customUpload]="true" [multiple]="true"
+            accept="image/*" [maxFileSize]="maxFileSize">
             <ng-template pTemplate="content">
               <ul *ngIf="uploadedFiles.length">
-                <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{ file.size.toString() }} bytes</li>  <!-- utiliser toString() -->
+                <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{ file.size.toString() }} bytes</li>
+                <!-- utiliser toString() -->
               </ul>
-              
+
             </ng-template>
           </p-fileUpload>
         </div>
         <!-- Fin du composant d'upload -->
 
-        
+
 
         <!-- COMPOSANT GALLERIE -->
         <div *ngIf="displayMode==='galleria'" class="container-fluid">
-         
+
           <div class="card md:flex md:justify-content-center">
             <div *ngIf="imagesSafeUrl" class="grid" style="max-width: 800px;">
-                <div *ngFor="let imageSafeUrl of imagesSafeUrl; let index = index" class="col-3" key="index" class="m-3">
-                    <img [src]="imageSafeUrl"  style="cursor: pointer" (click)="imageClick(index)" style="width: 200px" />
-                </div>
+              <div *ngFor="let imageSafeUrl of imagesSafeUrl; let index = index" class="col-3" key="index" class="m-3">
+                <img [src]="imageSafeUrl" style="cursor: pointer" (click)="imageClick(index)" style="width: 200px" />
+              </div>
             </div>
-            <p-galleria [value]="imagesSafeUrl" [(visible)]="displayCustom" [(activeIndex)]="activeIndex" 
-            [responsiveOptions]="responsiveOptions" [containerStyle]="{ 'max-width': '850px' }" 
-            [numVisible]="7" [circular]="true" [fullScreen]="true" 
-            [showItemNavigators]="true" [showThumbnails]="false">
+            <p-galleria [value]="imagesSafeUrl" [(visible)]="displayCustom" [(activeIndex)]="activeIndex"
+              [responsiveOptions]="responsiveOptions" [containerStyle]="{ 'max-width': '850px' }" [numVisible]="7"
+              [circular]="true" [fullScreen]="true" [showItemNavigators]="true" [showThumbnails]="false">
 
-                <ng-template pTemplate="item" let-item>
-                  <img [src]="item" style="width: 100%; display: block;" />
+              <ng-template pTemplate="item" let-item>
+                <img [src]="item" style="width: 100%; display: block;" />
               </ng-template>
             </p-galleria>
+          </div>
+
+
         </div>
-
-
-           </div>
-                <!-- Fin du composant gallerie -->
+        <!-- Fin du composant gallerie -->
 
       </div>
     </div>

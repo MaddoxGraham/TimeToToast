@@ -68,9 +68,6 @@ export class PhotoComponent implements OnInit {
     this.fetchGalleria();
    
 }
- 
-  
-  
 
 //gestion de l'upload
 
@@ -80,9 +77,6 @@ onUpload(event: any) {
   // Assumons que tu aies les valeurs pour idUser et idEvent quelque part dans ton composant
   const idUser = this.userEvent.idUser;
   const idEvent = this.event.idEvent;
-  console.log("click on upload")
-  console.log(this.user.idPerson)
- 
   for (let file of files) {
     formData.append('files', file, file.name); // Note 'files' au lieu de 'file'
   }
@@ -90,6 +84,7 @@ if (this.user.idPerson && this.event.idEvent) {
     this.uploadService.uploadFiles(formData, this.user.idPerson, this.event.idEvent).subscribe(
     (response) => {
       this.messageService.add({severity: 'success', summary: 'Succès', detail: 'Fichiers uploadés avec succès'});
+      
     },
     (error) => {
       this.messageService.add({severity: 'error', summary: 'Erreur', detail: 'Upload a échoué'});
