@@ -50,15 +50,18 @@ public class PhotoService {
             String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
 
             photo.setName(fileName);
+
+            // Assurez-vous que le chemin complet est correct
+            Path filePath = Paths.get(uploadDir + fileName);
+
             // Composez correctement le chemin de la source
-            photo.setSource("static/images/" + fileName);
+            photo.setSource(filePath.toString());
             photo.setCreatedAt(LocalDate.now());
 
             photo.setEvent(eventService.findEventByIdEvent(idEvent));
             photo.setPerson(personService.findPersonByIdPerson(idPerson));
 
-            // Assurez-vous que le chemin complet est correct
-            Path filePath = Paths.get(uploadDir + fileName);
+
             Files.write(filePath, file.getBytes());
 
             // Sauvegarde de l'objet Photo dans la base de données

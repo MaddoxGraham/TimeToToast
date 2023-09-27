@@ -14,6 +14,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -41,16 +42,25 @@ public class PhotoController {
     public ResponseEntity<List<Map<String, String>>> getPhotoByEvent(@PathVariable("idEvent") Long idEvent) throws IOException {
         List<PhotoDto> photos = photoService.findPhotoByIdEvent(idEvent);
         List<Map<String, String>> jsonMapList = new ArrayList<>();
+
         for (PhotoDto photo : photos){
             String imagesPath = photo.getSource();
 
-            File file = new ClassPathResource(imagesPath).getFile();
+            // Chargez le fichier directement à partir du système de fichiers.
+            File file = new File(imagesPath);
+            if (!file.exists() || !file.isFile()) {
+                // Gérer l'erreur - le fichier n'existe pas
+                throw new FileNotFoundException("Le fichier " + imagesPath + " n'existe pas");
+            }
+
             String encodeImage = Base64.getEncoder().withoutPadding().encodeToString(Files.readAllBytes(file.toPath()));
+
             Map<String, String> jsonMap = new HashMap<>();
             jsonMap.put("content", encodeImage);
             jsonMapList.add(jsonMap);
         }
-        return new ResponseEntity<List<Map<String, String>>>(jsonMapList, HttpStatus.OK);
+
+        return new ResponseEntity<>(jsonMapList, HttpStatus.OK);
     }
 
 
