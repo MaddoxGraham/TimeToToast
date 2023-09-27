@@ -13,6 +13,10 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { CardModule } from 'primeng/card';
 import { FileUploadModule } from 'primeng/fileupload';
 import { GalleriaModule } from 'primeng/galleria';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { CalendarModule } from 'primeng/calendar';
+import { DataViewModule } from 'primeng/dataview';
+
 
 
 @NgModule({
@@ -33,6 +37,9 @@ import { GalleriaModule } from 'primeng/galleria';
     CardModule,
     FileUploadModule,
     GalleriaModule,
+    SelectButtonModule,
+    CalendarModule,
+    DataViewModule,
   ],
   exports: [
     TabMenuModule,
@@ -49,6 +56,9 @@ import { GalleriaModule } from 'primeng/galleria';
     CardModule,
     FileUploadModule,
     GalleriaModule,
+    SelectButtonModule,
+    CalendarModule,
+    DataViewModule,
   ]
 })
 export class ShareModule { }

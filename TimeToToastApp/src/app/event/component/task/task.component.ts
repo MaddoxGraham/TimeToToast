@@ -1,12 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { EventDto } from 'src/app/share/dtos/event/event-dto';
 import { GuestDto } from 'src/app/share/dtos/guest/guest-dto';
 import { TaskDto } from 'src/app/share/dtos/task/task-dto';
 import { UserEventRoleDto } from 'src/app/share/dtos/userEventRole/user-event-role-dto';
 import { Subscription } from 'rxjs';
 import { SharedService } from 'src/app/core/service/shared/shared.service';
-import { EventService } from 'src/app/core/service/event/event.service';
+import { UserDto } from 'src/app/share/dtos/user/user-dto';
+
 
 
 
@@ -19,6 +20,7 @@ export class TaskComponent implements OnInit{
   @Output() moduleDeleted = new EventEmitter<void>();
   @Input() userEvent!: UserEventRoleDto;
   @Input() event!: EventDto;
+  @Input() user!:UserDto;
 
 
   public displayMode: 'all' | 'mine' | 'create' = 'all';
@@ -29,26 +31,30 @@ export class TaskComponent implements OnInit{
   private guestsSubscription!: Subscription;
   guests!: GuestDto[];
   showInvisibleToggle: boolean = false;
-
+  value!: number;
+  currentStep!:number;
+  paymentOptions: any[] = [
+      { name: 'Basse', value: 1 },
+      { name: 'Moyenne', value: 2 },
+      { name: 'Haute', value: 3 }
+  ];
   Assignee: GuestDto[] = [];
   InvisibleTo: GuestDto[] = [];
-
   filteredGuests: GuestDto[] = [];
 
   isOpen = false;  // Accordéon fermé par défaut
-  taskForm!: FormGroup;
+  description!: string;
+  urgency!: number;
+  dueDate!: Date;
+
+  rangeDates: Date[] | undefined;
+
 
   constructor(private fb: FormBuilder,
     private sharedService: SharedService) { }
 
 
-  ngOnInit(): void {   
-    //  this.initializeDateRange();
-    this.taskForm = this.fb.group({
-      description: ['', [Validators.required]],
-      urgency: ['', [Validators.required]],
-      dueDate: [''],
-    });
+   ngOnInit(): void {   
     this.guestsSubscription = this.sharedService.guests$.subscribe(guests => {
       this.guests = guests;
       this.guests = this.guests.map(guest => ({
@@ -56,11 +62,6 @@ export class TaskComponent implements OnInit{
       displayLabel: guest.firstName ? guest.firstName : guest.email
     }));
     this.updateFilteredGuests();
-    });
-    this.taskForm = this.fb.group({
-      Assignee: [null],
-      InvisibleTo: [null],
-      // autres champs...
     });
 
 }
@@ -70,7 +71,6 @@ updateFilteredGuests() {
 }
 
 saveAssignees() {
-  // Votre logique pour enregistrer les assignés
   this.updateFilteredGuests();
 }
 
@@ -80,57 +80,25 @@ saveInvisibleTo() {
 
 
 createTask() {
-  const taskData = this.taskForm.value;
-  console.log(this.taskForm.value); }
+  console.log("Description:", this.description);
+   const taskData = {
+    description: this.description,
+      urgency: this.urgency,
+      dueDate: this.dueDate,
+      Assignee:this.Assignee,
+    };
+    // const mappedDatasTask={
+    //   description:taskData.description,
+    //   dueDate:taskData.dueDate,
+    //   urgence:taskData.urgency,
+    //   creator: this.user.idPerson,
+    //   event:this.event.idEvent,
+    //   assignees : this.Assignee,
+    //   invisibles:this.InvisibleTo
+    // }
+    // console.log(mappedDatasTask);
+  }
 
-// ngOnDestroy() {
-//   this.guestsSubscription.unsubscribe();
-// }
 
+  }
 
-  // createTask() {  
-  // if (this.taskForm.valid) {  
-  //   const taskData = this.taskForm.value;
-
-  //   // au click : création de la lache puis envoie des data qui permettent de faire une entrée dans user task. 
-  //   // userTask (ceux qui ont la tache sont dans un tableau : isVisible[] . UserTask (ceux qui ne voient pas la tâche sont dans un tableau isInvisible[]))
-  //   const data = {
-  //     description: taskData.description,
-  //     dateTask: new Date(taskData.dueDate),
-  //     urgence: taskData.urgence,
-
-  //   }
-  //   console.log(this.taskForm.value);
-  // }
-// }
-// initializeDateRange(): void {
-//   if (this.event && this.event.eventDate) {
-//     const eventDate = new Date(this.event.eventDate);
-//     this.maxDate = this.formatDate(eventDate);
-//   // }
-//   const currentDate = new Date();
-//   this.minDate = this.formatDate(currentDate);
-// }
-
-// private formatDate(date: Date): string {
-//   const year = date.getFullYear();
-//   const month = String(date.getMonth() + 1).padStart(2, '0');
-//   const day = String(date.getDate()).padStart(2, '0');
-//   return `${year}-${month}-${day}`;
-// }
-
-// addGuest(selectedValue: string) {
-//     const guest = this.guests.find(g => g.idPerson === Number(selectedValue));
-//     if (guest) {
-//       this.hiddenGuest.push(guest);
-//     }
-//   }
-
-//   removeGuest(guest: GuestDto) {
-//     const index = this.hiddenGuest.indexOf(guest);
-//     if (index > -1) {
-//       this.hiddenGuest.splice(index, 1);
-//     }
-//   }
-
-}

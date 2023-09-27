@@ -121,7 +121,7 @@
               va peut être en rajouter ! </span>
           </div>
 
-          <app-task *ngIf="isTaskModuleActive"  [userEvent]="userEvent" [event]="event"
+          <app-task *ngIf="isTaskModuleActive"   [user]="user"  [userEvent]="userEvent" [event]="event"
             (moduleDeleted)="onModuleDeleted('task')">
           </app-task>
 

@@ -1,18 +1,16 @@
 <div id="accordion mt-4">
   <div class="card">
-    <div class="card-header">
+    <div class="card-header">      
+       <button class="btn w-100 toggle-btn" [attr.aria-expanded]="isOpen" (click)="isOpen = !isOpen">
       <div class="mb-0 d-flex flex-row nowrap justify-content-between">
-
-
-        <h2> Module Tâches </h2>
+        <h2> Module Tâche </h2>
         <div>
-          <button class="btn btn-link toggle-btn" [attr.aria-expanded]="isOpen" (click)="isOpen = !isOpen">
-            <i [ngClass]="{'fa-chevron-down': !isOpen, 'fa-chevron-up': isOpen}" class="fa"></i>
-          </button>
+
+          <i [ngClass]="{'fa-chevron-down': !isOpen, 'fa-chevron-up': isOpen}" class="fa"></i>
 
         </div>
-
       </div>
+    </button>
     </div>
     <div id="collapseOne" class="collapse" [ngClass]="{'show': isOpen}">
       <div class="card-body">
@@ -47,11 +45,12 @@
 
               <div *ngIf="userEvent.role != 'CREATEUR'">
                 <p> Le créateur de cet événement en surement en train d'ajouter de nouvelles tâches ! <br> <br>
-                Patientez encore un peu ! Le créateur de cet événement vient d'activer le module tâche ! 
-                Vous verrez surement apparaitre des tâches pour vous ou pou d'autres invités ! 
+                  Patientez encore un peu ! Le créateur de cet événement vient d'activer le module tâche !
+                  Vous verrez surement apparaitre des tâches pour vous ou pou d'autres invités !
                 </p>
 
-                <p class="txt-handwritting">N'hesitez pas a faire savoir a votre hote si vous avez des idees de taches ! </p>
+                <p class="txt-handwritting">N'hesitez pas a faire savoir a votre hote si vous avez des idees de taches !
+                </p>
               </div>
 
 
@@ -127,118 +126,57 @@
 
         </div>
 
-       <!--   Vue pour créer une tâche -->
-    
+        <!--   Vue pour créer une tâche -->
+
         <div *ngIf="displayMode === 'create'">
-           <form class="p-3">
+          <form (ngSubmit)="createTask()" class="p-3">
             <!-- Textarea pour la description de la tâche -->
             <div class="card flex p-float-label justify-content-center mb-3">
-              <textarea id="float-input" rows="5" cols="30" pInputTextarea [autoResize]="true" class="form-control"></textarea>
+              <textarea id="float-input"  [(ngModel)]="description" rows="5" name="description" cols="30" pInputTextarea [autoResize]="true"
+                class="form-control"></textarea>
               <label for="float-input" class="form-label">Décrivez en quelques mots votre nouvelle tâche</label>
             </div>
-                      <!-- Multiselect pour les assignés -->
+
+
+            <div class="card flex justify-content-center">
+              <p> Définissez l'urgence de cette nouvelle tâche </p>
+              <p-selectButton id="selectGravity" name="urgency" [options]="paymentOptions" [ngModelOptions]="{standalone: true}" [(ngModel)]="urgency" [multiple]="false"
+                optionLabel="name" optionValue="value"> </p-selectButton>
+            </div>
+
+            <div class="card flex justify-content-center">
+              <p> Choisissez une date pour réaliser cette tâche. </p>
+              <p-calendar [(ngModel)]="dueDate" name="dueDate" [ngModelOptions]="{standalone: true}"></p-calendar>
+            </div>
+
+
+            <!-- Multiselect pour les assignés -->
           
-            <div class="card flex justify-content-center mb-3">
-            <p-multiSelect [options]="guests" [(ngModel)]="Assignee" (ngModelChange)="saveAssignees()" defaultLabel="Avez-vous une personne en tête pour cette tâche ?" optionLabel="displayLabel" display="chip"></p-multiSelect>
-          </div>
-      
-          <!-- Toggle Button pour cacher la tâche -->
-          <div class="d-flex align-items-center mb-3">
-            <span class="me-2">Cacher la tâche pour certain(e)s</span>
-            <p-toggleButton [(ngModel)]="showInvisibleToggle" onLabel="Yes" offLabel="No"></p-toggleButton>
-          </div>
-                <!-- Multiselect pour les invités pour qui la tâche est invisible -->
-          <div *ngIf="showInvisibleToggle" class="card flex justify-content-center">
-            <p-multiSelect [options]="filteredGuests" [(ngModel)]="InvisibleTo" (ngModelChange)="saveInvisibleTo()" defaultLabel="Rendre invisible pour" optionLabel="displayLabel" display="chip"></p-multiSelect>
-          </div>
-     
-        <!-- Bouton pour créer la tâche -->
-        <div class="d-flex justify-content-center mb-3">
-          <button type="submit" click="createTask()" class="btn btn-primary">Créer une tâche</button>
-        </div>
-  </form>
-      
-        </div>
-      
-
-    
-      
-
-<!--  
-         <form [formGroup]="taskForm" (submit)="createTask()">
-            <div class="mb-3"> <label for="description" class="form-label">Description</label>
-              <input type="text" class="form-control" id="description" formControlName="description">
-            </div>
-
-            <div class="mb-3 d-flex flex-row ">
-
-              <div>
-
-
-                <label for="dueDate" class="form-label">Date d'exécution</label>
-                <input type="date" class="form-control" id="dueDate" [min]="minDate" [max]="maxDate" formControlName="dueDate">
-              </div>
-              <div>
-                <label for="urgency" class="form-label">Urgence</label>
-                <select class="form-control" id="urgency" formControlName="urgency">
-                  <option value="3">Haute</option>
-                  <option value="2">Moyenne</option>
-                  <option value="1">Basse</option>
-                </select>
+              <div class="card flex justify-content-center mb-3">
+                <p-multiSelect [options]="guests" [(ngModel)]="Assignee" [ngModelOptions]="{standalone: true}"  name="Assignee" (ngModelChange)="saveAssignees()"
+                  defaultLabel="Avez-vous une personne en tête pour cette tâche ?" optionLabel="displayLabel"
+                  display="chip"></p-multiSelect>
               </div>
 
-            </div>
+              <!-- Toggle Button pour cacher la tâche -->
+              <div class="d-flex align-items-center mb-3">
+                <span class="me-2">Cacher la tâche pour certain(e)s</span>
+                <p-toggleButton [(ngModel)]="showInvisibleToggle" onLabel="Yes"  [ngModelOptions]="{standalone: true}" offLabel="No"></p-toggleButton>
+              </div>
+              <!-- Multiselect pour les invités pour qui la tâche est invisible -->
+              <div *ngIf="showInvisibleToggle" class="card flex justify-content-center">
+                <p-multiSelect [options]="filteredGuests" [(ngModel)]="InvisibleTo" [ngModelOptions]="{standalone: true}"  name="InvisibleTo" (ngModelChange)="saveInvisibleTo()"
+                  defaultLabel="Rendre invisible pour" optionLabel="displayLabel" display="chip"></p-multiSelect>
+              </div>
 
-            <div class="mb-3">
-              <label for="assignee" class="form-label">Assigné à</label>
-              <select class="form-control" id="assignee" formControlName="assignee">
-                <option *ngFor="let guest of guests" [value]="guest.idPerson">          
-                  <p *ngIf="guest.firstName">{{ guest.firstName }} {{ guest.lastName }} </p>
-                  <p *ngIf="!guest.firstName"> {{ guest.email }}</p>
-                </option>
-              </select>
-              
-            </div>
+              <!-- Bouton pour créer la tâche -->
+              <div class="d-flex justify-content-center mb-3">
+                <button type="submit"  class="btn btn-primary">Créer une tâche</button>
+              </div>
 
-
-
-            <div class="mb-3">
-
-<div > 
-<label class="me-2">Voulez-vous rendre cette tâche invisible pour certains invités ?</label>
-<input type="radio" id="yes" name="displaySelect" (click)="showSelect = true">
-<label class="me-2" for="yes">Oui</label>
-<input type="radio" id="no" name="displaySelect" (click)="showSelect = false" checked>
-<label for="no">Non</label>
-</div>
-Exemple de ce que vous pouvez afficher conditionnellement 
-<div *ngIf="showSelect">
-  <div class="mb-3">
-    <label for="assignee" class="form-label">Selectionner l'invité pour qui la tâche sera invisible</label>
-    <select class="form-control" id="assignee" formControlName="assignee">
-      <option *ngFor="let guest of guests" [value]="guest.idPerson">
-        <p *ngIf="guest.firstName">{{ guest.firstName }} {{ guest.lastName }} </p>
-        <p *ngIf="!guest.firstName"> {{ guest.email }}</p>
-      </option>
-    </select>
-  </div>
-</div>
-
-
-<ul>
-  <li *ngFor="let guest of hiddenGuest">
-    {{ guest.firstName ? guest.firstName + ' ' + guest.lastName : guest.email }} <button (click)="removeGuest(guest)">-</button>
-  </li>
-</ul>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Créer</button>
           </form>
+
         </div>
--->
-
-
-
       </div>
     </div>
   </div>

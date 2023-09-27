@@ -5,6 +5,7 @@ import { EmailDataDto } from 'src/app/share/dtos/EmailData/EmailDataDto';
 import { EventDto } from 'src/app/share/dtos/event/event-dto';
 import { GuestDto } from 'src/app/share/dtos/guest/guest-dto';
 import { TaskDto } from 'src/app/share/dtos/task/task-dto';
+import { UserDto } from 'src/app/share/dtos/user/user-dto';
 import { UserEventRoleDto } from 'src/app/share/dtos/userEventRole/user-event-role-dto';
 import { UserEventsDto } from 'src/app/share/dtos/userEvents/user-events-dto';
 import { environment } from 'src/environments/environment';
@@ -54,7 +55,7 @@ export class EventService {
       return this.httpClient.put<EventDto>(`${environment.updateModule}${idEvent}/${moduleName}`, {});
     }
 
-    addTask(data: { description: String, dateTask : Date, urgence : number , event : number , creator : number , assigneeUser : number , assigneeGuest : number }):Observable<TaskDto>{
+    addTask(data: { description: String, dueDate : Date, urgence : number , event : number , creator : number , assignees : UserDto[] , invisibles : UserDto[] }):Observable<TaskDto>{
       return this.httpClient.post<TaskDto>(environment.addTask, data);
     }
 

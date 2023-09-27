@@ -80,27 +80,4 @@ public class PersonController {
 
         return  new ResponseEntity<>(newPersonDto, HttpStatus.OK);
     }
-
-//    @PutMapping("/update/{idUser}")
-//    public ResponseEntity<UserDto> updateUser(@PathVariable("idUser") Long idUser, @RequestBody UserUpdateDto user) {
-//        UserDto updateUser = userService.updateUser(idUser, user);
-//        return new ResponseEntity<>(updateUser, HttpStatus.OK);
-//    }
-
-    //update (attention au role guest et user
-
-
-    // USER Methods
-    // GUEST Methods
-
-    //    @PostMapping("/verifyGuest")
-//    public ResponseEntity<GuestDto> verifyGuest(@RequestBody String token){
-//        String email = userAuthProvider.verifyGuest(token);
-//        GuestDto guestDto = guestService.verifyGuest(email);
-//        return new ResponseEntity<>(guestDto, HttpStatus.OK);
-//    }
-
-    //get by mail ?
-
-
 }

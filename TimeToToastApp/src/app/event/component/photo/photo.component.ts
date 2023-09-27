@@ -26,7 +26,7 @@ export class PhotoComponent implements OnInit {
   @Input() userEvent!: UserEventRoleDto;
   @Input() event!: EventDto;
   @Input() user! : UserDto;
-  public displayMode: 'welcome' | 'galleria' | 'upload' = 'welcome';
+  public displayMode: string = 'welcome';
 
   imagesSafeUrl: SafeUrl[] = [];
 
@@ -64,10 +64,20 @@ export class PhotoComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log("Initial displayMode: ", this.displayMode);
+  //  this.fetchGalleria();
 
-    this.fetchGalleria();
-   
 }
+
+
+setDisplayMode(mode: 'welcome' | 'galleria' | 'upload') {
+  this.displayMode = mode;
+  console.log("Updated displayMode: ", this.displayMode);
+  if (mode === 'galleria') {
+      this.fetchGalleria();
+  }
+}
+
 
 //gestion de l'upload
 
@@ -83,8 +93,9 @@ onUpload(event: any) {
 if (this.user.idPerson && this.event.idEvent) {
     this.uploadService.uploadFiles(formData, this.user.idPerson, this.event.idEvent).subscribe(
     (response) => {
+      console.log('Upload successful', response);
       this.messageService.add({severity: 'success', summary: 'Succès', detail: 'Fichiers uploadés avec succès'});
-      
+       this.imagesSafeUrl = [];
     },
     (error) => {
       this.messageService.add({severity: 'error', summary: 'Erreur', detail: 'Upload a échoué'});
@@ -93,13 +104,15 @@ if (this.user.idPerson && this.event.idEvent) {
 } else { console.log("WARNING - L'utilisateur ou l'évènement ne sont pas reconnus. ")}
 
 }
-  //gestion de la gallerie
 
-  
+
+  //gestion de la gallerie 
 
 fetchGalleria() {
+  this.imagesSafeUrl = [];
   this.uploadService.getPhotos(this.event.idEvent).subscribe(
     (data: ImportPhotoDto[]) => {
+      console.log('Fetched data', data);
       data.forEach((image: ImportPhotoDto) => {
         let imageUrl = 'data:image/jpeg;base64,' + image.content;
         // Ajoutez l'URL sécurisée à imagesSafeUrl
