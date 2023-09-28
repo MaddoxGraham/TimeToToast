@@ -16,18 +16,23 @@ export class GiftComponent implements OnInit {
   @Input() event!: EventDto;
 
   constructor(private sharedService: SharedService,private giftService : GiftService) { }
-
-  layout: string = 'list';
-
-  gifts!: GiftDto[];
-  isOpen = false;  // Accordéon ouvert par défaut
+  gifts: GiftDto[] = [];
+  layout: 'list' | 'grid' = 'list';
+  isOpen = false; 
 
 
   ngOnInit() {
-      
+    if( this.isOpen = true){
+    this.getGifts()
+    }
   }
 
   getSeverity(gift: GiftDto) {
+    switch (gift.isPaid){}
+   
+     // case gift.isPaid  
+     // case !gift.isPaid 
+
       // switch (product.inventoryStatus) {
       //     case 'INSTOCK':
       //         return 'success';
@@ -42,7 +47,26 @@ export class GiftComponent implements OnInit {
       //         return null;
       // }
       // Check si le produit a été acheté , a des contributions mais il manque encore pour faire la totalité, est disponible à l'achat
-      // attention le acheté = isPaid est à true. Il manque isPaid est à false mais il existe une entry dans giftContribution avec ce giftId et sinon false et il existe pas d'enty pour dispo. 
-  };
+      // attention le acheté = isPaid est à true. 
+      //Il manque isPaid est à false mais il existe une entry dans giftContribution avec ce giftId et sinon
+      // false et il existe pas d'enty pour dispo. 
+  }
+
+
+  getGifts(){
+    this.giftService.getGifts(this.event.idEvent).subscribe(
+      (reponse) => {
+        this.gifts = reponse;
+        console.log(this.gifts); 
+      },
+      (error) => {
+        console.error('Erreur:', error); 
+      }
+    )
+  }
+
+  
+
+
 }
 

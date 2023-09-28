@@ -16,6 +16,9 @@ import { GalleriaModule } from 'primeng/galleria';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { CalendarModule } from 'primeng/calendar';
 import { DataViewModule } from 'primeng/dataview';
+import { RatingModule } from 'primeng/rating';
+import { TagModule } from 'primeng/tag';
+
 
 
 
@@ -40,6 +43,9 @@ import { DataViewModule } from 'primeng/dataview';
     SelectButtonModule,
     CalendarModule,
     DataViewModule,
+    RatingModule,
+    TagModule,
+    
   ],
   exports: [
     TabMenuModule,
@@ -58,7 +64,9 @@ import { DataViewModule } from 'primeng/dataview';
     GalleriaModule,
     SelectButtonModule,
     CalendarModule,
+    RatingModule,
     DataViewModule,
+    TagModule,
   ]
 })
 export class ShareModule { }
