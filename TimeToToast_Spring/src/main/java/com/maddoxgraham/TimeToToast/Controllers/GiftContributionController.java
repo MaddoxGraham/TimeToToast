@@ -1,6 +1,7 @@
 package com.maddoxgraham.TimeToToast.Controllers;
 
 import com.maddoxgraham.TimeToToast.DTOs.GiftContributionDto;
+import com.maddoxgraham.TimeToToast.DTOs.GiftDto;
 import com.maddoxgraham.TimeToToast.Models.GiftContribution;
 import com.maddoxgraham.TimeToToast.Services.GiftContributionService;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,9 @@ public class GiftContributionController {
 
     private final GiftContributionService giftContributionService;
 
-//    @GetMapping("getContribution/{idGift}")
-//    public ResponseEntity<List<GiftContributionDto>> getContribution(@PathVariable("idGift") Long )
+    @GetMapping("/getContribution/{idGift}")
+    public ResponseEntity<List<GiftContributionDto>> getContribution(@PathVariable("idGift") Long idGift) {
+        List<GiftContributionDto> giftContributionDtos = giftContributionService.findByIdGift(idGift);
+        return new ResponseEntity<>(giftContributionDtos, HttpStatus.OK);
+    }
 }

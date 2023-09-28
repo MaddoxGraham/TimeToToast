@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { GiftService } from 'src/app/core/service/service/gift.service';
+import { GiftService } from 'src/app/core/service/gift/gift.service';
 import { SharedService } from 'src/app/core/service/shared/shared.service';
 import { EventDto } from 'src/app/share/dtos/event/event-dto';
 import { GiftDto } from 'src/app/share/dtos/gift/gift-dto';
+import { GiftContributionDto } from 'src/app/share/dtos/giftContribution/gift-contribution-dto';
 import { UserEventRoleDto } from 'src/app/share/dtos/userEventRole/user-event-role-dto';
 
 @Component({
@@ -19,37 +20,32 @@ export class GiftComponent implements OnInit {
   gifts: GiftDto[] = [];
   layout: 'list' | 'grid' = 'list';
   isOpen = false; 
-
+  contributionMap: { [key: number]: GiftContributionDto[] } = {};
+  showModal:boolean =false;
+  amount!:number;
 
   ngOnInit() {
     if( this.isOpen = true){
-    this.getGifts()
+    this.getGifts();
+    console.log(this.contributionMap);
     }
   }
 
   getSeverity(gift: GiftDto) {
-    switch (gift.isPaid){}
-   
-     // case gift.isPaid  
-     // case !gift.isPaid 
+    let result = { severity: '', message: '' };
 
-      // switch (product.inventoryStatus) {
-      //     case 'INSTOCK':
-      //         return 'success';
+  if (gift.isPaid) {
+    result.severity = 'danger';
+    result.message = 'CADEAUX DÉJÀ ACHETÉ PAR UN MEMBRE';
+  } else if (this.contributionMap[gift.idGift] && this.contributionMap[gift.idGift].length > 0) {
+    result.severity = 'warning';
+    result.message = 'PARTIELLEMENT FINANCÉ';
+  } else {
+    result.severity = 'success';
+    result.message = 'DISPONIBLE POUR ACHAT';
+  }
 
-      //     case 'LOWSTOCK':
-      //         return 'warning';
-
-      //     case 'OUTOFSTOCK':
-      //         return 'danger';
-
-      //     default:
-      //         return null;
-      // }
-      // Check si le produit a été acheté , a des contributions mais il manque encore pour faire la totalité, est disponible à l'achat
-      // attention le acheté = isPaid est à true. 
-      //Il manque isPaid est à false mais il existe une entry dans giftContribution avec ce giftId et sinon
-      // false et il existe pas d'enty pour dispo. 
+  return result;
   }
 
 
@@ -57,7 +53,9 @@ export class GiftComponent implements OnInit {
     this.giftService.getGifts(this.event.idEvent).subscribe(
       (reponse) => {
         this.gifts = reponse;
-        console.log(this.gifts); 
+        this.gifts.forEach(gift => {
+          this.getContributions(gift.idGift);
+        });
       },
       (error) => {
         console.error('Erreur:', error); 
@@ -65,8 +63,33 @@ export class GiftComponent implements OnInit {
     )
   }
 
-  
+  getContributions(gift:number){
+    this.giftService.getContributions(gift).subscribe(
+      (reponse) => {
+        this.contributionMap[gift] = reponse; // faire un tableau avec pour clée l'id du cadeau et un tableau des contributions.
+      },
+      (error) => {
+      
+      }
+    )
 
+  }
+
+  openLinkAndShowModal(gift: any) {
+     if (gift.url) {
+    window.open(gift.url, '_blank');  // Ouvre le lien du cadeau dans un nouvel onglet
+  }
+  this.showModal = true; // Affiche la modale
+  console.log(this.showModal);
+  }
+  
+  contributeToGift(isContributed: boolean, amount?: number) {
+    if (isContributed) {
+      // Ajouter une nouvelle entrée dans giftContribution
+      // Utilise l'argument 'amount' pour savoir de combien la personne a participé
+    }
+    this.showModal = false;  // Ferme la modale
+  }
 
 }
 

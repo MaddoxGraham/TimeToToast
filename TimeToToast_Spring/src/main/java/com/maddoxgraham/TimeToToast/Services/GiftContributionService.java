@@ -1,40 +1,29 @@
 package com.maddoxgraham.TimeToToast.Services;
 
+import com.maddoxgraham.TimeToToast.DTOs.GiftContributionDto;
+import com.maddoxgraham.TimeToToast.DTOs.GiftDto;
+import com.maddoxgraham.TimeToToast.Mappers.GiftContributionsMapper;
+import com.maddoxgraham.TimeToToast.Mappers.GiftMapper;
+import com.maddoxgraham.TimeToToast.Models.Gift;
 import com.maddoxgraham.TimeToToast.TimeToToastApplication;
 import com.maddoxgraham.TimeToToast.Exception.UserNotFoundException;
 import com.maddoxgraham.TimeToToast.Models.GiftContribution;
 import com.maddoxgraham.TimeToToast.Repository.GiftContributionRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class GiftContributionService {
     private final GiftContributionRepository giftContributionRepository;
 
-    @Autowired
-    public GiftContributionService(GiftContributionRepository giftContributionRepository) {
-        this.giftContributionRepository = giftContributionRepository;
+   public List<GiftContributionDto> findByIdGift(Long idGift) {
+       List<GiftContribution> contributions = giftContributionRepository.findByGiftIdGift(idGift);
+       return contributions.stream().map(GiftContributionsMapper::toDto).collect(Collectors.toList());
     }
 
-    public GiftContribution addGiftContribution(GiftContribution giftContribution){
-        return giftContributionRepository.save(giftContribution);
-    }
-
-    public List<GiftContribution> findAllGiftContributions(){
-        return giftContributionRepository.findAll();
-    }
-
-    public GiftContribution updateGiftContribution(GiftContribution giftContribution){
-        return giftContributionRepository.save(giftContribution);
-    }
-
-    public GiftContribution findGiftContributionByIdGiftContribution(Long idGiftContribution){
-        return giftContributionRepository.findGiftContributionByIdGiftContribution(idGiftContribution).orElseThrow(() -> new UserNotFoundException("User n° " + idGiftContribution + " was not found"));
-    }
-
-    public void deleteGiftContribution(Long idGiftContribution){
-        giftContributionRepository.deleteGiftContributionByIdGiftContribution(idGiftContribution);
-    }
 }

@@ -31,7 +31,7 @@ export class PhotoComponent implements OnInit {
   imagesSafeUrl: SafeUrl[] = [];
 
   uploadedFiles: any[] = [];
-  maxFileSize: number = 4000000;  // 1 MB
+  maxFileSize: number = 4000000; 
   uploadUrl!: string;
 
   displayCustom: boolean = false;
