@@ -4,11 +4,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/core/service/authentication/authentication.service';
 import { UserService } from 'src/app/core/service/user/user.service';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-user-update',
   templateUrl: './user-update.component.html',
-  styleUrls: ['./user-update.component.css']
+  styleUrls: ['./user-update.component.css'],
+  providers: [MessageService]
+
 })
 export class UserUpdateComponent implements OnInit {
   user!: UserDto;
@@ -17,12 +20,12 @@ export class UserUpdateComponent implements OnInit {
   passwordFieldType = 'password';
   confirmPasswordFieldType = 'password';
   updateForm!: FormGroup;
+  maxFileSize: number =1000000;
 
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthenticationService,
     private userService: UserService,
-    private router: Router
+    private messageService: MessageService
   ) {}
 
   togglePasswordFields() {
@@ -44,16 +47,17 @@ export class UserUpdateComponent implements OnInit {
     }
 
     this.updateForm = this.formBuilder.group({
-      firstName: [this.user.firstName || '', Validators.required],
-      lastName: [this.user.lastName || '', Validators.required],
-      email: [this.user.email || '', Validators.required],
-      phone: [this.user.phone || '', Validators.required],
-      login: [this.user.login || '', Validators.required],
-      adresse: [this.user.adresse || '', Validators.required],
-      ville: [this.user.ville || '', Validators.required],
-      cp: [this.user.cp || '', Validators.required],
+      firstName: [this.user.firstName || '', [Validators.required, Validators.pattern("^[\p{L}' -]+$")]],
+      lastName: [this.user.lastName || '', [Validators.required, Validators.pattern("^[\p{L}' -]+$")]],
+      email: [this.user.email || '', [Validators.required, Validators.pattern("/^[^\s@]+@[^\s@]+\.[^\s@]+$/")]],
+      phone: [this.user.phone || '', [Validators.required, Validators.pattern("/^\+?[1-9]\d{1,14}$/")]],
+      login: [this.user.login || '', [Validators.required, Validators.pattern("/^[a-zA-Z0-9]+$/")]],
+      adresse: [this.user.adresse || '', [Validators.required, Validators.pattern("/^[a-zA-Z0-9 .,-]+$/")]],
+      ville: [this.user.ville || '', [Validators.required, Validators.pattern("^[\p{L}' -]+$")]],
+      cp: [this.user.cp || '', [Validators.required, Validators.pattern("/^\d{5}$/")]],
       birthday: [this.user.birthday || ''],
-      password: [this.user.password || '']
+      password: [this.user.password || '', Validators.pattern("/^\d{5}$/")],
+      confirmPassword: [this.user.password || '', Validators.pattern("/^\d{5}$/")]
       // Ajouter un contrôle pour le mot de passe de confirmation si nécessaire
     });
   }

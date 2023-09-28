@@ -24,7 +24,8 @@ export class EventUserComponent implements OnInit {
 
   constructor(private eventService: EventService,
               private router: Router,
-              private confirmationService: ConfirmationService, private messageService: MessageService) { }
+              private confirmationService: ConfirmationService, 
+              private messageService: MessageService) { }
 
   ngOnInit(): void {
     this.loadUserEventRoles();

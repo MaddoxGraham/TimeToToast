@@ -59,5 +59,4 @@ export class EventService {
       return this.httpClient.post<TaskDto>(environment.addTask, data);
     }
 
-    //  addHiddenUserTask(idTask : number, idUser : number, idGuest : number)
-  }
+}
