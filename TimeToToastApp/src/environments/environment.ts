@@ -32,5 +32,7 @@ export const environment = {
     getPhotos:"http://localhost:8080/photo/findEventPhoto",
 
     pathImages: 'C:/Users/User/OneDrive/Documents/TimeToToast/TimeToToast_Spring/uploads/',
+
+    getGifts : "http://localhost:8080/gift/getGifts",
 }
   

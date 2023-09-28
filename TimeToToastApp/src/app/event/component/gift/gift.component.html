@@ -1,11 +1,13 @@
 <div id="accordion mt-4">
   <div class="card">
     <div class="card-header">
-      <button class="btn btn-link toggle-btn" [attr.aria-expanded]="isOpen" (click)="isOpen = !isOpen">
+      <button class="btn w-100 toggle-btn" [attr.aria-expanded]="isOpen" (click)="isOpen = !isOpen">
         <div class="mb-0 d-flex flex-row nowrap justify-content-between">
           <h2> Module Cadeaux </h2>
           <div>
+
             <i [ngClass]="{'fa-chevron-down': !isOpen, 'fa-chevron-up': isOpen}" class="fa"></i>
+
           </div>
         </div>
       </button>

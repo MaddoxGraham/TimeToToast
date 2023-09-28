@@ -22,7 +22,7 @@ public class Gift implements Serializable{
     private String name;
     private String url;
     private String photo;
-    private Number wanted;
+    private Long wanted;
     private Double price;
 
     private String categorie;
