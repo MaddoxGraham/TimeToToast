@@ -20,8 +20,6 @@ import { RatingModule } from 'primeng/rating';
 import { TagModule } from 'primeng/tag';
 
 
-
-
 @NgModule({
   declarations: [],
   imports: [

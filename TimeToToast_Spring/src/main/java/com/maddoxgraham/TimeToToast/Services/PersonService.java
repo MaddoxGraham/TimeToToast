@@ -189,4 +189,16 @@ public class PersonService {
         }
         return null;
     }
+
+    public PersonDto avatar(Long idPerson, String avatar) {
+        Optional<Person> personOpt = personRepository.findByidPerson(idPerson);
+        if(personOpt.isPresent()){
+            Person person = personOpt.get();
+            person.setAvatar(avatar);
+            personRepository.save(person);
+            PersonDto personDto = personMapper.toPersonDto(person);
+            return personDto;
+        }
+        return null;
+    }
 }

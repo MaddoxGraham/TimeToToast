@@ -27,4 +27,8 @@ export class UserService {
   updateUser(id: number, user: UserDto): Observable<UserDto> {
     return this.httpClient.put<UserDto>(`${environment.updateUser}${id}`, user);
   }
+
+  avatar(id: number, avatar: string): Observable<UserDto> {
+    return this.httpClient.post<UserDto>(`${environment.avatar}${id}`, avatar);
+  }
 }

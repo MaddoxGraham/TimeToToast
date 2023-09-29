@@ -54,12 +54,15 @@ public class Person implements Serializable {
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
+    @Column(columnDefinition = "LONGTEXT")
     private String avatar;
     private String phone;
     private String login;
     private String password;
     @Column(name = "refreshToken")
     private String refreshToken;
+
+
 
     // Guest field
     private Boolean isPresent;

@@ -48,7 +48,7 @@ public class PersonController {
 //
 //    }
 
-    @GetMapping("getEventGuests/{idEvent}")
+    @GetMapping("/getEventGuests/{idEvent}")
     public  ResponseEntity<List<PersonDto>> getEventGuests(@PathVariable Long idEvent){
     List<PersonDto> guests = personService.findGuestByEvent(idEvent);
     return new ResponseEntity<>(guests,HttpStatus.OK);
@@ -70,7 +70,7 @@ public class PersonController {
         return new ResponseEntity<>(personDto, HttpStatus.OK);
     }
 
-    @PutMapping("guestToUser/{idPerson}")
+    @PutMapping("/guestToUser/{idPerson}")
     public ResponseEntity<PersonDto> guestToUser(@PathVariable Long idPerson, @RequestBody PersonDto personDto){
         PersonDto newPersonDto = personService.fromGuestToUser(idPerson, personDto);
         Map<String, String> tokens = userAuthProvider.createTokensForGuestToUser(newPersonDto);
@@ -80,4 +80,11 @@ public class PersonController {
 
         return  new ResponseEntity<>(newPersonDto, HttpStatus.OK);
     }
+
+    @PostMapping("/avatar/{idPerson}")
+    public ResponseEntity<PersonDto> avatar(@PathVariable Long idPerson, @RequestBody String avatar){
+        PersonDto personDto = personService.avatar(idPerson, avatar);
+        return  new ResponseEntity<>(personDto, HttpStatus.OK);
+    }
+
 }

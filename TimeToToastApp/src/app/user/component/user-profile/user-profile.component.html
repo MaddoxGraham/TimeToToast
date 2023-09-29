@@ -19,8 +19,14 @@
         </div>
 
         <div class="infoBox m-auto text-center">
-            <img src="/assets/images/user2.webp" alt="User Avatar" class="img-fluid rounded-circle mb-3"
-                style="width: 100px;">
+            <ng-container>
+
+            </ng-container>
+            <div class="infoBox m-auto text-center">
+                <input type="file" #fileInput style="display:none" (change)="uploadImage($event)" />
+                <img [src]="imagesSafeUrl" alt="User Avatar" class="img-fluid rounded-circle mb-3" style="width: 100px; cursor:pointer" (click)="fileInput.click()" />
+
+            </div>
             <h3>{{ showLogin ? user.login : (user.lastName + ' ' + user.firstName) }}</h3>
 
             <div class="infosText">
@@ -47,18 +53,23 @@
 
         <div class="container box-shadow rounded myEvent border p-4">
             <h2 class="mb-4">Mes Derniers Evènement</h2>
-            <div class="row mb-3 ">
-                <!-- Event -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Event Title</h5>
-                            <p class="card-text">Description of the event...</p>
-                            <a [routerLink]="['/event/singleEvent']" class="btn btn-primary">Go to Event</a>
+            <ng-container *ngIf="eventsOptions.length > 0">
+                <div class="row mb-3 " >
+                    <!-- Event -->
+                    <div class="col-md-4 d-flex flex-row">
+                        <div class="card m-2" *ngFor="let eventOption of eventsOptions">
+                            <div class="card-body">
+                                <h2 class="card-title">{{eventOption.title}}</h2>
+                                <p class="card-text">{{eventOption.description}}</p>
+                                <a (click)="sendToDetails(eventOption.idEvent)" class="btn btn-primary">Go to Event</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </ng-container>
+            <ng-container *ngIf="eventsOptions.length == 0">
+                <a [routerLink]="['/event/creer']"><i class="fa fa-plus"></i>Vous n'avez pas envore d'événement. cliquez sur ce lien pour en créer un !</a>
+            </ng-container>
             <div class="text-right m-auto">
                 <span class="pe-2"> voir tous mes évènements</span>
                 <a [routerLink]="['/event/myEvent']"><i class="fa fa-plus"></i></a>
