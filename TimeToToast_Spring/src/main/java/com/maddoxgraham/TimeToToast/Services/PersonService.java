@@ -201,4 +201,25 @@ public class PersonService {
         }
         return null;
     }
+
+    public PersonDto updateUser(Long idPerson, PersonDto personeDto) {
+        Optional<Person> personOpt = personRepository.findByidPerson(idPerson);
+        if(personOpt.isPresent()){
+            Person person = personOpt.get();
+            // Fusionner les champs de 'user' avec 'existingUser' selon vos besoins
+            if (person.getFirstName() != personeDto.getFirstName()) person.setFirstName(personeDto.getFirstName());
+            if (person.getLastName() != personeDto.getLastName()) person.setLastName(personeDto.getLastName());
+            if (person.getPassword() != "") person.setPassword(passwordEncoder.encode(CharBuffer.wrap(personeDto.getPassword())));
+            if (person.getPhone() != personeDto.getPhone()) person.setPhone(personeDto.getPhone());
+            if (person.getEmail() != personeDto.getEmail()) person.setEmail(personeDto.getEmail());
+            if (person.getBirthday() != null) person.setBirthday(personeDto.getBirthday());
+            if (person.getAdresse() != personeDto.getAdresse()) person.setAdresse(personeDto.getAdresse());
+            if (person.getVille() != personeDto.getVille()) person.setVille(personeDto.getVille());
+            if (person.getCp() != personeDto.getCp()) person.setCp(personeDto.getCp());
+
+            personRepository.save(person);
+            return personMapper.toPersonDto(person);
+        }
+        return null;
+    }
 }

@@ -12,31 +12,47 @@
   </div>
 
   <!---->
+  <p-toast></p-toast>
   <div class="container mt-5 mb-5 position-relative">
     <h1 class="text-center mb-5">Modifier mon profil</h1>
-    <form [formGroup]="updateForm" (ngSubmit)="onSubmit(updateForm)">
+    <form [formGroup]="updateForm">
       <div class="row">
         <h2>votre identitée</h2>
         <div class="col-md-6">
           <div class="form-group">
             <label for="firstName">Prénom:</label>
             <input type="text" class="form-control" id="firstName" formControlName="firstName" name="firstName" required>
+            <div *ngIf="updateForm.get('firstName')?.invalid && (updateForm.get('firstName')?.dirty || updateForm.get('firstName')?.touched)">
+              <small class="text-danger" *ngIf="updateForm.get('firstName')?.errors?.['required']">Le prénom est requis.</small>
+              <small class="text-danger" *ngIf="updateForm.get('firstName')?.errors?.['namePattern']">Le prénom contient des caractères non valides.</small>
+           </div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
             <label for="lastName">Nom:</label>
             <input type="text" class="form-control" id="lastName" name="lastName" formControlName="lastName" required>
+            <div *ngIf="updateForm.get('lastName')?.invalid && (updateForm.get('lastName')?.dirty || updateForm.get('lastName')?.touched)">
+              <small class="text-danger" *ngIf="updateForm.get('lastName')?.errors?.['required']">Le nom est requis.</small>
+              <small class="text-danger" *ngIf="updateForm.get('lastName')?.errors?.['namePattern']">Le nom contient des caractères non valides.</small>
+           </div>
           </div>
         </div>
       </div>
       <div class="form-group">
         <label for="login">Login:</label>
         <input type="text" class="form-control" id="login" name="login" formControlName="login" required>
+        <div *ngIf="updateForm.get('login')?.invalid && (updateForm.get('login')?.dirty || updateForm.get('login')?.touched)">
+          <small class="text-danger" *ngIf="updateForm.get('login')?.errors?.['required']">Le login est requis.</small>
+          <small class="text-danger" *ngIf="updateForm.get('login')?.errors?.['loginPattern']">Le login contient des caractères non valides.</small>
+       </div>
       </div>
       <div class="form-group">
         <label for="birthday">Date de naissance:</label>
-        <input type="date" class="form-control" id="birthday" name="birthday" formControlName="birthday" >
+        <input type="date" class="form-control" id="birthday" name="birthday" formControlName="birthday" [max]="maxdate" >
+        <div *ngIf="updateForm.get('birthday')?.invalid && (updateForm.get('birthday')?.dirty || updateForm.get('birthday')?.touched)">
+          <small class="text-danger" *ngIf="updateForm.get('birthday')?.errors?.['required']">La date de naissance est requise.</small>
+       </div>
       </div>
       <button (click)="togglePasswordFields()" class="mt-4 btn-animated-border">Modifier mon mot de passe</button>
       <div *ngIf="showPasswordFields">
@@ -55,32 +71,52 @@
         <h2>vos coordonnées</h2>
         <label for="email">Email:</label>
         <input type="email" class="form-control" id="email"formControlName="email" name="email"required>
+        <div *ngIf="updateForm.get('email')?.invalid && (updateForm.get('email')?.dirty || updateForm.get('email')?.touched)">
+          <small class="text-danger" *ngIf="updateForm.get('email')?.errors?.['required']">L'email est requis.</small>
+          <small class="text-danger" *ngIf="updateForm.get('email')?.errors?.['emailPattern']">L'email contient des caractères non valides.</small>
+       </div>
       </div>
       <div class="form-group">
         <label for="phone">Téléphone:</label>
         <input type="tel" class="form-control" id="phone" formControlName="phone" name="phone">
+        <div *ngIf="updateForm.get('phone')?.invalid && (updateForm.get('phone')?.dirty || updateForm.get('phone')?.touched)">
+          <small class="text-danger" *ngIf="updateForm.get('phone')?.errors?.['required']">Le téléphone est requis.</small>
+          <small class="text-danger" *ngIf="updateForm.get('phone')?.errors?.['phonePattern']">Le téléphone contient des caractères non valides.</small>
+       </div>
       </div>
       <div class="mt-4 form-group">
         <h2>votre adresse</h2>
         <label for="adresse">Adresse:</label>
         <input type="text" class="form-control" id="adresse" formControlName="adresse" name="adresse">
+        <div *ngIf="updateForm.get('adresse')?.invalid && (updateForm.get('adresse')?.dirty || updateForm.get('adresse')?.touched)">
+          <small class="text-danger" *ngIf="updateForm.get('adresse')?.errors?.['required']">L'adresse est requis.</small>
+          <small class="text-danger" *ngIf="updateForm.get('adresse')?.errors?.['adressPattern']">L'adresse contient des caractères non valides.</small>
+       </div>
       </div>
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
             <label for="ville">Ville:</label>
             <input type="text" class="form-control" id="ville" formControlName="ville" name="ville" required>
+            <div *ngIf="updateForm.get('ville')?.invalid && (updateForm.get('ville')?.dirty || updateForm.get('ville')?.touched)">
+              <small class="text-danger" *ngIf="updateForm.get('ville')?.errors?.['required']">La ville est requis.</small>
+              <small class="text-danger" *ngIf="updateForm.get('ville')?.errors?.['namePattern']">La ville contient des caractères non valides.</small>
+           </div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
             <label for="cp">Code Postal:</label>
             <input type="text" class="form-control" id="cp" name="cp" formControlName="cp" required>
+            <div *ngIf="updateForm.get('cp')?.invalid && (updateForm.get('cp')?.dirty || updateForm.get('cp')?.touched)">
+              <small class="text-danger" *ngIf="updateForm.get('cp')?.errors?.['required']">Le code postal est requis.</small>
+              <small class="text-danger" *ngIf="updateForm.get('cp')?.errors?.['cpPattern']">Le code postal contient des caractères non valides.</small>
+           </div>
           </div>
         </div>
       </div>
       <div class="text-right">
-        <button type="submit" class="btn-animated-border">Mettre à jour le profil</button>
+        <button type="submit" class="btn-animated-border" (click)="onSubmit(updateForm)">Mettre à jour le profil</button>
       </div>
     </form>
   </div>
