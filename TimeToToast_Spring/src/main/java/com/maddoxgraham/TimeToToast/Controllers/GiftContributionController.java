@@ -23,4 +23,10 @@ public class GiftContributionController {
         List<GiftContributionDto> giftContributionDtos = giftContributionService.findByIdGift(idGift);
         return new ResponseEntity<>(giftContributionDtos, HttpStatus.OK);
     }
+
+    @PostMapping("addContribution")
+    public ResponseEntity<GiftContributionDto> addContribution(@RequestBody  GiftContributionDto newContribution) {
+    GiftContributionDto createdContribution = giftContributionService.addContribution(newContribution);
+    return new ResponseEntity<>(createdContribution, HttpStatus.OK);
+}
 }

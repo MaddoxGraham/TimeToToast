@@ -21,8 +21,7 @@ export class TaskComponent implements OnInit{
   @Input() userEvent!: UserEventRoleDto;
   @Input() event!: EventDto;
   @Input() user!:UserDto;
-
-
+  
   public displayMode: 'all' | 'mine' | 'create' = 'all';
   Tasks!:TaskDto[];
   public isTaskModuleActive!:boolean;

@@ -19,4 +19,8 @@ export class GiftService {
   getContributions(idGift:number): Observable<GiftContributionDto[]>{
     return this.http.get<GiftContributionDto[]>(`${environment.getContributions}/${idGift}`);
   }
+
+  addContribution(data: GiftContributionDto ): Observable<GiftContributionDto> {
+    return this.http.post<GiftContributionDto>(`${environment.addContribution}` , data);
+  }
 }

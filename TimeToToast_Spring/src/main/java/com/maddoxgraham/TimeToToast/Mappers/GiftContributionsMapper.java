@@ -3,7 +3,9 @@ package com.maddoxgraham.TimeToToast.Mappers;
 
 import com.maddoxgraham.TimeToToast.DTOs.GiftContributionDto;
 import com.maddoxgraham.TimeToToast.Models.GiftContribution;
+import org.springframework.stereotype.Component;
 
+@Component
 public class GiftContributionsMapper {
     public static GiftContributionDto toDto(GiftContribution contribution) {
         GiftContributionDto dto = new GiftContributionDto();

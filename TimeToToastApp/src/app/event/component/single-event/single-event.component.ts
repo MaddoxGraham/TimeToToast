@@ -39,8 +39,6 @@ export class SingleEventComponent implements OnInit {
   public guests!: GuestDto[];
   public guestsSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
-
-
   constructor(private route: ActivatedRoute,
     private eventService: EventService,
     private fb: FormBuilder,
@@ -51,8 +49,6 @@ export class SingleEventComponent implements OnInit {
     });
 
   }
-
-
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {

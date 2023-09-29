@@ -1,9 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { GiftService } from 'src/app/core/service/gift/gift.service';
 import { SharedService } from 'src/app/core/service/shared/shared.service';
 import { EventDto } from 'src/app/share/dtos/event/event-dto';
 import { GiftDto } from 'src/app/share/dtos/gift/gift-dto';
 import { GiftContributionDto } from 'src/app/share/dtos/giftContribution/gift-contribution-dto';
+import { GuestDto } from 'src/app/share/dtos/guest/guest-dto';
+import { UserDto } from 'src/app/share/dtos/user/user-dto';
 import { UserEventRoleDto } from 'src/app/share/dtos/userEventRole/user-event-role-dto';
 
 @Component({
@@ -15,20 +18,29 @@ export class GiftComponent implements OnInit {
   @Output() moduleDeleted = new EventEmitter<void>();
   @Input() userEvent!: UserEventRoleDto;
   @Input() event!: EventDto;
+  @Input() user!: UserDto;
 
-  constructor(private sharedService: SharedService,private giftService : GiftService) { }
+  constructor(private sharedService: SharedService,private giftService : GiftService,) { }
   gifts: GiftDto[] = [];
+  gift!:GiftDto;
   layout: 'list' | 'grid' = 'list';
   isOpen = false; 
   contributionMap: { [key: number]: GiftContributionDto[] } = {};
   showModal:boolean =false;
   amount!:number;
+  showInput: boolean = false;
+  fullAmount: boolean = false;
+  newContribution!: GiftContributionDto;
+
 
   ngOnInit() {
     if( this.isOpen = true){
     this.getGifts();
     console.log(this.contributionMap);
     }
+
+
+
   }
 
   getSeverity(gift: GiftDto) {
@@ -66,7 +78,7 @@ export class GiftComponent implements OnInit {
   getContributions(gift:number){
     this.giftService.getContributions(gift).subscribe(
       (reponse) => {
-        this.contributionMap[gift] = reponse; // faire un tableau avec pour clée l'id du cadeau et un tableau des contributions.
+        this.contributionMap[gift] = reponse; 
       },
       (error) => {
       
@@ -75,21 +87,37 @@ export class GiftComponent implements OnInit {
 
   }
 
-  openLinkAndShowModal(gift: any) {
+  openLinkAndShowModal(gift: GiftDto) {
      if (gift.url) {
-    window.open(gift.url, '_blank');  // Ouvre le lien du cadeau dans un nouvel onglet
+    window.open(gift.url, '_blank');  
+    this.gift= gift
   }
-  this.showModal = true; // Affiche la modale
-  console.log(this.showModal);
+  this.showModal = true; 
   }
   
   contributeToGift(isContributed: boolean, amount?: number) {
-    if (isContributed) {
-      // Ajouter une nouvelle entrée dans giftContribution
-      // Utilise l'argument 'amount' pour savoir de combien la personne a participé
+    this.newContribution = { } as GiftContributionDto;
+    console.log("amount : " + amount + " user : " + this.user + " gift :  "  )
+    
+    if (isContributed && amount !== undefined) {
+      this.newContribution.amount = amount;
+      if (this.user && this.user.idPerson !== undefined) {
+        this.newContribution.user = this.user;
+      }
+      this.newContribution.gift = this.gift;
+      console.log('totalité de new contribution : ' + this.newContribution)
+      // this.giftService.addContribution(this.newContribution).subscribe(
+      //   response => {
+      // },
+      // error => {
+      //   console.log('Erreur lors de l’ajout de la contribution', error);
+      // }
+    //);
     }
     this.showModal = false;  // Ferme la modale
+    this.showInput = false;  // Réinitialise le formulaire
+    this.amount = 0;         // Réinitialise l'amount
+    this.fullAmount = false; // Réinitialise la checkbox
   }
 
 }
-

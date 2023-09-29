@@ -17,7 +17,7 @@ export class UserProfileComponent implements OnInit{
   userEventsList: UserEventsDto[] = [];
   eventsOptions: EventDto[] = [];
   showLogin = false;
-  imagesSafeUrl = this.sanitizer.bypassSecurityTrustUrl("/assets/images/user2.webp");
+  imagesSafeUrl = this.sanitizer.bypassSecurityTrustUrl("/assets/images/plusIcon.png");
   
 
   constructor(private eventService: EventService,
