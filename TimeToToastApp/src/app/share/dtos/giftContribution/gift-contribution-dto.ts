@@ -5,7 +5,7 @@ import { UserDto } from "../user/user-dto";
 export interface GiftContributionDto {
     idGiftContribution:number,
     amount:number,
-    gift:GiftDto,
-    user?:UserDto,
-    guest?:GuestDto
+    idGift: number,
+    idPerson?: number,
+    guest?:GuestDto | number,
 }

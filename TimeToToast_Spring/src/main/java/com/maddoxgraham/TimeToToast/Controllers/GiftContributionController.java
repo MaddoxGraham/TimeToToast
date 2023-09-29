@@ -26,7 +26,10 @@ public class GiftContributionController {
 
     @PostMapping("addContribution")
     public ResponseEntity<GiftContributionDto> addContribution(@RequestBody  GiftContributionDto newContribution) {
-    GiftContributionDto createdContribution = giftContributionService.addContribution(newContribution);
+        System.out.println("Valeur de idGift: " + newContribution.getIdGift());
+        System.out.println("Valeur de idPerson: " + newContribution.getIdPerson());
+        System.out.println("Valeur de amount: " + newContribution.getAmount());
+        GiftContributionDto createdContribution = giftContributionService.addContribution(newContribution);
     return new ResponseEntity<>(createdContribution, HttpStatus.OK);
 }
 }

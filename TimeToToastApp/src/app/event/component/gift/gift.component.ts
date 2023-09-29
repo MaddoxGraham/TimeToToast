@@ -31,7 +31,7 @@ export class GiftComponent implements OnInit {
   showInput: boolean = false;
   fullAmount: boolean = false;
   newContribution!: GiftContributionDto;
-
+  isContributed:boolean = false;
 
   ngOnInit() {
     if( this.isOpen = true){
@@ -97,27 +97,29 @@ export class GiftComponent implements OnInit {
   
   contributeToGift(isContributed: boolean, amount?: number) {
     this.newContribution = { } as GiftContributionDto;
-    console.log("amount : " + amount + " user : " + this.user + " gift :  "  )
+    console.log("amount : " + amount + " user : " + this.user + " gift :  " + this.gift.idGift )
     
     if (isContributed && amount !== undefined) {
       this.newContribution.amount = amount;
       if (this.user && this.user.idPerson !== undefined) {
-        this.newContribution.user = this.user;
+        this.newContribution.idPerson = this.user.idPerson;
       }
-      this.newContribution.gift = this.gift;
+      this.newContribution.idGift = this.gift.idGift;
       console.log('totalité de new contribution : ' + this.newContribution)
-      // this.giftService.addContribution(this.newContribution).subscribe(
-      //   response => {
-      // },
-      // error => {
-      //   console.log('Erreur lors de l’ajout de la contribution', error);
-      // }
-    //);
+      this.giftService.addContribution(this.newContribution).subscribe(
+        response => {
+        console.log(response);
+      },
+      error => {
+        console.log('Erreur lors de l’ajout de la contribution', error);
+      }
+    );
     }
-    this.showModal = false;  // Ferme la modale
-    this.showInput = false;  // Réinitialise le formulaire
-    this.amount = 0;         // Réinitialise l'amount
-    this.fullAmount = false; // Réinitialise la checkbox
+    this.showModal = false;  
+    this.isContributed=false
+    this.showInput = false;  
+    this.amount = 0;      
+    this.fullAmount = false; 
   }
 
 }
