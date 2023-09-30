@@ -15,7 +15,8 @@ import java.util.stream.Collectors;
 public class GiftContributionService {
     private final GiftContributionRepository giftContributionRepository;
     private final GiftContributionsMapper giftContributionMapper;
-
+    private final GiftService giftService;
+    private final PersonService personService;
 
    public List<GiftContributionDto> findByIdGift(Long idGift) {
        List<GiftContribution> contributions = giftContributionRepository.findByGiftIdGift(idGift);
@@ -23,7 +24,10 @@ public class GiftContributionService {
     }
 
     public GiftContributionDto addContribution(GiftContributionDto newContribution){
+
         GiftContribution contribution = giftContributionMapper.toEntity(newContribution);
+       contribution.setGift(giftService.findGiftByIdGift(newContribution.getIdGift()));
+       contribution.setPerson(personService.findPersonByIdPerson(newContribution.getIdPerson()));
         GiftContribution savedContribution = giftContributionRepository.save(contribution);
 
         return giftContributionMapper.toDto(savedContribution);

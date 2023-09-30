@@ -46,20 +46,23 @@ export class GiftComponent implements OnInit {
   getSeverity(gift: GiftDto) {
     let result = { severity: '', message: '' };
 
-  if (gift.isPaid) {
+  if (gift.paid) {
     result.severity = 'danger';
     result.message = 'CADEAUX DÉJÀ ACHETÉ PAR UN MEMBRE';
-  } else if (this.contributionMap[gift.idGift] && this.contributionMap[gift.idGift].length > 0) {
-    // this.totalAmount = this.contributionMap[gift.idGift].reduce((sum, contribution) => sum + contribution.amount, 0);
-    result.severity = 'warning';
-    result.message = `PARTIELLEMENT FINANCÉ - Total : ${this.totalAmount}`;
-  
-  } else {
+    return result;
+  } 
+   if (this.contributionMap[gift.idGift] && this.contributionMap[gift.idGift].length > 0) {
+    if (this.getUpdatedPrice(gift) != 0) {
+          result.severity = 'warning';
+    result.message = `PARTIELLEMENT FINANCÉ`;
+    // envoie de paid à 1 en bdd.
+    return result;
+    }         
+  }
     result.severity = 'success';
     result.message = 'DISPONIBLE POUR ACHAT';
-  }
-
-  return result;
+    return result;
+  
   }
 
 
@@ -68,6 +71,7 @@ export class GiftComponent implements OnInit {
       (reponse) => {
         this.gifts = reponse;
         this.gifts.forEach(gift => {
+          console.log( "la valeur de is Paid est à : " + gift.paid )
           this.getContributions(gift.idGift);
         });
       },
@@ -77,6 +81,10 @@ export class GiftComponent implements OnInit {
     )
   }
 
+  updatePaid(gift: GiftDto){
+    
+  }
+  
   getContributions(gift:number){
     this.giftService.getContributions(gift).subscribe(
       (reponse) => {
@@ -112,6 +120,7 @@ export class GiftComponent implements OnInit {
       this.giftService.addContribution(this.newContribution).subscribe(
         response => {
         console.log(response);
+        this.getUpdatedPrice(this.gift)
       },
       error => {
         console.log('Erreur lors de l’ajout de la contribution', error);

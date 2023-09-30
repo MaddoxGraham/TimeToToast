@@ -9,7 +9,7 @@ export interface GiftDto {
     wanted:number,
     price:number,
     categorie:string,
-    isPaid:boolean,
+    paid:boolean,
     event:EventDto,
     contributions:GiftContributionDto[]
 }

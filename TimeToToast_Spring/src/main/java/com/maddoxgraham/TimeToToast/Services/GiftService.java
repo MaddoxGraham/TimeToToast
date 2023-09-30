@@ -1,6 +1,7 @@
 package com.maddoxgraham.TimeToToast.Services;
 
 import com.maddoxgraham.TimeToToast.DTOs.GiftDto;
+import com.maddoxgraham.TimeToToast.Exception.UserNotFoundException;
 import com.maddoxgraham.TimeToToast.Mappers.GiftMapper;
 import com.maddoxgraham.TimeToToast.Models.Gift;
 import com.maddoxgraham.TimeToToast.Repository.GiftRepository;
@@ -33,9 +34,9 @@ public class GiftService {
 //        return giftRepository.save(gift);
 //    }
 //
-//    public Gift findGiftByIdGift(Long idGift){
-//        return giftRepository.findGiftByIdGift(idGift).orElseThrow(() -> new UserNotFoundException("User n° " + idGift + " was not found"));
-//    }
+    public Gift findGiftByIdGift(Long idGift){
+        return giftRepository.findGiftByIdGift(idGift).orElseThrow(() -> new UserNotFoundException("User n° " + idGift + " was not found"));
+    }
 //
 //    public void deleteGift(Long idGift){
 //        giftRepository.deleteGiftByIdGift(idGift);
