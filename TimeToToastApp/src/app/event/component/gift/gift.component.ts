@@ -32,7 +32,7 @@ export class GiftComponent implements OnInit {
   fullAmount: boolean = false;
   newContribution!: GiftContributionDto;
   isContributed:boolean = false;
-
+  totalAmount: { [key: number]: number } = {};
   ngOnInit() {
     if( this.isOpen = true){
     this.getGifts();
@@ -50,8 +50,10 @@ export class GiftComponent implements OnInit {
     result.severity = 'danger';
     result.message = 'CADEAUX DÉJÀ ACHETÉ PAR UN MEMBRE';
   } else if (this.contributionMap[gift.idGift] && this.contributionMap[gift.idGift].length > 0) {
+    // this.totalAmount = this.contributionMap[gift.idGift].reduce((sum, contribution) => sum + contribution.amount, 0);
     result.severity = 'warning';
-    result.message = 'PARTIELLEMENT FINANCÉ';
+    result.message = `PARTIELLEMENT FINANCÉ - Total : ${this.totalAmount}`;
+  
   } else {
     result.severity = 'success';
     result.message = 'DISPONIBLE POUR ACHAT';
@@ -79,6 +81,7 @@ export class GiftComponent implements OnInit {
     this.giftService.getContributions(gift).subscribe(
       (reponse) => {
         this.contributionMap[gift] = reponse; 
+        this.totalAmount[gift] = reponse.reduce((sum, contribution) => sum + contribution.amount, 0);
       },
       (error) => {
       
@@ -121,5 +124,13 @@ export class GiftComponent implements OnInit {
     this.amount = 0;      
     this.fullAmount = false; 
   }
+
+  getUpdatedPrice(gift: GiftDto): number {
+    if (this.totalAmount[gift.idGift] !== undefined) {
+      return gift.price - this.totalAmount[gift.idGift];
+    }
+    return gift.price;
+  }
+  
 
 }
