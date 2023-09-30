@@ -96,7 +96,7 @@ public class PhotoService {
     }
 
     public void deletePhoto(Long idPhoto){
-        photoRepository.deletePhotoByIdPhoto(idPhoto);
+        photoRepository.deleteById(idPhoto);
     }
 
 
