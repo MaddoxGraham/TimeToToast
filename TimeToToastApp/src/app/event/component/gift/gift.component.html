@@ -15,7 +15,7 @@
     <div id="collapseOne" class="collapse" [ngClass]="{'show': isOpen}">
       <div class="card-body">
 
-        <!-- Navbar 
+
                 <nav *ngIf="userEvent.role == 'CREATEUR'" class="navbar navbar-expand-lg navbar-light bg-light">
                   <div class="container-fluid">
                     <div>
@@ -24,7 +24,7 @@
                       <button (click)="setDisplayMode('upload')" class="btn btn-outline-success"> Ajouter un cadeaux.</button>
                     </div>
                   </div>
-                </nav>-->
+                </nav>
 
 
 
@@ -128,24 +128,19 @@
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title" id="staticBackdropLabel">Participation au cadeau</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  <button type="button" class="btn-close" id="closeModalBtn"  data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                   <p>Avez-vous participé au cadeau ?</p>
                   
                   <ng-container *ngIf="!showInput">
-                    <button class="btn btn-secondary" (click)="contributeToGift(false)">Non</button>
+                    <button class="btn btn-secondary" data-bs-dismiss="modal" (click)="contributeToGift(false)">Non</button>
                     <button class="btn btn-primary" (click)="showInput = true">Oui</button>
                   </ng-container>
                   
                   <ng-container *ngIf="showInput">
-                    <input type="number" [(ngModel)]="amount" [max]="gift.price" placeholder="Indiquez le montant">
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" [(ngModel)]="fullAmount">
-                      <label class="form-check-label">Vous avez payé la totalité du cadeau ?</label>
-                    </div>
-                    <!-- Bouton Valider prend la place de Oui ici -->
-        
+                    <input type="number" [(ngModel)]="amount" 
+                           (input)="adjustAmount()" placeholder="Indiquez le montant">
                   </ng-container>
                 </div>
                 

@@ -9,19 +9,36 @@ import lombok.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class GiftService {
     private final GiftRepository giftRepository;
+    private final GiftMapper giftMapper;
 
     public List<GiftDto> getGiftsByEvent(Long idEvent) {
         List<Gift> gifts = giftRepository.findByEventIdEvent(idEvent);
         return gifts.stream().map(GiftMapper::toDto).collect(Collectors.toList());
     }
 
+    public GiftDto updateisPaid(GiftDto dto){
+        Optional<Gift> optionalGift = giftRepository.findGiftByIdGift(dto.getIdGift());
+        if(optionalGift.isPresent()){
+            Gift gift = optionalGift.get();
+            gift.setPaid(true);
+            Gift updatedPaid = giftRepository.save(gift);
+            return GiftMapper.toDto(updatedPaid);
+        }
+    return null;
+    }
 
+
+    //    public Gift updateGift(Gift gift){
+//        return giftRepository.save(gift);
+//    }
+//
 //    public Gift addGift(Gift gift){
 //        return giftRepository.save(gift);
 //    }

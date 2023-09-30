@@ -4,7 +4,9 @@ import com.maddoxgraham.TimeToToast.DTOs.GiftDto;
 import com.maddoxgraham.TimeToToast.DTOs.PhotoDto;
 import com.maddoxgraham.TimeToToast.Models.Gift;
 import com.maddoxgraham.TimeToToast.Models.Photo;
+import org.springframework.stereotype.Component;
 
+@Component
 public class GiftMapper {
     public static GiftDto toDto(Gift gift) {
         GiftDto dto = new GiftDto();

@@ -23,7 +23,17 @@ public class GiftController {
         return new ResponseEntity<>(giftDtos, HttpStatus.OK);
     }
 
+    @PutMapping("giftIsPaid")
+    public ResponseEntity<GiftDto> giftisPaid(@RequestBody GiftDto gift){
+        GiftDto dto = giftService.updateisPaid(gift);
+        return new ResponseEntity<GiftDto>(dto, HttpStatus.OK);
+    }
 
+//    @PutMapping("/update")
+//    public ResponseEntity<Gift> updateGift(@RequestBody Gift gift){
+//        Gift updateGift = giftService.updateGift(gift);
+//        return new ResponseEntity<>(updateGift, HttpStatus.OK);
+//    }
 //
 //    @GetMapping("/all")
 //    public ResponseEntity<List<Gift>> getAllGift() {
@@ -43,11 +53,6 @@ public class GiftController {
 //        return new ResponseEntity<>(newGift, HttpStatus.CREATED);
 //    }
 //
-//    @PutMapping("/update")
-//    public ResponseEntity<Gift> updateGift(@RequestBody Gift gift){
-//        Gift updateGift = giftService.updateGift(gift);
-//        return new ResponseEntity<>(updateGift, HttpStatus.OK);
-//    }
 //
 //    @DeleteMapping("/delete/{idGift}")
 //    public ResponseEntity<?> deleteGift(@PathVariable("idGift") Long idGift){

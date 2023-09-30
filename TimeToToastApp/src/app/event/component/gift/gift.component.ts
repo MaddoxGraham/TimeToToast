@@ -33,6 +33,8 @@ export class GiftComponent implements OnInit {
   newContribution!: GiftContributionDto;
   isContributed:boolean = false;
   totalAmount: { [key: number]: number } = {};
+  displayMode!:string;
+
   ngOnInit() {
     if( this.isOpen = true){
     this.getGifts();
@@ -55,7 +57,6 @@ export class GiftComponent implements OnInit {
     if (this.getUpdatedPrice(gift) != 0) {
           result.severity = 'warning';
     result.message = `PARTIELLEMENT FINANCÉ`;
-    // envoie de paid à 1 en bdd.
     return result;
     }         
   }
@@ -71,7 +72,6 @@ export class GiftComponent implements OnInit {
       (reponse) => {
         this.gifts = reponse;
         this.gifts.forEach(gift => {
-          console.log( "la valeur de is Paid est à : " + gift.paid )
           this.getContributions(gift.idGift);
         });
       },
@@ -82,9 +82,16 @@ export class GiftComponent implements OnInit {
   }
 
   updatePaid(gift: GiftDto){
-    
+    this.giftService.giftIsPaid(gift).subscribe(
+      (reponse) => {
+        console.log(reponse)
+      },
+      (error) => {
+        console.error('Erreur:', error); 
+      }
+    )
   }
-  
+
   getContributions(gift:number){
     this.giftService.getContributions(gift).subscribe(
       (reponse) => {
@@ -119,8 +126,15 @@ export class GiftComponent implements OnInit {
       console.log('totalité de new contribution : ' + this.newContribution)
       this.giftService.addContribution(this.newContribution).subscribe(
         response => {
-        console.log(response);
-        this.getUpdatedPrice(this.gift)
+        const updatedPrice = this.getUpdatedPrice(this.gift)
+        console.log("Je suis bloqué par : " + updatedPrice);
+        if (updatedPrice <= 0 ){
+          console.log("Le cadeaux est payé ! ");
+          this.updatePaid(this.gift);
+          this.getSeverity(this.gift);
+         
+        }
+
       },
       error => {
         console.log('Erreur lors de l’ajout de la contribution', error);
@@ -132,6 +146,9 @@ export class GiftComponent implements OnInit {
     this.showInput = false;  
     this.amount = 0;      
     this.fullAmount = false; 
+    const closeButton: HTMLElement = document.getElementById('closeModalBtn') as HTMLElement;
+  closeButton.click(); 
+  window.location.reload();
   }
 
   getUpdatedPrice(gift: GiftDto): number {
@@ -140,6 +157,21 @@ export class GiftComponent implements OnInit {
     }
     return gift.price;
   }
-  
+
+  setDisplayMode(display:string){
+
+  }
+
+
+  adjustAmount() {
+    if (this.amount < 0) {
+      this.amount = 0;
+    }
+    if (this.amount > this.gift.price) {
+      this.amount = this.gift.price;
+    }
+  }
+
+
 
 }

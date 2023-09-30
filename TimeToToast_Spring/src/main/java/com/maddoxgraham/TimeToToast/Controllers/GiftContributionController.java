@@ -32,4 +32,5 @@ public class GiftContributionController {
         GiftContributionDto createdContribution = giftContributionService.addContribution(newContribution);
     return new ResponseEntity<>(createdContribution, HttpStatus.OK);
 }
+
 }
