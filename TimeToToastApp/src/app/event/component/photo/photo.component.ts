@@ -112,7 +112,6 @@ fetchGalleria() {
   this.imagesSafeUrl = [];
   this.uploadService.getPhotos(this.event.idEvent).subscribe(
     (data: ImportPhotoDto[]) => {
-      console.log('Fetched data', data);
       data.forEach((image: ImportPhotoDto) => {
         let imageUrl = 'data:image/jpeg;base64,' + image.content;
         // Ajoutez l'URL sécurisée à imagesSafeUrl

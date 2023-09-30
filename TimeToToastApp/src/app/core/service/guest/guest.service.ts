@@ -8,7 +8,6 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class GuestService {
-
   constructor(private httpClient: HttpClient) { }
 
   verifyGuest(token: string): Observable<GuestDto> {
@@ -22,5 +21,9 @@ export class GuestService {
   addDetailsToGuest({lastName, firstName}: {lastName: string, firstName: string}, idPerson: number): Observable<GuestDto> {
     const data = {lastName, firstName};
     return this.httpClient.put<GuestDto>(`${environment.addDetailsToGuest}${idPerson}`, data)
+  }
+
+  deleteGuest(idPerson: number, idEvent: number): Observable<any> {
+    return this.httpClient.delete(`${environment.deleteGuest}${idPerson}/${idEvent}`);
   }
 }

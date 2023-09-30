@@ -81,8 +81,40 @@ export class UserUpdateComponent implements OnInit {
     Object.keys(this.updateForm.controls).forEach(key => {
       const controlErrors: ValidationErrors | null | undefined = this.updateForm.get(key)?.errors;
       if (controlErrors != null) {
-        console.log('Nom du champ avec erreur:', key);
-        console.log('Liste des erreurs:', controlErrors);
+        let champ: string = '';
+        switch(key){
+          case 'firstName':
+            champ = 'prénom';
+            break;
+          case 'lastName':
+            champ = 'nom'
+            break;
+          case 'login':
+            champ = 'login';
+            break;
+          case 'birthday':
+            champ = 'date de naissance'
+            break;
+          case 'password':
+            champ = 'mot de passe';
+            break;
+          case 'email':
+            champ = 'e-mail'
+            break;
+          case 'phone':
+            champ = 'téléphone';
+            break;
+          case 'adresse':
+            champ = 'adresse'
+            break;
+          case 'ville':
+            champ = 'ville';
+            break;
+          case 'cp':
+            champ = 'code postal'
+            break;
+        }
+        this.messageService.add({severity:'warn', summary: 'Attention', detail: `Il semble y avoir un probléme avec le champ ${champ}`});
       }
     });
     this.formSubmitted = true;
@@ -101,10 +133,8 @@ export class UserUpdateComponent implements OnInit {
           );
         }
       } else {
-        this.messageService.add({severity:'error', summary: 'Erreur', detail: 'Les mots de passes ne sont pas identiques.'});
+        this.messageService.add({severity:'warn', summary: 'Attention', detail: 'Les mots de passes ne sont pas identiques.'});
       }
-    } else {
-      this.messageService.add({severity:'error', summary: 'Erreur', detail: 'Veuillez corriger les erreurs dans le formulaire.'});
     }
  }
 

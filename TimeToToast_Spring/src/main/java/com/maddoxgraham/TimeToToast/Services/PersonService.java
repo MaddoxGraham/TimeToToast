@@ -10,11 +10,13 @@ import com.maddoxgraham.TimeToToast.Mappers.PersonMapper;
 import com.maddoxgraham.TimeToToast.Models.Enums.Role;
 import com.maddoxgraham.TimeToToast.Models.Event;
 import com.maddoxgraham.TimeToToast.Models.Person;
+import com.maddoxgraham.TimeToToast.Models.UserEventKey;
 import com.maddoxgraham.TimeToToast.Models.UserEventRole;
 import com.maddoxgraham.TimeToToast.Repository.EventRepository;
 import com.maddoxgraham.TimeToToast.Repository.PersonRepository;
 import com.maddoxgraham.TimeToToast.Repository.UserEventRoleRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -42,11 +44,16 @@ public class PersonService {
     }
 
     // Delete a person by ID and return the deleted person
-    public Person deletePersonByIdPerson(Long idPerson){
+    @Transactional
+    public Person deletePersonByIdPerson(Long idPerson, Long idEvent){
+        userEventRoleRepository.deleteByPerson_IdPersonAndEvent_IdEvent(idPerson, idEvent);
         Optional<Person> personOptional = personRepository.findById(idPerson);
         if (personOptional.isPresent()) {
             Person personToDelete = personOptional.get();
-            personRepository.deleteById(idPerson);
+            System.out.println("Role: " + personToDelete.getRole());
+            if (Role.GUEST.equals(personToDelete.getRole())){
+                personRepository.deleteByIdPerson(idPerson);
+            }
             return personToDelete;
         } else {
             throw new EntityNotFoundException("Person with ID " + idPerson + " not found");

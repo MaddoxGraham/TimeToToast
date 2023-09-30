@@ -4,6 +4,7 @@ import com.maddoxgraham.TimeToToast.Config.UserAuthProvider;
 import com.maddoxgraham.TimeToToast.DTOs.PersonDto;
 import com.maddoxgraham.TimeToToast.Models.Event;
 import com.maddoxgraham.TimeToToast.Models.Person;
+import com.maddoxgraham.TimeToToast.Models.UserEventKey;
 import com.maddoxgraham.TimeToToast.Models.UserEventRole;
 import com.maddoxgraham.TimeToToast.Repository.EventRepository;
 import com.maddoxgraham.TimeToToast.Repository.PersonRepository;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -25,8 +27,6 @@ public class PersonController {
 
     private final PersonService personService;
     private final UserAuthProvider userAuthProvider;
-    private final UserEventRoleRepository userEventRoleRepository;
-    private final EventRepository eventRepository;
 
     // PERSON Methods
 
@@ -37,16 +37,15 @@ public class PersonController {
     }
 
     //delete by id
-    @GetMapping("/delete/{idUser}")
-    public ResponseEntity<?> deletePerson(@PathVariable("idUser") Long idUser){
-    Person person = personService.deletePersonByIdPerson(idUser);
-    return new ResponseEntity<>(person,HttpStatus.OK);
+    @DeleteMapping("/delete/{idPerson}/{idEvent}")
+    public ResponseEntity<Map<String, String>> deletePerson(@PathVariable("idPerson") Long idPerson, @PathVariable("idEvent") Long idEvent){
+        personService.deletePersonByIdPerson(idPerson, idEvent);
+        Map<String, String> message = new HashMap<>();
+        message.put("message", "Invité supprimé");
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
-//    @PostMapping("/update/{idUser}")
-//    public ResponseEntity<PersonDto> updateUser(@PathVariable("idUser") Long idUser, @RequestBody PersonDto person){
-//
-//    }
+
 
     @GetMapping("/getEventGuests/{idEvent}")
     public  ResponseEntity<List<PersonDto>> getEventGuests(@PathVariable Long idEvent){

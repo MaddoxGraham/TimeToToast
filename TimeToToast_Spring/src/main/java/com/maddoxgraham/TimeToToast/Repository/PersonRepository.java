@@ -16,4 +16,6 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     Optional<Person> findByRefreshToken(String refreshToken);
     Optional<Person> findByEmail(String email);
 
+    void deleteByIdPerson(Long idPerson);
+
 }

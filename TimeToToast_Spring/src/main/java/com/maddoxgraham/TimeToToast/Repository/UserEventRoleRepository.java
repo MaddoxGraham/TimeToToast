@@ -16,4 +16,6 @@ public interface UserEventRoleRepository extends JpaRepository<UserEventRole, Us
 
     List<UserEventRole> findByEvent(Event event);
 
+    void deleteByPerson_IdPersonAndEvent_IdEvent(Long idPerson, Long idEvent);
+
 }
