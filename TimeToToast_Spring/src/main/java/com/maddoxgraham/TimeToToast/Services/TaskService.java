@@ -42,4 +42,12 @@ public class TaskService {
         taskRepository.deleteById(idTask);
     }
 
+    public void deleteTaskOfEvent(Long idEvent) {
+        List<Task> taskList = taskRepository.findByEvent_IdEvent(idEvent);
+        for(Task task: taskList) {
+            List<UserTask> userTaskList = userTaskRepository.findByUserTaskKey_IdTask(task.getIdTask());
+            userTaskRepository.deleteAll(userTaskList);
+            taskRepository.deleteById(task.getIdTask());
+        }
+    }
 }

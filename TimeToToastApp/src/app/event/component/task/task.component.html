@@ -1,16 +1,16 @@
 <div id="accordion mt-4">
   <div class="card">
-    <div class="card-header">      
-       <button class="btn w-100 toggle-btn" [attr.aria-expanded]="isOpen" (click)="isOpen = !isOpen">
-      <div class="mb-0 d-flex flex-row nowrap justify-content-between">
-        <h2> Module Tâche </h2>
-        <div>
+    <div class="card-header">
+      <button class="btn w-100 toggle-btn" [attr.aria-expanded]="isOpen" (click)="isOpen = !isOpen">
+        <div class="mb-0 d-flex flex-row nowrap justify-content-between">
+          <h2> Module Tâche </h2>
+          <div>
 
-          <i [ngClass]="{'fa-chevron-down': !isOpen, 'fa-chevron-up': isOpen}" class="fa"></i>
+            <i [ngClass]="{'fa-chevron-down': !isOpen, 'fa-chevron-up': isOpen}" class="fa"></i>
 
+          </div>
         </div>
-      </div>
-    </button>
+      </button>
     </div>
     <div id="collapseOne" class="collapse" [ngClass]="{'show': isOpen}">
       <div class="card-body">
@@ -129,52 +129,50 @@
         <!--   Vue pour créer une tâche -->
 
         <div *ngIf="displayMode === 'create'">
-          <form (ngSubmit)="createTask()" class="p-3">
-            <!-- Textarea pour la description de la tâche -->
+          <form [formGroup]="taskForm" (ngSubmit)="createTask()" class="p-3">
+
+            <!-- Section de Description -->
             <div class="card flex p-float-label justify-content-center mb-3">
-              <textarea id="float-input"  [(ngModel)]="description" rows="5" name="description" cols="30" pInputTextarea [autoResize]="true"
-                class="form-control"></textarea>
-              <label for="float-input" class="form-label">Décrivez en quelques mots votre nouvelle tâche</label>
+                <label for="description" class="form-label">Décrivez en quelques mots votre nouvelle tâche</label>
+                <textarea formControlName="description" id="description" rows="5" pInputTextarea [autoResize]="true"
+                    class="form-control"></textarea>
             </div>
+        
+            <!-- Section de l'Urgence -->
+            <div class="card flex justify-content-center mb-3">
+                <p>Définissez l'urgence de cette nouvelle tâche</p>
+                <p-selectButton formControlName="urgency" [options]="urgencies" optionLabel="name" optionValue="value"></p-selectButton>
 
-
-            <div class="card flex justify-content-center">
-              <p> Définissez l'urgence de cette nouvelle tâche </p>
-              <p-selectButton id="selectGravity" name="urgency" [options]="paymentOptions" [ngModelOptions]="{standalone: true}" [(ngModel)]="urgency" [multiple]="false"
-                optionLabel="name" optionValue="value"> </p-selectButton>
             </div>
-
-            <div class="card flex justify-content-center">
-              <p> Choisissez une date pour réaliser cette tâche. </p>
-              <p-calendar [(ngModel)]="dueDate" name="dueDate" [ngModelOptions]="{standalone: true}"></p-calendar>
+        
+            <!-- Section de Date -->
+            <div class="card flex justify-content-center mb-3">
+                <p>Choisissez une date pour réaliser cette tâche.</p>
+                <p-calendar formControlName="dueDate"></p-calendar>
             </div>
-
-
-            <!-- Multiselect pour les assignés -->
-          
-              <div class="card flex justify-content-center mb-3">
-                <p-multiSelect [options]="guests" [(ngModel)]="Assignee" [ngModelOptions]="{standalone: true}"  name="Assignee" (ngModelChange)="saveAssignees()"
-                  defaultLabel="Avez-vous une personne en tête pour cette tâche ?" optionLabel="displayLabel"
-                  display="chip"></p-multiSelect>
-              </div>
-
-              <!-- Toggle Button pour cacher la tâche -->
-              <div class="d-flex align-items-center mb-3">
+        
+            <!-- Section des Assignés -->
+            <div class="card flex justify-content-center mb-3">
+                <p-multiSelect [options]="guests" formControlName="assignee" display="chip"></p-multiSelect>
+            </div>
+        
+            <!-- Section de Toggle Button -->
+            <div class="d-flex align-items-center mb-3">
+                <p-toggleButton formControlName="showInvisibleToggle" onLabel="Yes" offLabel="No"></p-toggleButton>
                 <span class="me-2">Cacher la tâche pour certain(e)s</span>
-                <p-toggleButton [(ngModel)]="showInvisibleToggle" onLabel="Yes"  [ngModelOptions]="{standalone: true}" offLabel="No"></p-toggleButton>
-              </div>
-              <!-- Multiselect pour les invités pour qui la tâche est invisible -->
-              <div *ngIf="showInvisibleToggle" class="card flex justify-content-center">
-                <p-multiSelect [options]="filteredGuests" [(ngModel)]="InvisibleTo" [ngModelOptions]="{standalone: true}"  name="InvisibleTo" (ngModelChange)="saveInvisibleTo()"
-                  defaultLabel="Rendre invisible pour" optionLabel="displayLabel" display="chip"></p-multiSelect>
-              </div>
-
-              <!-- Bouton pour créer la tâche -->
-              <div class="d-flex justify-content-center mb-3">
-                <button type="submit"  class="btn btn-primary">Créer une tâche</button>
-              </div>
-
-          </form>
+            </div>
+        
+            <!-- Section des Invités Invisibles -->
+            <div *ngIf="taskForm.get('showInvisibleToggle')?.value" class="card flex justify-content-center mb-3">
+                <p-multiSelect [options]="filteredGuests" formControlName="invisibleTo" display="chip"  ></p-multiSelect>
+            </div>
+        
+            <!-- Section de Bouton de Soumission -->
+            <div class="d-flex justify-content-center mb-3">
+                <button type="submit" class="btn btn-primary" [disabled]="taskForm.invalid">Créer une tâche</button>
+            </div>
+        </form>
+        
 
         </div>
       </div>

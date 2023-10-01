@@ -64,8 +64,6 @@ public class PhotoController {
         return new ResponseEntity<>(jsonMapList, HttpStatus.OK);
     }
 
-
-
     @GetMapping("/uploads/{imageName}")
     public ResponseEntity<String> getImageUrl(@PathVariable String imageName) {
         Path path = Paths.get("uploads/" + imageName);
