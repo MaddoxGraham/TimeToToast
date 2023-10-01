@@ -59,7 +59,7 @@
           <div class="card md:flex md:justify-content-center">
             <div *ngIf="images" class="grid" style="max-width: 800px;">
               <div *ngFor="let image of images; let index = index" class="col-3" key="index" class="m-3">
-                <i class="pi pi-trash position-absolute" *ngIf="this.user.idPerson == image.personId" (click)="deleteImage(image.photoId)"></i>
+                <i class="pi pi-trash position-absolute" *ngIf="this.user.idPerson == image.personId || this.user.role === 'CREATEUR'" (click)="deleteImage(image.photoId)"></i>
                 <img [src]="image.safeUrl" style="cursor: pointer" (click)="imageClick(index)" style="width: 200px" />
               </div>
             </div>
