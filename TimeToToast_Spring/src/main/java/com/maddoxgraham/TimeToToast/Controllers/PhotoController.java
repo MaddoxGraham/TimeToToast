@@ -39,29 +39,31 @@ public class PhotoController {
     }
 
     @GetMapping("findEventPhoto/{idEvent}")
-    public ResponseEntity<List<Map<String, String>>> getPhotoByEvent(@PathVariable("idEvent") Long idEvent) throws IOException {
+    public ResponseEntity<List<Map<String, Object>>> getPhotoByEvent(@PathVariable("idEvent") Long idEvent) throws IOException {
         List<PhotoDto> photos = photoService.findPhotoByIdEvent(idEvent);
-        List<Map<String, String>> jsonMapList = new ArrayList<>();
+        List<Map<String, Object>> jsonMapList = new ArrayList<>();
 
         for (PhotoDto photo : photos){
             String imagesPath = photo.getSource();
 
-            // Chargez le fichier directement à partir du système de fichiers.
             File file = new File(imagesPath);
             if (!file.exists() || !file.isFile()) {
-                // Gérer l'erreur - le fichier n'existe pas
                 throw new FileNotFoundException("Le fichier " + imagesPath + " n'existe pas");
             }
 
             String encodeImage = Base64.getEncoder().withoutPadding().encodeToString(Files.readAllBytes(file.toPath()));
 
-            Map<String, String> jsonMap = new HashMap<>();
+            Map<String, Object> jsonMap = new HashMap<>();
             jsonMap.put("content", encodeImage);
+            jsonMap.put("personId", photo.getPerson());
+            jsonMap.put("photoId", photo.getIdPhoto());
+
             jsonMapList.add(jsonMap);
         }
 
         return new ResponseEntity<>(jsonMapList, HttpStatus.OK);
     }
+
 
 
     @GetMapping("/uploads/{imageName}")
@@ -77,6 +79,14 @@ public class PhotoController {
             // Handle exception
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("delete/{idPhoto}")
+    public ResponseEntity<Map<String, String>> deletePhoto(@PathVariable Long idPhoto){
+        photoService.deletePhoto(idPhoto);
+        Map<String, String> message = new HashMap<>();
+        message.put("message", "photo supprimée");
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
 }

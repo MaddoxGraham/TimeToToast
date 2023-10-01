@@ -55,19 +55,20 @@
 
         <!-- COMPOSANT GALLERIE -->
         <div *ngIf="displayMode==='galleria'" class="container-fluid">
-
+          <p-toast></p-toast>
           <div class="card md:flex md:justify-content-center">
-            <div *ngIf="imagesSafeUrl" class="grid" style="max-width: 800px;">
-              <div *ngFor="let imageSafeUrl of imagesSafeUrl; let index = index" class="col-3" key="index" class="m-3">
-                <img [src]="imageSafeUrl" style="cursor: pointer" (click)="imageClick(index)" style="width: 200px" />
+            <div *ngIf="images" class="grid" style="max-width: 800px;">
+              <div *ngFor="let image of images; let index = index" class="col-3" key="index" class="m-3">
+                <i class="pi pi-trash position-absolute" *ngIf="this.user.idPerson == image.personId || this.user.role === 'CREATEUR'" (click)="deleteImage(image.photoId)"></i>
+                <img [src]="image.safeUrl" style="cursor: pointer" (click)="imageClick(index)" style="width: 200px" />
               </div>
             </div>
-            <p-galleria [value]="imagesSafeUrl" [(visible)]="displayCustom" [(activeIndex)]="activeIndex"
+            <p-galleria [value]="images" [(visible)]="displayCustom" [(activeIndex)]="activeIndex"
               [responsiveOptions]="responsiveOptions" [containerStyle]="{ 'max-width': '850px' }" [numVisible]="7"
               [circular]="true" [fullScreen]="true" [showItemNavigators]="true" [showThumbnails]="false">
 
               <ng-template pTemplate="item" let-item>
-                <img [src]="item" style="width: 100%; display: block;" />
+                <img [src]="item.safeUrl" style="width: 100%; display: block;" />
               </ng-template>
             </p-galleria>
           </div>

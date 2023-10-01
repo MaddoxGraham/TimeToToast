@@ -31,6 +31,7 @@ export const environment = {
 
     uploadPhoto:"http://localhost:8080/photo/upload",
     getPhotos:"http://localhost:8080/photo/findEventPhoto",
+    deletePhoto: 'http://localhost:8080/photo/delete/',
 
     pathImages: 'C:/Users/User/OneDrive/Documents/TimeToToast/TimeToToast_Spring/uploads/',
 

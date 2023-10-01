@@ -1,5 +1,5 @@
 <!-- single-event.component.html -->
-
+<p-toast></p-toast>
 <div *ngIf="event" class="">
 
   <div class="row">
@@ -40,6 +40,7 @@
                 <input name="email" id="email" type="text" class="form-control"
                   (keyup)="checkEmail($event, emailInput.value, emailInput)" (keydown.enter)="$event.preventDefault()"
                   #emailInput />
+                  <small>* Valider l'email en appuyant sur la barre espace</small>
                 <div *ngIf="emailInvalid" class="invalid-feedback d-block">
                   L'adresse e-mail entrée n'est pas valide.
                 </div>
@@ -47,7 +48,7 @@
                   Cette adresse e-mail existe déjà dans la liste.
                 </div>
 
-                <button type="submit" [disabled]="emailList.length === 0" class="btn btn-primary">Envoyer</button>
+                <button *ngIf="emailList.length > 0" type="submit" [disabled]="emailList.length === 0" class="btn btn-primary mt-2">Envoyer</button>
               </form>
 
             </div>
@@ -74,7 +75,8 @@
             <ul>
               <li *ngFor="let person of user.persons">
                 {{ person.firstName || person.lastName ? (person.firstName + ' ' + (person.lastName | uppercase)) : person.email }}
-            </li>
+                <i class="pi pi-trash" (click)="person.idPerson !== undefined && deleteInvite(person.idPerson)"></i>
+              </li>
             </ul>
         </ng-container>
         

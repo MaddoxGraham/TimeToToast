@@ -4,7 +4,6 @@ import { MessageService } from 'primeng/api';
 import { PhotoService } from 'src/app/core/service/photo/photo.service';
 import { UploadService } from 'src/app/core/service/upload/upload.service';
 import { EventDto } from 'src/app/share/dtos/event/event-dto';
-import { ImportPhotoDto } from 'src/app/share/dtos/photo/import-photo-dto';
 import { UserDto } from 'src/app/share/dtos/user/user-dto';
 import { UserEventRoleDto } from 'src/app/share/dtos/userEventRole/user-event-role-dto';
 
@@ -19,7 +18,7 @@ interface UploadEvent {
   selector: 'app-photo',
   templateUrl: './photo.component.html',
   styleUrls: ['./photo.component.css'],
-  providers: [MessageService] // Ajouté ici
+  providers: [MessageService]
 })
 export class PhotoComponent implements OnInit {
   @Output() moduleDeleted = new EventEmitter<void>();
@@ -29,6 +28,7 @@ export class PhotoComponent implements OnInit {
   public displayMode: string = 'welcome';
 
   imagesSafeUrl: SafeUrl[] = [];
+  images: any[] = [];
 
   uploadedFiles: any[] = [];
   maxFileSize: number = 4000000; 
@@ -60,14 +60,13 @@ export class PhotoComponent implements OnInit {
 
   constructor(private uploadService:UploadService, 
               private messageService: MessageService,
-              private sanitizer: DomSanitizer ) {
+              private sanitizer: DomSanitizer,
+              private photoService: PhotoService ) {
   }
 
   ngOnInit() {
-    console.log("Initial displayMode: ", this.displayMode);
-  //  this.fetchGalleria();
-
-}
+    
+  }
 
 
 setDisplayMode(mode: 'welcome' | 'galleria' | 'upload') {
@@ -93,7 +92,6 @@ onUpload(event: any) {
 if (this.user.idPerson && this.event.idEvent) {
     this.uploadService.uploadFiles(formData, this.user.idPerson, this.event.idEvent).subscribe(
     (response) => {
-      console.log('Upload successful', response);
       this.messageService.add({severity: 'success', summary: 'Succès', detail: 'Fichiers uploadés avec succès'});
        this.imagesSafeUrl = [];
     },
@@ -108,27 +106,36 @@ if (this.user.idPerson && this.event.idEvent) {
 
   //gestion de la gallerie 
 
-fetchGalleria() {
-  this.imagesSafeUrl = [];
-  this.uploadService.getPhotos(this.event.idEvent).subscribe(
-    (data: ImportPhotoDto[]) => {
-      console.log('Fetched data', data);
-      data.forEach((image: ImportPhotoDto) => {
-        let imageUrl = 'data:image/jpeg;base64,' + image.content;
-        // Ajoutez l'URL sécurisée à imagesSafeUrl
-        this.imagesSafeUrl.push(this.sanitizer.bypassSecurityTrustUrl(imageUrl));
-      });
-    },
-    (error) => {
-      console.error("Une erreur s'est produite :", error);
-    }
-  );
-}
-
-
-imageClick(index: number) {
+  fetchGalleria() {
+    this.uploadService.getPhotos(this.event.idEvent).subscribe(
+        (data: any[]) => {
+            data.forEach((image: any) => {
+                let imageUrl = 'data:image/jpeg;base64,' + image.content;
+                
+                let imageObject = {
+                    safeUrl: this.sanitizer.bypassSecurityTrustUrl(imageUrl),
+                    photoId: image.photoId,
+                    personId: image.personId,
+                };
+                this.images = this.images || [];
+                this.images.push(imageObject);
+            });
+        },
+        (error) => {
+            console.error("Une erreur s'est produite :", error);
+        }
+    );
+  }
+  imageClick(index: number) {
     this.activeIndex = index;
     this.displayCustom = true;
-}
+  }
+
+  deleteImage(idPhoto: number){
+    this.photoService.deletePhoto(idPhoto).subscribe(response => {
+      this.messageService.add({severity: 'success', summary: 'Succès', detail: 'Photo supprimé avec succès'});
+      this.images = this.images.filter(image => image.photoId !== idPhoto);
+    });
+  }
 
 }

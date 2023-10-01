@@ -23,6 +23,7 @@
                     </ul>
 
                     <div class="tab-content">
+                        <p-toast></p-toast>
                         <!-- Login Form -->
                         <div [ngClass]=" active == 'login' ? 'tab-pane fade show active' : 'tab-pane fade ' ">
                             <form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm)">
@@ -48,22 +49,48 @@
 
                                 <div class="d-flex flex-row">
                                 <div class="form-outline me-2 mb-4">
-                                    <label class="form-label" for="firstName"> Nom </label>
+                                    <label class="form-label" for="firstName"> prénom </label>
                                     <input class="form-control" type="text" id="firstName" formControlName="firstName">
+                                    <div *ngIf="registerForm.get('firstName')?.invalid && (registerForm.get('firstName')?.dirty || registerForm.get('firstName')?.touched)">
+                                        <small class="text-danger" *ngIf="registerForm.get('firstName')?.errors?.['required']">Le prénom est requis.</small>
+                                        <small class="text-danger" *ngIf="registerForm.get('firstName')?.errors?.['namePattern']">Le prénom contient des caractères non valides.</small>
+                                     </div>
                                 </div>
                                 <div class="form-outline mb-4">
-                                    <label class="form-label" for="lastName"> Prénom </label>
+                                    <label class="form-label" for="lastName"> Nom </label>
                                     <input class="form-control" type="text" id="lastName" formControlName="lastName">
+                                    <div *ngIf="registerForm.get('lastName')?.invalid && (registerForm.get('lastName')?.dirty || registerForm.get('lastName')?.touched)">
+                                        <small class="text-danger" *ngIf="registerForm.get('lastName')?.errors?.['required']">Le nom est requis.</small>
+                                        <small class="text-danger" *ngIf="registerForm.get('lastName')?.errors?.['namePattern']">Le nom contient des caractères non valides.</small>
+                                     </div>
                                 </div>
                                 </div>
                                 <div class="form-outline mb-4">
                                     <label class="form-label" for="login"> Login </label>
                                     <input class="form-control" type="text" id="login" formControlName="login">
+                                    <div *ngIf="registerForm.get('login')?.invalid && (registerForm.get('login')?.dirty || registerForm.get('login')?.touched)">
+                                        <small class="text-danger" *ngIf="registerForm.get('login')?.errors?.['required']">Le login est requis.</small>
+                                        <small class="text-danger" *ngIf="registerForm.get('login')?.errors?.['loginPattern']">Le login contient des caractères non valides.</small>
+                                     </div>
                                 </div>
                         
                                 <div class="form-outline mb-4">
                                     <label class="form-label" for="password"> Password </label>
                                     <input class="form-control" type="password" id="password" formControlName="password">
+                                    <div *ngIf="registerForm.get('password')?.invalid && (registerForm.get('password')?.dirty || registerForm.get('password')?.touched)">
+                                        <small class="text-danger" *ngIf="registerForm.get('password')?.errors?.['required']">Le mot de passe est requis.</small>
+                                        <small class="text-danger" *ngIf="registerForm.get('password')?.errors?.['passwordPattern']">Le mot de passe contient des caractères non valides.</small>
+                                    </div>
+                                </div>
+
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="confirmPassword"> Comfirmer Password </label>
+                                    <input class="form-control" type="password" id="confirmPassword" formControlName="confirmPassword">
+                                    <div *ngIf="registerForm.get('confirmPassword')?.invalid && (registerForm.get('confirmPassword')?.dirty || registerForm.get('confirmPassword')?.touched)">
+                                        <small class="text-danger" *ngIf="registerForm.get('confirmPassword')?.errors?.['required']">Le mot de passe est requis.</small>
+                                        <small class="text-danger" *ngIf="registerForm.get('confirmPassword')?.errors?.['passwordPattern']">Le mot de passe contient des caractères non valides.</small>
+                                        <small class="text-danger" *ngIf="registerForm.get('confirmPassword')?.value != registerForm.get('password')?.value">Les mots de passe ne correspondent pas.</small>
+                                    </div>
                                 </div>
 
                                 <h6 class="txt-handwritting"> Vous contacter  </h6>
@@ -72,28 +99,49 @@
                                     <input class="form-control" type="email" id="email" formControlName="email">
                                     <div class="invalid-feedback">
                                         Please provide a valid city.
-                                      </div>
+                                    </div>
+                                    <div *ngIf="registerForm.get('email')?.invalid && (registerForm.get('email')?.dirty || registerForm.get('email')?.touched)">
+                                        <small class="text-danger" *ngIf="registerForm.get('email')?.errors?.['required']">L'email est requis.</small>
+                                        <small class="text-danger" *ngIf="registerForm.get('email')?.errors?.['emailPattern']">L'email contient des caractères non valides.</small>
+                                     </div>
                                 </div>
 
                                 <div class="form-outline mb-4">
                                     <label class="form-label" for="phone"> Téléphone </label>
                                     <input class="form-control" type="phone" id="phone" formControlName="phone">
+                                    <div *ngIf="registerForm.get('phone')?.invalid && (registerForm.get('phone')?.dirty || registerForm.get('phone')?.touched)">
+                                        <small class="text-danger" *ngIf="registerForm.get('phone')?.errors?.['required']">Le téléphone est requis.</small>
+                                        <small class="text-danger" *ngIf="registerForm.get('phone')?.errors?.['phonePattern']">Le téléphone contient des caractères non valides.</small>
+                                    </div>
                                 </div>
 
                                 <h6 class="txt-handwritting"> Dites nous en plus  </h6>
                                 <div class="form-outline mb-4">
                                     <label class="form-label" for="adresse"> Adresse </label>
                                     <input class="form-control" type="text" id="adresse" formControlName="adresse">
+                                    <div *ngIf="registerForm.get('adresse')?.invalid && (registerForm.get('adresse')?.dirty || registerForm.get('adresse')?.touched)">
+                                        <small class="text-danger" *ngIf="registerForm.get('adresse')?.errors?.['required']">L'adresse est requis.</small>
+                                        <small class="text-danger" *ngIf="registerForm.get('adresse')?.errors?.['adressPattern']">L'adresse contient des caractères non valides.</small>
+                                     </div>
                                 </div>
+
                                 <div class="d-flex flex-row">
                                 <div class="form-outline mb-4 me-2">
                                     <label class="form-label" for="ville"> Ville </label>
                                     <input class="form-control" type="text" id="ville" formControlName="ville">
+                                    <div *ngIf="registerForm.get('ville')?.invalid && (registerForm.get('ville')?.dirty || registerForm.get('ville')?.touched)">
+                                        <small class="text-danger" *ngIf="registerForm.get('ville')?.errors?.['required']">La ville est requis.</small>
+                                        <small class="text-danger" *ngIf="registerForm.get('ville')?.errors?.['namePattern']">La ville contient des caractères non valides.</small>
+                                     </div>
                                 </div>
 
                                 <div class="form-outline mb-4">
                                     <label class="form-label" for="cp"> Code Postal </label>
                                     <input class="form-control" type="text" id="cp" formControlName="cp">
+                                    <div *ngIf="registerForm.get('cp')?.invalid && (registerForm.get('cp')?.dirty || registerForm.get('cp')?.touched)">
+                                        <small class="text-danger" *ngIf="registerForm.get('cp')?.errors?.['required']">Le code postal est requis.</small>
+                                        <small class="text-danger" *ngIf="registerForm.get('cp')?.errors?.['cpPattern']">Le code postal contient des caractères non valides.</small>
+                                     </div>
                                 </div>
                         
                                 </div>
@@ -101,6 +149,9 @@
                                 <div class="form-outline mb-4">
                                     <label class="form-label" for="birthday"> Date de Naissance </label>
                                     <input class="form-control" type="date" id="birthday" formControlName="birthday">
+                                    <div *ngIf="registerForm.get('birthday')?.invalid && (registerForm.get('birthday')?.dirty || registerForm.get('birthday')?.touched)">
+                                        <small class="text-danger" *ngIf="registerForm.get('birthday')?.errors?.['required']">La date de naissance est requise.</small>
+                                     </div>
                                 </div>
 
 

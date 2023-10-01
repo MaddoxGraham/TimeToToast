@@ -1,4 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 
 
@@ -6,4 +9,10 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class PhotoService {
+
+  constructor(private httpClient: HttpClient) { }
+
+  deletePhoto(idPhoto: number): Observable<any> {
+    return this.httpClient.delete(`${environment.deletePhoto}${idPhoto}`);
+  }
 }

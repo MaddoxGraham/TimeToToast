@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { BehaviorSubject } from 'rxjs';
 import { EventService } from 'src/app/core/service/event/event.service';
+import { GuestService } from 'src/app/core/service/guest/guest.service';
 import { SharedService } from 'src/app/core/service/shared/shared.service';
 import { EmailDataDto } from 'src/app/share/dtos/EmailData/EmailDataDto';
 import { EventDto } from 'src/app/share/dtos/event/event-dto';
@@ -14,13 +16,15 @@ import { UserEventRoleDto } from 'src/app/share/dtos/userEventRole/user-event-ro
 @Component({
   selector: 'app-single-event',
   templateUrl: './single-event.component.html',
-  styleUrls: ['./single-event.component.css']
+  styleUrls: ['./single-event.component.css'],
+  providers: [MessageService]
 })
 export class SingleEventComponent implements OnInit {
 
   event!: EventDto;
   user!: UserDto;
   userEventList!: UserEventRoleDto[];
+  eventId!:number
   public isTaskModuleActive: boolean = false;
   public isGiftModuleActive: boolean = false;
   public isPhotoModuleActive: boolean = false;
@@ -40,9 +44,11 @@ export class SingleEventComponent implements OnInit {
   public guestsSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   constructor(private route: ActivatedRoute,
-    private eventService: EventService,
-    private fb: FormBuilder,
-    private sharedService: SharedService,) {
+              private eventService: EventService,
+              private fb: FormBuilder,
+              private sharedService: SharedService,
+              private guestService: GuestService,
+              private messageService: MessageService) {
 
     this.emailForm = this.fb.group({
       emails: this.fb.array([]),
@@ -58,17 +64,17 @@ export class SingleEventComponent implements OnInit {
       if (idEvent) { this.getEvent(idEvent);}
       if (idUser.idPerson && idEvent) {this.getUserEventRole(idUser.idPerson, idEvent) }
       if (idEvent) { this.getUserEventRoleList(idEvent) }
+      this.eventId = idEvent
     });
 
     const idUser: UserDto = JSON.parse(sessionStorage.getItem('user') || '{}');
-    this.user = idUser;
+    this.user = idUser; 
   }
 
   // CURRENT USER OR EVENT  REALTED QUERY 
 
 
-  getUsersByRole(role: string): UserDto[] {
-    
+  getUsersByRole(role: string): UserDto[] { 
     const userEvents = this.userEventList.filter(userEvent => userEvent.role === role);
     const users: UserDto[] = [];
     userEvents.forEach(userEvent => {
@@ -76,6 +82,7 @@ export class SingleEventComponent implements OnInit {
         users.push(...userEvent.persons);
       }
     });
+
     return users;
   }
 
@@ -98,7 +105,7 @@ export class SingleEventComponent implements OnInit {
     this.eventService.getUserEventRoleList(idEvent).subscribe(
       (response) => {
         this.userEventList = response;
-        console.log(this.userEventList);
+
       },
       (error) => {
         console.error('Erreur lors de la récupération de la liste des utilisateurs:', error);
@@ -285,8 +292,26 @@ export class SingleEventComponent implements OnInit {
         this.guestsSubject.next(this.guests); // Met à jour la valeur du BehaviorSubject
 
         this.sharedService.updateGuests(this.guests);
+        this.getUserEventRoleList(this.eventId);
       }
     )
+  }
+
+  deleteInvite(idPerson: number) {
+    this.guestService.deleteGuest(idPerson, this.eventId).subscribe(
+      (response: any) => {
+        if (response && response.message === 'Invité supprimé') {
+          this.messageService.add({severity:'success', summary: 'Succès', detail: 'Invité supprimé !'});
+          this.getUserEventRoleList(this.eventId);
+        } else {
+          this.messageService.add({severity:'info', summary: 'Info', detail: 'L’invité a peut-être déjà été supprimé ou n’existe pas'});
+        }
+      },
+      error => {
+        console.error('Erreur lors de la suppression de l\'invité', error);
+        this.messageService.add({severity:'error', summary: 'Erreur', detail: 'Impossible de supprimer l’invité !'});
+      }
+    );
   }
 
 }
