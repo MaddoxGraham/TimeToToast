@@ -18,7 +18,8 @@ import { CalendarModule } from 'primeng/calendar';
 import { DataViewModule } from 'primeng/dataview';
 import { RatingModule } from 'primeng/rating';
 import { TagModule } from 'primeng/tag';
-
+import { CascadeSelectModule } from 'primeng/cascadeselect';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @NgModule({
   declarations: [],
@@ -43,6 +44,8 @@ import { TagModule } from 'primeng/tag';
     DataViewModule,
     RatingModule,
     TagModule,
+    CascadeSelectModule,
+    InputNumberModule,
     
   ],
   exports: [
@@ -65,6 +68,8 @@ import { TagModule } from 'primeng/tag';
     RatingModule,
     DataViewModule,
     TagModule,
+    CascadeSelectModule,
+    InputNumberModule,
   ]
 })
 export class ShareModule { }

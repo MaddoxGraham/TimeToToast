@@ -16,19 +16,20 @@
       <div class="card-body">
 
 
-                <nav *ngIf="userEvent.role == 'CREATEUR'" class="navbar navbar-expand-lg navbar-light bg-light">
-                  <div class="container-fluid">
-                    <div>
-                      <button (click)="setDisplayMode('galleria') " class="btn btn-outline-secondary me-2">Consulter la liste des cadeaux
-                      </button>
-                      <button (click)="setDisplayMode('upload')" class="btn btn-outline-success"> Ajouter un cadeaux.</button>
-                    </div>
-                  </div>
-                </nav>
+        <nav *ngIf="userEvent.role == 'CREATEUR'" class="navbar navbar-expand-lg navbar-light bg-light">
+          <div class="container-fluid">
+            <div>
+              <button (click)="setDisplayMode('galleria') " class="btn btn-outline-secondary me-2">Consulter la liste
+                des cadeaux
+              </button>
+              <button (click)="setDisplayMode('addGift')" class="btn btn-outline-success"> Ajouter un cadeaux.</button>
+            </div>
+          </div>
+        </nav>
 
 
 
-        <div class="card">
+        <div *ngIf="displayMode == 'galleria'" class="card">
           <p-dataView #dv [value]="gifts" [layout]="layout">
 
             <ng-template pTemplate="header">
@@ -65,15 +66,18 @@
 
 
                       <!-- Si updatedPrice est différent de gift.price, alors afficher updatedPrice et rayer gift.price -->
-<span *ngIf="getUpdatedPrice(gift) !== gift.price" class="text-2xl font-semibold"> {{ getUpdatedPrice(gift) +'€'}}</span>
-<span *ngIf="getUpdatedPrice(gift) !== gift.price" class="line-through"> {{ gift.price +'€'}}</span>
+                      <span *ngIf="getUpdatedPrice(gift) !== gift.price" class="text-2xl font-semibold"> {{
+                        getUpdatedPrice(gift) +'€'}}</span>
+                      <span *ngIf="getUpdatedPrice(gift) !== gift.price" class="line-through"> {{ gift.price
+                        +'€'}}</span>
 
-<!-- Si updatedPrice est égal à gift.price, alors afficher seulement gift.price -->
-<span *ngIf="getUpdatedPrice(gift) === gift.price" class="text-2xl font-semibold"> {{ gift.price +'€'}}</span>
+                      <!-- Si updatedPrice est égal à gift.price, alors afficher seulement gift.price -->
+                      <span *ngIf="getUpdatedPrice(gift) === gift.price" class="text-2xl font-semibold"> {{ gift.price
+                        +'€'}}</span>
 
                       <button pButton icon="pi pi-shopping-cart" class="md:align-self-end mb-2 p-button-rounded"
-                      data-bs-toggle="modal" data-bs-target="#staticBackdrop" [disabled]="gift.paid === true"
-                      (click)="openLinkAndShowModal(gift)"></button>
+                        data-bs-toggle="modal" data-bs-target="#staticBackdrop" [disabled]="gift.paid === true"
+                        (click)="openLinkAndShowModal(gift)"></button>
 
                     </div>
                   </div>
@@ -102,12 +106,14 @@
                   </div>
                   <div class="flex align-items-center justify-content-between">
 
-        <!-- Si updatedPrice est différent de gift.price, alors afficher updatedPrice et rayer gift.price -->
-<span *ngIf="getUpdatedPrice(gift) !== gift.price" class="text-2xl font-semibold"> {{ getUpdatedPrice(gift) +'€'}}</span>
-<span *ngIf="getUpdatedPrice(gift) !== gift.price" class="line-through"> {{ gift.price +'€'}}</span>
+                    <!-- Si updatedPrice est différent de gift.price, alors afficher updatedPrice et rayer gift.price -->
+                    <span *ngIf="getUpdatedPrice(gift) !== gift.price" class="text-2xl font-semibold"> {{
+                      getUpdatedPrice(gift) +'€'}}</span>
+                    <span *ngIf="getUpdatedPrice(gift) !== gift.price" class="line-through"> {{ gift.price +'€'}}</span>
 
-<!-- Si updatedPrice est égal à gift.price, alors afficher seulement gift.price -->
-<span *ngIf="getUpdatedPrice(gift) === gift.price" class="text-2xl font-semibold"> {{ gift.price +'€'}}</span>
+                    <!-- Si updatedPrice est égal à gift.price, alors afficher seulement gift.price -->
+                    <span *ngIf="getUpdatedPrice(gift) === gift.price" class="text-2xl font-semibold"> {{ gift.price
+                      +'€'}}</span>
 
 
                     <!-- Bouton -->
@@ -128,26 +134,28 @@
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title" id="staticBackdropLabel">Participation au cadeau</h5>
-                  <button type="button" class="btn-close" id="closeModalBtn"  data-bs-dismiss="modal" aria-label="Close"></button>
+                  <button type="button" class="btn-close" id="closeModalBtn" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                   <p>Avez-vous participé au cadeau ?</p>
-                  
+
                   <ng-container *ngIf="!showInput">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal" (click)="contributeToGift(false)">Non</button>
+                    <button class="btn btn-secondary" data-bs-dismiss="modal"
+                      (click)="contributeToGift(false)">Non</button>
                     <button class="btn btn-primary" (click)="showInput = true">Oui</button>
                   </ng-container>
-                  
+
                   <ng-container *ngIf="showInput">
-                    <input type="number" [(ngModel)]="amount" 
-                           (input)="adjustAmount()" placeholder="Indiquez le montant">
+                    <input type="number" [(ngModel)]="amount" (input)="adjustAmount()"
+                      placeholder="Indiquez le montant">
                   </ng-container>
                 </div>
-                
+
                 <!-- Pied de page du modal -->
-                <div  *ngIf="showInput" class="modal-footer">
-                      <button class="btn btn-success" [disabled]="!amount && !fullAmount" 
-                            (click)="contributeToGift(true, fullAmount ? gift.price : amount)">Valider</button>
+                <div *ngIf="showInput" class="modal-footer">
+                  <button class="btn btn-success" [disabled]="!amount && !fullAmount"
+                    (click)="contributeToGift(true, fullAmount ? gift.price : amount)">Valider</button>
 
                 </div>
               </div>
@@ -157,6 +165,61 @@
 
         </div>
 
+<div *ngIf="displayMode == 'addGift'" class="p-2 card">
+  <h2> Ajouter un cadeaux a votre liste </h2>
+  <p> Bienvenue dans le module de création de cadeaux. Ici vous pouvez ajouter simplement un cadeau à votre liste en remplissant le formulaire. </p>
+ <form class="needs-validation" [formGroup]="addGiftForm" (ngSubmit)="addGift()">
+
+
+  <h2> Votre Cadeaux </h2>
+  <span class="my-4 p-float-label">
+  <input pInputText id="name"  type="text" formControlName="name" class="form-control"  [ngClass]="{'is-invalid': addGiftForm.get('name')?.touched && !addGiftForm.get('name')?.valid}">
+  <div *ngIf="addGiftForm.get('name')?.touched && !addGiftForm.get('name')?.valid" class="position-absolute">
+    <i class="bi bi-exclamation-circle-fill text-danger" style="top: 50%; right: 10px; transform: translateY(-50%);"></i>
+  </div>
+  <label htmlFor="name">Nom de votre cadeaux</label>
+</span>
+
+<span class="my-2 ">
+  <input  id="url" type="text" formControlName="url" placeholder="L'url de votre cadeaux " class="form-control"[ngClass]="{'is-invalid': addGiftForm.get('name')?.touched && !addGiftForm.get('name')?.valid}">
+  <div *ngIf="addGiftForm.get('name')?.touched && !addGiftForm.get('name')?.valid" class="position-absolute">
+    <i class="bi bi-exclamation-circle-fill text-danger" style="top: 50%; right: 10px; transform: translateY(-50%);"></i>
+  </div>
+  <small id="url-help">Copier/coller le lien de votre navigateur dans ce champs.</small>
+</span>
+
+<div class="my-2 card flex justify-content-center">
+  <p-cascadeSelect id="categorie" formControlName="selectedCategory" class="form-control" [options]="categories" optionLabel="nom" optionGroupLabel="nom" [optionGroupChildren]="['sousCategories']" [style]="{ minWidth: '14rem' }" placeholder="Sélectionnez une catégorie"></p-cascadeSelect>
+</div>
+
+<h2 class="my-4"> Illustrer vos envies </h2>
+<p> Rajoutez une image pour que vos invités visualise le cadeaux que vous souhaitez. </p>
+<small> Vous pouvez généralement cliquer sur une image et faire afficher l'image. Coppiez/Collez ensuite le lien url de cette image ici</small>
+<div class="my-3">
+  <input p-inputText formControlName="photo" class="form-control" placeholder="Entrez le lien URL de l'image"[ngClass]="{'is-invalid': addGiftForm.get('name')?.touched && !addGiftForm.get('name')?.valid}">
+  <div *ngIf="addGiftForm.get('name')?.touched && !addGiftForm.get('name')?.valid" class="position-absolute">
+    <i class="bi bi-exclamation-circle-fill text-danger" style="top: 50%; right: 10px; transform: translateY(-50%);"></i>
+  </div>
+  <img *ngIf="showImage" [src]="addGiftForm.get('photo')?.value" alt="Preview" width="100"/>
+</div>
+
+<p> Indiquez simplement à vos convives les cadeaux que vous souhaitez mettre en avant</p>
+<span> <p-rating [cancel]="false" formControlName="wanted"></p-rating> </span>
+
+
+<h2 class="my-4"> Partager, souvent le plus beau des cadeaux.</h2>
+<div class="my-4">
+<label for="price"> Indiquez le montant du cadeaux que vous avez choisi </label>
+<input id="price" formControlName="price" class="form-group" (input)="onPriceInput($event)" [ngClass]="{'is-invalid': addGiftForm.get('price')?.touched && !addGiftForm.get('price')?.valid}" />
+<div *ngIf="addGiftForm.get('price')?.touched && !addGiftForm.get('price')?.valid" class="invalid-feedback">
+  Merci de saisir un montant
+</div>
+</div>
+
+  <button class="btn btn-success" [disabled]="addGiftForm.invalid" type="submit"> Ajouter mon cadeaux </button>
+ </form>
+
+</div>
 
 
       </div>

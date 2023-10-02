@@ -3,6 +3,7 @@ package com.maddoxgraham.TimeToToast.Services;
 import com.maddoxgraham.TimeToToast.DTOs.GiftDto;
 import com.maddoxgraham.TimeToToast.Exception.UserNotFoundException;
 import com.maddoxgraham.TimeToToast.Mappers.GiftMapper;
+import com.maddoxgraham.TimeToToast.Models.Event;
 import com.maddoxgraham.TimeToToast.Models.Gift;
 import com.maddoxgraham.TimeToToast.Repository.GiftRepository;
 import lombok.*;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 public class GiftService {
     private final GiftRepository giftRepository;
     private final GiftMapper giftMapper;
+    private final EventService eventService;
 
     public List<GiftDto> getGiftsByEvent(Long idEvent) {
         List<Gift> gifts = giftRepository.findByEventIdEvent(idEvent);
@@ -34,7 +36,14 @@ public class GiftService {
     return null;
     }
 
-
+ public GiftDto addGift(GiftDto dto){
+        Gift gift = GiftMapper.toEntity(dto);
+        gift.setPaid(false);
+        Event event = eventService.findEventByIdEvent(gift.getEvent().getIdEvent());
+        gift.setEvent(event);
+        Gift savedGift = giftRepository.save(gift);
+        return GiftMapper.toDto(savedGift);
+ }
     //    public Gift updateGift(Gift gift){
 //        return giftRepository.save(gift);
 //    }

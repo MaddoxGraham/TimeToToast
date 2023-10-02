@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { FormControl,  FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GiftService } from 'src/app/core/service/gift/gift.service';
+import { GiftListService } from 'src/app/core/service/giftList/gift-list.service';
 import { SharedService } from 'src/app/core/service/shared/shared.service';
 import { EventDto } from 'src/app/share/dtos/event/event-dto';
 import { GiftDto } from 'src/app/share/dtos/gift/gift-dto';
 import { GiftContributionDto } from 'src/app/share/dtos/giftContribution/gift-contribution-dto';
-import { GuestDto } from 'src/app/share/dtos/guest/guest-dto';
 import { UserDto } from 'src/app/share/dtos/user/user-dto';
 import { UserEventRoleDto } from 'src/app/share/dtos/userEventRole/user-event-role-dto';
 
@@ -20,7 +20,13 @@ export class GiftComponent implements OnInit {
   @Input() event!: EventDto;
   @Input() user!: UserDto;
 
-  constructor(private sharedService: SharedService,private giftService : GiftService,) { }
+  constructor(private sharedService: SharedService,
+              private giftService : GiftService,
+              private fb: FormBuilder,
+              private giftList:GiftListService,
+              ) { }
+
+
   gifts: GiftDto[] = [];
   gift!:GiftDto;
   layout: 'list' | 'grid' = 'list';
@@ -33,7 +39,14 @@ export class GiftComponent implements OnInit {
   newContribution!: GiftContributionDto;
   isContributed:boolean = false;
   totalAmount: { [key: number]: number } = {};
-  displayMode!:string;
+  displayMode:string = 'galleria';
+  addGiftForm!:FormGroup;
+  
+  categories: any[] | undefined;
+  selectedCategory!:any;
+  
+  imageUrl: string = '';
+  showImage: boolean = false;
 
   ngOnInit() {
     if( this.isOpen = true){
@@ -41,9 +54,50 @@ export class GiftComponent implements OnInit {
     console.log(this.contributionMap);
     }
 
+    this.categories = this.giftList.getCategories()
+
+    this.addGiftForm = this.fb.group({
+      name: ['', Validators.required],
+    selectedCategory: new FormControl<object | null>(null),
+      url:['', Validators.required],
+      photo:['', Validators.required],
+      wanted:[''],
+      price:[ , Validators.required],
+      event:this.event,
+     
+    });
+   
+    this.addGiftForm.get('photo')?.valueChanges.subscribe(photo => {
+      console.log("URL changed to:", photo);  // Ajoutez cette ligne
+      this.showImage = this.isValidUrl(photo);
+    });
 
 
   }
+
+  addGift(){
+    if (this.addGiftForm.valid) {
+      console.log('Form Submitted!', this.addGiftForm.value);
+      this.giftService.addGift(this.addGiftForm.value).subscribe(
+        (reponse) => {console.log(reponse)
+          });
+    } else {
+      console.log('Form is invalid!');
+      this.addGiftForm.markAllAsTouched(); // Trigger validation messages
+    }
+  }
+
+  isValidUrl(photo: string): boolean {
+    return photo.startsWith('http'); // Votre logique de validation ici
+  }
+  
+  onPriceInput(event: any) {
+    let value = event.target.value;
+    value = value.replace(',', '.'); // remplace les virgules par des points
+    value = value.replace(/[^0-9.]/g, ''); // enlève tout ce qui n'est pas un chiffre ou un point
+    this.addGiftForm.get('price')?.setValue(value);
+  }
+
 
   getSeverity(gift: GiftDto) {
     let result = { severity: '', message: '' };
@@ -159,7 +213,13 @@ export class GiftComponent implements OnInit {
   }
 
   setDisplayMode(display:string){
-
+    if (display == 'addGift') {
+      this.displayMode = 'addGift';
+    }
+    if (display == 'galleria') {
+      this.displayMode = 'galleria'
+    }
+   
   }
 
 

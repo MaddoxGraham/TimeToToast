@@ -1,9 +1,7 @@
 package com.maddoxgraham.TimeToToast.Mappers;
 
 import com.maddoxgraham.TimeToToast.DTOs.GiftDto;
-import com.maddoxgraham.TimeToToast.DTOs.PhotoDto;
 import com.maddoxgraham.TimeToToast.Models.Gift;
-import com.maddoxgraham.TimeToToast.Models.Photo;
 import org.springframework.stereotype.Component;
 
 @Component
