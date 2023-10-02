@@ -29,15 +29,16 @@ public class GiftService {
         return gifts.stream().map(GiftMapper::toDto).collect(Collectors.toList());
     }
 
-    public GiftDto updateisPaid(GiftDto dto){
+    public GiftDto updateisPaid(GiftDto dto) {
         Optional<Gift> optionalGift = giftRepository.findGiftByIdGift(dto.getIdGift());
-        if(optionalGift.isPresent()){
+        if (optionalGift.isPresent()) {
             Gift gift = optionalGift.get();
             gift.setPaid(true);
             Gift updatedPaid = giftRepository.save(gift);
             return GiftMapper.toDto(updatedPaid);
         }
-    return null;
+        return null;
+    }
       
  public GiftDto addGift(GiftDto dto){
         Gift gift = GiftMapper.toEntity(dto);
