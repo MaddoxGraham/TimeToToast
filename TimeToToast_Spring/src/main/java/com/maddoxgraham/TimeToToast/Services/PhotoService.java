@@ -100,4 +100,10 @@ public class PhotoService {
     }
 
 
+    public void deletePhotoOfEvent(Long idEvent) {
+        List<Photo> photoList = photoRepository.findByEvent_IdEvent(idEvent);
+        for(Photo photo: photoList){
+            photoRepository.deleteById(photo.getIdPhoto());
+        }
+    }
 }

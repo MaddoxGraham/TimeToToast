@@ -23,10 +23,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.CharBuffer;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -50,7 +48,6 @@ public class PersonService {
         Optional<Person> personOptional = personRepository.findById(idPerson);
         if (personOptional.isPresent()) {
             Person personToDelete = personOptional.get();
-            System.out.println("Role: " + personToDelete.getRole());
             if (Role.GUEST.equals(personToDelete.getRole())){
                 personRepository.deleteByIdPerson(idPerson);
             }
@@ -228,5 +225,26 @@ public class PersonService {
             return personMapper.toPersonDto(person);
         }
         return null;
+    }
+
+    @Transactional
+    public void deleteGuestOfEvent(Long idEvent) {
+        // Récupérer la liste des UserEventRole où le role est "INVITE" pour un idEvent spécifique
+        List<UserEventRole> userEventRoles = userEventRoleRepository.findByRoleAndEvent_IdEvent("INVITE", idEvent);
+        List<UserEventRole> userEventRoleCreateur = userEventRoleRepository.findByRoleAndEvent_IdEvent("CREATEUR", idEvent);
+        for (UserEventRole userEventRole: userEventRoleCreateur){
+            userEventRoleRepository.delete(userEventRole);
+        }
+        // Filtrer les entités Person qui ont le role "GUEST" parmi les UserEventRole récupérés
+        Set<Person> guestPersons = userEventRoles.stream()
+                .map(UserEventRole::getPerson)
+                .filter(person -> person.getRole().equals(Role.GUEST))
+                .collect(Collectors.toSet());
+
+        for(Person person: guestPersons){
+            Long idPerson = person.getIdPerson();
+            Long idevent = idEvent;
+            deletePersonByIdPerson(idPerson, idevent);
+        }
     }
 }

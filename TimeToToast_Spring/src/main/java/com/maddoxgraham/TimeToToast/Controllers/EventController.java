@@ -3,15 +3,16 @@ package com.maddoxgraham.TimeToToast.Controllers;
 import com.maddoxgraham.TimeToToast.DTOs.EmailDataDto;
 import com.maddoxgraham.TimeToToast.Models.Event;
 import com.maddoxgraham.TimeToToast.Models.Person;
-import com.maddoxgraham.TimeToToast.Services.EmailService;
-import com.maddoxgraham.TimeToToast.Services.EventService;
-import com.maddoxgraham.TimeToToast.Services.PersonService;
+import com.maddoxgraham.TimeToToast.Services.*;
 import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -22,6 +23,9 @@ public class EventController {
     private final EventService eventService;
     private final EmailService emailService;
     private final PersonService personService;
+    private final GiftService giftService;
+    private final TaskService taskService;
+    private final PhotoService photoService;
 
 
     @GetMapping("/all")
@@ -65,12 +69,6 @@ public class EventController {
         return new ResponseEntity<>(event, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{idEvent}")
-    public ResponseEntity<?> deleteEvent(@PathVariable("idEvent") Long idEvent){
-        eventService.deleteEvent(idEvent);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
 
 
     @PostMapping("/sendHTMLEmail")
@@ -84,6 +82,24 @@ public class EventController {
         }
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("delete/{idEvent}")
+    public ResponseEntity<Map<String, String>> deleteEvent(@PathVariable Long idEvent) {
+        //Suppresion des gift
+        giftService.deleteGiftsOfEvent(idEvent);
+        // suppression task
+        taskService.deleteTaskOfEvent(idEvent);
+        // suppression photo
+        photoService.deletePhotoOfEvent(idEvent);
+        // suppresion des guests
+        personService.deleteGuestOfEvent(idEvent);
+        // suppression de l'event
+        eventService.deleteEvent(idEvent);
+
+        Map<String, String> message = new HashMap<>();
+        message.put("message", "event supprimée");
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 }
 

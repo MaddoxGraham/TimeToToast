@@ -5,6 +5,8 @@ import com.maddoxgraham.TimeToToast.Exception.UserNotFoundException;
 import com.maddoxgraham.TimeToToast.Mappers.GiftMapper;
 import com.maddoxgraham.TimeToToast.Models.Event;
 import com.maddoxgraham.TimeToToast.Models.Gift;
+import com.maddoxgraham.TimeToToast.Models.GiftContribution;
+import com.maddoxgraham.TimeToToast.Repository.GiftContributionRepository;
 import com.maddoxgraham.TimeToToast.Repository.GiftRepository;
 import lombok.*;
 import org.springframework.stereotype.Service;
@@ -17,8 +19,10 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class GiftService {
     private final GiftRepository giftRepository;
+    private final GiftContributionRepository giftContributionRepository;
     private final GiftMapper giftMapper;
     private final EventService eventService;
+
 
     public List<GiftDto> getGiftsByEvent(Long idEvent) {
         List<Gift> gifts = giftRepository.findByEventIdEvent(idEvent);
@@ -34,8 +38,7 @@ public class GiftService {
             return GiftMapper.toDto(updatedPaid);
         }
     return null;
-    }
-
+      
  public GiftDto addGift(GiftDto dto){
         Gift gift = GiftMapper.toEntity(dto);
         gift.setPaid(false);
@@ -63,8 +66,17 @@ public class GiftService {
     public Gift findGiftByIdGift(Long idGift){
         return giftRepository.findGiftByIdGift(idGift).orElseThrow(() -> new UserNotFoundException("User n° " + idGift + " was not found"));
     }
-//
-//    public void deleteGift(Long idGift){
-//        giftRepository.deleteGiftByIdGift(idGift);
-//    }
+
+    public void deleteGiftsOfEvent(Long idEvent) {
+        List<Gift> gifts =  giftRepository.findByEventIdEvent(idEvent);
+        for(Gift gift: gifts) {
+            List<GiftContribution> giftContributionList = giftContributionRepository.findByGiftIdGift(gift.getIdGift());
+            for(GiftContribution giftContribution: giftContributionList){
+                giftContributionRepository.deleteById(giftContribution.getIdGiftContribution());
+            }
+            giftRepository.deleteById(gift.getIdGift());
+        }
+
+    }
+
 }

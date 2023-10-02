@@ -59,4 +59,8 @@ export class EventService {
       return this.httpClient.post<TaskDto>(environment.addTask, data);
     }
 
+    deleteEvent(idEvent: number): Observable<any> {
+      return this.httpClient.delete(`${environment.deleteEvent}${idEvent}`)
+    }
+
 }

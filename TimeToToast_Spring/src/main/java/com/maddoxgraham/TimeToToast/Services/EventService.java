@@ -4,6 +4,7 @@ import com.maddoxgraham.TimeToToast.TimeToToastApplication;
 import com.maddoxgraham.TimeToToast.Exception.UserNotFoundException;
 import com.maddoxgraham.TimeToToast.Models.Event;
 import com.maddoxgraham.TimeToToast.Repository.EventRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,8 @@ public class EventService {
     public Event findEventByIdEvent(Long idEvent){
         return eventRepository.findEventByIdEvent(idEvent).orElseThrow(() -> new UserNotFoundException("Event n° " + idEvent + " was not found"));
     }
+    @Transactional
     public void deleteEvent(Long idEvent){
-        eventRepository.deleteEventByIdEvent(idEvent);
+        eventRepository.deleteById(idEvent);
     }
 }
