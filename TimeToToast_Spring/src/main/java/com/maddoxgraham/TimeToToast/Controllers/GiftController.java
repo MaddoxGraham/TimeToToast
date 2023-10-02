@@ -23,10 +23,16 @@ public class GiftController {
         return new ResponseEntity<>(giftDtos, HttpStatus.OK);
     }
 
-    @PutMapping("giftIsPaid")
+    @PutMapping("/giftIsPaid")
     public ResponseEntity<GiftDto> giftisPaid(@RequestBody GiftDto gift){
         GiftDto dto = giftService.updateisPaid(gift);
         return new ResponseEntity<GiftDto>(dto, HttpStatus.OK);
+    }
+
+    @PostMapping("/addGift")
+    public ResponseEntity<GiftDto> addGift(@RequestBody GiftDto gift){
+        GiftDto dto = giftService.addGift(gift);
+        return new ResponseEntity<GiftDto>(dto,HttpStatus.OK);
     }
 
 //    @PutMapping("/update")
@@ -34,7 +40,7 @@ public class GiftController {
 //        Gift updateGift = giftService.updateGift(gift);
 //        return new ResponseEntity<>(updateGift, HttpStatus.OK);
 //    }
-//
+
 //    @GetMapping("/all")
 //    public ResponseEntity<List<Gift>> getAllGift() {
 //        List<Gift> gifts = giftService.findAllGifts();

@@ -40,5 +40,6 @@ export const environment = {
     getContributions : "http://localhost:8080/giftContribution/getContribution",
     addContribution : "http://localhost:8080/giftContribution/addContribution",
     giftIsPaid:"http://localhost:8080/gift/giftIsPaid",
+    addGift: "http://localhost:8080/gift/addGift",
 }
   
