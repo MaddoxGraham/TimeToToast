@@ -39,7 +39,7 @@ public class GiftService {
  public GiftDto addGift(GiftDto dto){
         Gift gift = GiftMapper.toEntity(dto);
         gift.setPaid(false);
-        Event event = eventService.findEventByIdEvent(gift.getEvent().getIdEvent());
+        Event event = eventService.findEventByIdEvent(dto.getEvent());
         gift.setEvent(event);
         Gift savedGift = giftRepository.save(gift);
         return GiftMapper.toDto(savedGift);

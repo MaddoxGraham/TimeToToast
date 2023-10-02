@@ -28,7 +28,7 @@ export class GiftService {
     return this.http.put<GiftDto>(`${environment.giftIsPaid}` , gift)
   }
 
-  addGift(data: {name:string, url:string, photo:string, wanted:number, price:number, categorie:string, event:Event }): Observable<GiftDto> {
+  addGift(data: {name:string, url:string, photo:string, wanted:number, price:number, categorie:string, event:number }): Observable<GiftDto> {
     return this.http.post<GiftDto>(environment.addGift, data);
   }
 

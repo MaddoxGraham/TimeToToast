@@ -63,7 +63,7 @@ export class GiftComponent implements OnInit {
       photo:['', Validators.required],
       wanted:[''],
       price:[ , Validators.required],
-      event:this.event,
+      event:this.event.idEvent,
      
     });
    
@@ -75,9 +75,16 @@ export class GiftComponent implements OnInit {
 
   }
 
-  addGift(){
+  addGift(){  
+   
+    console.log("L'id de mon evenement " + this.addGiftForm.value.selectedCategory);
     if (this.addGiftForm.valid) {
-      console.log('Form Submitted!', this.addGiftForm.value);
+      const data = {...this.addGiftForm.value};
+      if (data.selectedCategory && data.selectedCategory.nom) {
+        data.categorie = data.selectedCategory.nom;
+      }
+      delete data.selectedCategory;
+      console.log('Form Submitted!', data);
       this.giftService.addGift(this.addGiftForm.value).subscribe(
         (reponse) => {console.log(reponse)
           });
