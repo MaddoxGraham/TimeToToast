@@ -73,8 +73,12 @@ export class EventUserComponent implements OnInit {
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
             this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted' });
-            console.log(idEvent)
-            //ici le delete event 
+            this.eventService.deleteEvent(idEvent).subscribe(response => {
+              if(response && response.message === 'event supprimée') {
+                this.loadUserEventRoles();
+                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Evénement supprimé' });
+              }
+            });
         },
         reject: (type: ConfirmEventType) => {
             switch (type) {

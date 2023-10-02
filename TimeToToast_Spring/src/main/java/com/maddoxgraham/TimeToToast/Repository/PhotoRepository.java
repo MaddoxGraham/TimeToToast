@@ -14,5 +14,7 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
     Optional<Photo> findPhotoByIdPhoto(Long idPhoto);
 
     Optional<List<Photo>> findPhotoByEvent(Event event);
+
+    List<Photo> findByEvent_IdEvent(Long idEvent);
 }
 
