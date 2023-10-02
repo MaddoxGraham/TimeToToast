@@ -18,7 +18,6 @@ public class TaskMapper {
         dto.setDateTask(task.getDateTask());
         dto.setEvent(task.getEvent().getIdEvent());
         dto.setCreator(task.getCreator().getIdPerson());
-        dto.setAssignee(task.getAssignee().getIdPerson());
         dto.setUrgence(task.getUrgence());
         dto.setDescription(task.getDescription());
        return dto;

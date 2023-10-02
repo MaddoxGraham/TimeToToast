@@ -1,7 +1,9 @@
 package com.maddoxgraham.TimeToToast.Services;
 
 
+import com.maddoxgraham.TimeToToast.DTOs.TaskDto;
 import com.maddoxgraham.TimeToToast.Exception.UserNotFoundException;
+import com.maddoxgraham.TimeToToast.Mappers.TaskMapper;
 import com.maddoxgraham.TimeToToast.Models.Task;
 import com.maddoxgraham.TimeToToast.Models.UserTask;
 import com.maddoxgraham.TimeToToast.Repository.TaskRepository;
@@ -18,9 +20,11 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
     private final UserTaskRepository userTaskRepository;
+    private final TaskMapper taskMapper;
 
-    public Task addTask(Task task){
-        return taskRepository.save(task);
+    public TaskDto addTask(TaskDto taskDto){
+        Task task = taskRepository.save(taskMapper.toEntity(taskDto));
+        return taskMapper.toDto(task);
     }
 
     public List<Task> findAllTasks(){

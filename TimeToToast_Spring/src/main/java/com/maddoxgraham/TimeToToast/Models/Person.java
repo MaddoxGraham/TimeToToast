@@ -44,8 +44,6 @@ public class Person implements Serializable {
     @OneToMany(mappedBy = "person")
     private Set<Comment> comments;
 
-    @OneToMany(mappedBy = "assignee")
-    private Set<Task> assignedTasks;
 
     // User field
     private String adresse;
@@ -61,8 +59,6 @@ public class Person implements Serializable {
     private String password;
     @Column(name = "refreshToken")
     private String refreshToken;
-
-
 
     // Guest field
     private Boolean isPresent;

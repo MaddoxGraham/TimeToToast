@@ -84,7 +84,7 @@ onUpload(event: any) {
   const files = event.files;
   const formData: FormData = new FormData();
   // Assumons que tu aies les valeurs pour idUser et idEvent quelque part dans ton composant
-  const idUser = this.userEvent.idUser;
+  const idUser = this.userEvent.idPerson;
   const idEvent = this.event.idEvent;
   for (let file of files) {
     formData.append('files', file, file.name); // Note 'files' au lieu de 'file'

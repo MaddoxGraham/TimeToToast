@@ -1,6 +1,7 @@
 package com.maddoxgraham.TimeToToast.Controllers;
 
 
+import com.maddoxgraham.TimeToToast.DTOs.TaskDto;
 import com.maddoxgraham.TimeToToast.Models.Task;
 import com.maddoxgraham.TimeToToast.Services.TaskService;
 import lombok.AllArgsConstructor;
@@ -23,27 +24,10 @@ public class TaskController {
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
-    @GetMapping("/find/{idTask}")
-    public ResponseEntity<Task> getTaskById(@PathVariable("idTask") Long idTask) {
-        Task task = taskService.findTaskByIdTask(idTask);
-        return new ResponseEntity<>(task, HttpStatus.OK);
-    }
-
     @PostMapping("/add")
-    public ResponseEntity<Task> addTask(@RequestBody Task task){
-        Task newTask = taskService.addTask(task);
-        return new ResponseEntity<>(newTask, HttpStatus.CREATED);
+    public ResponseEntity<TaskDto> addTask(@RequestBody TaskDto taskDto){
+        TaskDto newTaskDto = taskService.addTask(taskDto);
+        return new ResponseEntity<>(newTaskDto, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<Task> updateTask(@RequestBody Task task){
-        Task updateTask = taskService.updateTask(task);
-        return new ResponseEntity<>(updateTask, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/delete/{idTask}")
-    public ResponseEntity<?> deleteTask(@PathVariable("idTask") Long idTask){
-        taskService.deleteTask(idTask);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 }

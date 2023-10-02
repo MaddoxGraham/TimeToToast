@@ -61,7 +61,7 @@
       </div>
       <ng-container *ngFor="let user of this.userEventList">
 
-        <ng-container *ngIf="user.role === 'CREATEUR'">
+        <ng-container *ngIf="user?.role === 'CREATEUR'">
             <h3> Créateur </h3>
             <ul>
                 <li *ngFor="let person of user.persons">
@@ -70,12 +70,12 @@
             </ul>
         </ng-container>
     
-        <ng-container *ngIf="user.role === 'INVITE'">
+        <ng-container *ngIf="user?.role === 'INVITE'">
             <h3> Invités </h3>
             <ul>
               <li *ngFor="let person of user.persons">
                 {{ person.firstName || person.lastName ? (person.firstName + ' ' + (person.lastName | uppercase)) : person.email }}
-                <i class="pi pi-trash" (click)="person.idPerson !== undefined && deleteInvite(person.idPerson)"></i>
+                <i class="pi pi-trash" (click)="person.idPerson !== undefined && deleteInvite(person.idPerson)" *ngIf="userId === createurid"></i>
               </li>
             </ul>
         </ng-container>
