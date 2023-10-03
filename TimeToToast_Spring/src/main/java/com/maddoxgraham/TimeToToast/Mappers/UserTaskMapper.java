@@ -7,7 +7,9 @@ import com.maddoxgraham.TimeToToast.Models.UserTask;
 import com.maddoxgraham.TimeToToast.Models.UserTaskKey;
 import com.maddoxgraham.TimeToToast.Services.PersonService;
 import com.maddoxgraham.TimeToToast.Services.TaskService;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserTaskMapper {
 
     // Convertir DTO en entité
@@ -21,6 +23,7 @@ public class UserTaskMapper {
 
        userTask.setPerson(person);
        userTask.setTask(task);
+
        userTask.setIsInvisible(dto.getIsInvisible());
 
         return userTask;

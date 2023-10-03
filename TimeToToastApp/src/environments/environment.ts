@@ -27,6 +27,7 @@ export const environment = {
     updateModule:'http://localhost:8080/event/update/',
 
     addTask:'http://localhost:8080/task/add',
+    getAllTaskOfEvent: 'http://localhost:8080/task/all/',
 
     fromGuestToUser:'http://localhost:8080/person/guestToUser/',
 

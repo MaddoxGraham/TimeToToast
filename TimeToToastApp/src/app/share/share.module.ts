@@ -20,9 +20,14 @@ import { RatingModule } from 'primeng/rating';
 import { TagModule } from 'primeng/tag';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { FormatDatePipe } from './pipes/format-date/format-date-pipe';
+import { FieldsetModule } from 'primeng/fieldset';
+import { ListboxModule } from 'primeng/listbox';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    FormatDatePipe,
+  ],
   imports: [
     CommonModule,
     TabMenuModule,
@@ -46,6 +51,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
     TagModule,
     CascadeSelectModule,
     InputNumberModule,
+    FieldsetModule,
+    ListboxModule
     
   ],
   exports: [
@@ -70,6 +77,9 @@ import { InputNumberModule } from 'primeng/inputnumber';
     TagModule,
     CascadeSelectModule,
     InputNumberModule,
+    FormatDatePipe,
+    FieldsetModule,
+    ListboxModule
   ]
 })
 export class ShareModule { }

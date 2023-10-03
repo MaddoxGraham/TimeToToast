@@ -1,7 +1,7 @@
 import { UserDto } from "../user/user-dto";
 
 export interface UserEventRoleDto {
-    idUser:number,
+    idPerson:number,
     idEvent:number,
     role:string,
     persons: UserDto[];
