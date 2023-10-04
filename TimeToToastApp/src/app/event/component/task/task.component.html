@@ -92,34 +92,37 @@
 
         <div *ngIf="displayMode === 'mine'">
           <div class="container mt-4">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">Description</th>
-                  <th scope="col">Urgence</th>
-                  <th scope="col">Date d'exécution</th>
-                  <th scope="col">Assigné à</th>
-                  <th scope="col">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Faire les courses</td>
-                  <td><span class="badge bg-danger">Haute</span></td>
-                  <td>2023-09-15</td>
-                  <td>CHANGE</td>
-                  <td>
-                    <!-- Visibles seulement si userEvent?.role == 'CREATEUR' -->
-                    <button class="btn btn-light me-2"><i class="fa-solid fa-eye-slash"></i></button>
-                    <!-- Oeil barré -->
-                    <button *ngIf="userEvent?.role == 'CREATEUR'" class="btn btn-primary"><i
-                        class="fa fa-pencil"></i></button> <!-- Edit -->
-                    <button *ngIf="userEvent?.role == 'CREATEUR'" class="btn btn-danger  ms-2"><i
-                        class="fa-regular fa-trash-can"></i></button> <!-- Poubelle -->
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <ng-container *ngIf="allTasks">
+              <ng-container *ngFor="let task of allTasks">
+                <p-fieldset *ngIf="user.idPerson !== undefined && task.assignee.includes(user.idPerson)">
+                  <ng-template pTemplate="header">
+                      <div class="flex d-flex justify-content-between">
+                        <p>{{ task.dueDate | formatDate }}</p>
+                        <span class="badge" [ngClass]="{'bg-primary': task.urgency == 1,'bg-warning': task.urgency == 2,'bg-danger': task.urgency == 3}" [ngSwitch]="task.urgency" [style]="{width: '150px'}">
+                          <ng-container *ngSwitchCase="1">Basse</ng-container>
+                          <ng-container *ngSwitchCase="2">Moyenne</ng-container>
+                          <ng-container *ngSwitchCase="3">Haute</ng-container>
+                        </span>
+                        <div>
+                          <!-- Visibles seulement si userEvent?.role == 'CREATEUR' -->
+                          <button *ngIf="userEvent?.role == 'CREATEUR'" class="btn btn-primary"><i class="fa fa-pencil"></i></button> <!-- Edit -->
+                          <button *ngIf="userEvent?.role == 'CREATEUR'" class="btn btn-danger  ms-2"><i class="fa-regular fa-trash-can"></i></button> <!-- Poubelle -->
+                        </div>
+                      </div>
+                  </ng-template>
+                  <h2>Description de la tâche: </h2>
+                  <p>{{ task.description }}</p>
+                  <ng-container *ngIf="task.assignee != []">
+                    <h2>Ils sont sur le coup : </h2>
+                    <p-listbox [options]="guestsForDropdown(task.assignee)" optionLabel="label" [style]="{'width':'15rem'}"></p-listbox>
+                  </ng-container>
+                  <ng-container *ngIf="task.invisibleTo != []">
+                    <h2>Ils ne doivent pas être au courant : </h2>
+                    <p-listbox [options]="guestsForDropdown(task.invisibleTo)" optionLabel="label" [style]="{'width':'15rem'}"></p-listbox>
+                  </ng-container>
+              </p-fieldset>
+              </ng-container>
+            </ng-container>
           </div>
 
 
