@@ -31,9 +31,6 @@ public class TaskController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Task> addTask(@RequestBody Task task){
-        Task newTask = taskService.addTask(task);
-        return new ResponseEntity<>(newTask, HttpStatus.CREATED);
     public ResponseEntity<TaskDto> addTask(@RequestBody NewTaskDto newTaskDto){
         Task task = taskService.addTask(newTaskDto);
         TaskDto taskDto = userTaskService.addUserTask(newTaskDto, task);
