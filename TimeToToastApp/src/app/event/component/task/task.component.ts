@@ -102,9 +102,6 @@ export class TaskComponent implements OnInit {
   getAllTasks(idEvent: number) {
     this.taskService.getAllTask(idEvent).subscribe((response: CreateTaskDto[]) => {
       this.allTasks = response;
-      console.log(this.guests)
-      console.log(this.allTasks)
-      console.log('userEvent', this.user.idPerson)
     })
   }
 
@@ -117,6 +114,13 @@ export class TaskComponent implements OnInit {
           value: person.idPerson
         };
       });
+  }
+
+  enlisted(idTask: number) {
+    if(this.user.idPerson)
+      this.taskService.addAssignee(idTask, this.user.idPerson).subscribe(response => {
+        this.getAllTasks(this.event.idEvent);
+      })
   }
   
 }

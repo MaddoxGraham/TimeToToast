@@ -4,6 +4,7 @@ import com.maddoxgraham.TimeToToast.DTOs.*;
 import com.maddoxgraham.TimeToToast.Mappers.TaskMapper;
 import com.maddoxgraham.TimeToToast.Mappers.UserTaskMapper;
 import com.maddoxgraham.TimeToToast.Models.*;
+import com.maddoxgraham.TimeToToast.Repository.PersonRepository;
 import com.maddoxgraham.TimeToToast.Repository.TaskRepository;
 import com.maddoxgraham.TimeToToast.Repository.UserTaskRepository;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,7 @@ public class UserTaskService {
 
     private final UserTaskRepository userTaskRepository;
     private final PersonService personService;
+    private final PersonRepository personRepository;
     private final TaskService taskService;
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
@@ -98,5 +100,15 @@ public class UserTaskService {
             userTaskRepository.save(userTask);
         }
         return taskMapper.toDto(task);
+    }
+
+    public void addTaskAssignee(Long idTask, Long idPerson) {
+        UserTaskDto userTaskDto = new UserTaskDto();
+        userTaskDto.setIdTask(idTask);
+        userTaskDto.setIdPerson(idPerson);
+        userTaskDto.setIsInvisible(false);
+        UserTask userTask = userTaskMapper.toEntity(userTaskDto, personService, taskService);
+        userTaskRepository.save(userTask);
+
     }
 }

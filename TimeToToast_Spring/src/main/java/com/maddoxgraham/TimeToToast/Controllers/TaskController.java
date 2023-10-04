@@ -49,4 +49,10 @@ public class TaskController {
         taskService.deleteTask(idTask);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PostMapping("/addTaskAssignee/{idTask}")
+    public ResponseEntity<?> addTaskAssignee(@PathVariable("idTask") Long idTask, @RequestBody Long idPerson){
+        userTaskService.addTaskAssignee(idTask, idPerson);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

@@ -28,6 +28,7 @@ export const environment = {
 
     addTask:'http://localhost:8080/task/add',
     getAllTaskOfEvent: 'http://localhost:8080/task/all/',
+    addTaskAssignee: 'http://localhost:8080/task/addTaskAssignee/',
 
     fromGuestToUser:'http://localhost:8080/person/guestToUser/',
 

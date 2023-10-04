@@ -35,7 +35,4 @@ public class Task implements Serializable {
     @JoinColumn(name="idCreator", nullable=false)
     private Person creator;
 
-    @ManyToOne
-    @JoinColumn(name="assignee")
-    private Person assignee;
 }

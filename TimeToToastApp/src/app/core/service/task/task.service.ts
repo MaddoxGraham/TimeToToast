@@ -18,4 +18,8 @@ export class TaskService {
   getAllTask(idEvent: number): Observable<CreateTaskDto[]> {
     return this.httpClient.get<CreateTaskDto[]>(`${environment.getAllTaskOfEvent}${idEvent}`)
   }
+
+  addAssignee(idTask: number, idPerson: number): Observable<any> {
+    return this.httpClient.post(`${environment.addTaskAssignee}${idTask}`, idPerson)
+  }
 }

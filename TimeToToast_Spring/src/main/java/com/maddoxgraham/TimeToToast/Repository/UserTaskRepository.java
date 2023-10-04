@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface UserTaskRepository extends JpaRepository<UserTask, UserTaskKey> {
 
     void deleteByUserTaskKey(UserTaskKey userTaskKey);
-    Optional<UserTask> findByUserTaskKey(UserTaskKey userTaskKey);
+    Optional<UserTask> findByUserTaskKey_IdTaskAndUserTaskKey_IdPerson(Long idTask, Long idPerson);
     List<UserTask> findByUserTaskKey_IdTask(Long idTask);
     List<UserTask> findByUserTaskKey_IdPerson(Long idPerson);
 

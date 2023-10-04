@@ -66,16 +66,20 @@
                         </span>
                         <div>
                           <!-- Visibles seulement si userEvent?.role == 'CREATEUR' -->
-                          <button *ngIf="userEvent?.role == 'CREATEUR'" class="btn btn-primary"><i class="fa fa-pencil"></i></button> <!-- Edit -->
                           <button *ngIf="userEvent?.role == 'CREATEUR'" class="btn btn-danger  ms-2"><i class="fa-regular fa-trash-can"></i></button> <!-- Poubelle -->
                         </div>
                       </div>
                   </ng-template>
                   <h2>Description de la tâche: </h2>
                   <p>{{ task.description }}</p>
-                  <ng-container *ngIf="task.assignee != []">
+                  <ng-container *ngIf="task.assignee.length > 0">
                     <h2>Ils sont sur le coup : </h2>
+                    <p>{{ task.assignee }}</p>
                     <p-listbox [options]="guestsForDropdown(task.assignee)" optionLabel="label" [style]="{'width':'15rem'}"></p-listbox>
+                  </ng-container>
+                  <ng-container *ngIf="task.assignee.length == 0">
+                    <h2>Soyez le premier sur cette tâche</h2>
+                    <button pButton pRipple label="Me porter volontaire" class="p-button-success" (click)="enlisted(task.idTask)"></button>
                   </ng-container>
                   <ng-container *ngIf="task.invisibleTo != []">
                     <h2>Ils ne doivent pas être au courant : </h2>
@@ -105,13 +109,12 @@
                         </span>
                         <div>
                           <!-- Visibles seulement si userEvent?.role == 'CREATEUR' -->
-                          <button *ngIf="userEvent?.role == 'CREATEUR'" class="btn btn-primary"><i class="fa fa-pencil"></i></button> <!-- Edit -->
+                          <button class="btn btn-primary"><i class="fa fa-pencil"></i></button> <!-- Edit -->
                           <button *ngIf="userEvent?.role == 'CREATEUR'" class="btn btn-danger  ms-2"><i class="fa-regular fa-trash-can"></i></button> <!-- Poubelle -->
                         </div>
                       </div>
                   </ng-template>
                   <h2>Description de la tâche: </h2>
-                  <p>{{ task.description }}</p>
                   <ng-container *ngIf="task.assignee != []">
                     <h2>Ils sont sur le coup : </h2>
                     <p-listbox [options]="guestsForDropdown(task.assignee)" optionLabel="label" [style]="{'width':'15rem'}"></p-listbox>
