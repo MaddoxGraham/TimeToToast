@@ -44,15 +44,21 @@ public class TaskController {
         return new ResponseEntity<>(updateTask, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{idTask}")
-    public ResponseEntity<?> deleteTask(@PathVariable("idTask") Long idTask){
-        taskService.deleteTask(idTask);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
     @PostMapping("/addTaskAssignee/{idTask}")
     public ResponseEntity<?> addTaskAssignee(@PathVariable("idTask") Long idTask, @RequestBody Long idPerson){
         userTaskService.addTaskAssignee(idTask, idPerson);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/removeTaskAssignee/{idTask}")
+    public ResponseEntity<?> removeTaskAssignee(@PathVariable("idTask") Long idTask, @RequestBody Long idPerson){
+        userTaskService.removeTaskAssignee(idTask, idPerson);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deleteTask/{idTask}")
+    public ResponseEntity<?> deleteTask(@PathVariable("idTask") Long idTask){
+        taskService.deleteTask(idTask);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

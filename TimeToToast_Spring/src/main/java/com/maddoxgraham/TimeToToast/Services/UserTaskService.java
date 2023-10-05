@@ -111,4 +111,13 @@ public class UserTaskService {
         userTaskRepository.save(userTask);
 
     }
+
+    public void removeTaskAssignee(Long idTask, Long idPerson) {
+        Optional<UserTask> userTaskOpt = userTaskRepository.findByUserTaskKey_IdTaskAndUserTaskKey_IdPerson(idTask, idPerson);
+        if(userTaskOpt.isPresent()){
+            UserTask userTask = userTaskOpt.get();
+            userTaskRepository.delete(userTask);
+        }
+    }
+
 }

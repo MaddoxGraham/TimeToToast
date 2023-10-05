@@ -171,10 +171,7 @@ export class LoginFormComponent implements OnInit{
       this.authService.setAuthToken(response.token, response.refreshToken);
       sessionStorage.setItem("user", JSON.stringify(response));
       this.authService.isLoggedIn.next(true);
-      if(response.role)
-        if(response.role ==="ADMIN"){
-          this.router.navigate(['/admin']);
-        } else if(response.role === "USER"){
+      if(response.role === "USER"){
           this.router.navigate(['/user/user']);
         }
     }

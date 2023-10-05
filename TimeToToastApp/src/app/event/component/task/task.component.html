@@ -21,7 +21,7 @@
               <button (click)="displayMode = 'all'" class="btn btn-outline-primary me-2">Toutes les tâches</button>
               <button *ngIf="allTasks" (click)="displayMode = 'mine'" class="btn btn-outline-secondary me-2">Voir mes
                 tâches</button>
-              <button *ngIf="userEvent.role == 'CREATEUR'" (click)="displayMode = 'create'"
+              <button *ngIf="userEvent?.role == 'CREATEUR'" (click)="displayMode = 'create'"
                 class="btn btn-outline-success">Créer une tâche</button>
             </div>
           </div>
@@ -66,7 +66,8 @@
                         </span>
                         <div>
                           <!-- Visibles seulement si userEvent?.role == 'CREATEUR' -->
-                          <button *ngIf="userEvent?.role == 'CREATEUR'" class="btn btn-danger  ms-2"><i class="fa-regular fa-trash-can"></i></button> <!-- Poubelle -->
+                          <button pButton pRipple label="Me porter volontaire" class="p-button-success" (click)="enlisted(task.idTask)" *ngIf="task.assignee.length > 0 && user.idPerson !== undefined && !task.assignee.includes(user.idPerson)"></button>
+                          <button *ngIf="userEvent?.role == 'CREATEUR'" class="btn btn-danger  ms-2" (click)="deleteTask(task.idTask)"><i class="fa-regular fa-trash-can"></i></button> <!-- Poubelle -->
                         </div>
                       </div>
                   </ng-template>
@@ -74,7 +75,6 @@
                   <p>{{ task.description }}</p>
                   <ng-container *ngIf="task.assignee.length > 0">
                     <h2>Ils sont sur le coup : </h2>
-                    <p>{{ task.assignee }}</p>
                     <p-listbox [options]="guestsForDropdown(task.assignee)" optionLabel="label" [style]="{'width':'15rem'}"></p-listbox>
                   </ng-container>
                   <ng-container *ngIf="task.assignee.length == 0">
@@ -109,8 +109,7 @@
                         </span>
                         <div>
                           <!-- Visibles seulement si userEvent?.role == 'CREATEUR' -->
-                          <button class="btn btn-primary"><i class="fa fa-pencil"></i></button> <!-- Edit -->
-                          <button *ngIf="userEvent?.role == 'CREATEUR'" class="btn btn-danger  ms-2"><i class="fa-regular fa-trash-can"></i></button> <!-- Poubelle -->
+                          <button class="btn btn-warning" (click)="giveUpTask(task.idTask)">Abandonner</button> <!-- Edit -->
                         </div>
                       </div>
                   </ng-template>

@@ -22,4 +22,12 @@ export class TaskService {
   addAssignee(idTask: number, idPerson: number): Observable<any> {
     return this.httpClient.post(`${environment.addTaskAssignee}${idTask}`, idPerson)
   }
+
+  giveUpTask(idTask: number, idPerson: number): Observable<any> {
+    return this.httpClient.post(`${environment.removeTaskAssignee}${idTask}`, idPerson)
+  }
+
+  deleteTask(idTask: number): Observable<any> {
+    return this.httpClient.delete(`${environment.deleteTask}${idTask}`)
+  }
 }
