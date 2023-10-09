@@ -68,7 +68,7 @@ export class GiftComponent implements OnInit {
     });
    
     this.addGiftForm.get('photo')?.valueChanges.subscribe(photo => {
-      console.log("URL changed to:", photo);  // Ajoutez cette ligne
+      console.log("URL changed to:", photo);  
       this.showImage = this.isValidUrl(photo);
     });
 
@@ -95,13 +95,13 @@ export class GiftComponent implements OnInit {
   }
 
   isValidUrl(photo: string): boolean {
-    return photo.startsWith('http'); // Votre logique de validation ici
+    return photo.startsWith('http'); 
   }
   
   onPriceInput(event: any) {
     let value = event.target.value;
-    value = value.replace(',', '.'); // remplace les virgules par des points
-    value = value.replace(/[^0-9.]/g, ''); // enlève tout ce qui n'est pas un chiffre ou un point
+    value = value.replace(',', '.'); 
+    value = value.replace(/[^0-9.]/g, '');
     this.addGiftForm.get('price')?.setValue(value);
   }
 
