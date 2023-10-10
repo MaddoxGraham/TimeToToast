@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { GiftDto } from 'src/app/share/dtos/gift/gift-dto';
+import { GiftMessageDto } from 'src/app/share/dtos/gift/gift-message-dto';
 import { GiftContributionDto } from 'src/app/share/dtos/giftContribution/gift-contribution-dto';
 import { environment } from 'src/environments/environment';
 
@@ -30,6 +31,10 @@ export class GiftService {
 
   addGift(data: {name:string, url:string, photo:string, wanted:number, price:number, categorie:string, event:number }): Observable<GiftDto> {
     return this.http.post<GiftDto>(environment.addGift, data);
+  }
+
+  deleteGift(id: number): Observable<GiftMessageDto> {
+    return this.http.delete<GiftMessageDto>(`${environment.deleteGift}${id}`);
   }
 
 }
