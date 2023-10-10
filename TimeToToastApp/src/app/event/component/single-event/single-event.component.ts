@@ -290,8 +290,8 @@ export class SingleEventComponent implements OnInit {
     this.eventService.eventGuest(this.event.idEvent).subscribe(
       (response) => {
         this.guests = response;
-        this.guestsSubject.next(this.guests); // Met à jour la valeur du BehaviorSubject
-
+        // Met à jour la valeur du BehaviorSubject
+        this.guestsSubject.next(this.guests); 
         this.sharedService.updateGuests(this.guests);
         this.getUserEventRoleList(this.eventId);
       }

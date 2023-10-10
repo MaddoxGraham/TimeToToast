@@ -20,7 +20,9 @@ public class Gift implements Serializable{
     private Long idGift;
 
     private String name;
+    @Column(name="url", columnDefinition = "TEXT")
     private String url;
+
     private String photo;
     private Long wanted;
     private Double price;
