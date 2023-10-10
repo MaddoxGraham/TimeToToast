@@ -48,22 +48,7 @@ public class GiftService {
         Gift savedGift = giftRepository.save(gift);
         return GiftMapper.toDto(savedGift);
  }
-    //    public Gift updateGift(Gift gift){
-//        return giftRepository.save(gift);
-//    }
-//
-//    public Gift addGift(Gift gift){
-//        return giftRepository.save(gift);
-//    }
-//
-//    public List<Gift> findAllGifts(){
-//        return giftRepository.findAll();
-//    }
-//
-//    public Gift updateGift(Gift gift){
-//        return giftRepository.save(gift);
-//    }
-//
+
     public Gift findGiftByIdGift(Long idGift){
         return giftRepository.findGiftByIdGift(idGift).orElseThrow(() -> new UserNotFoundException("User n° " + idGift + " was not found"));
     }
@@ -80,4 +65,7 @@ public class GiftService {
 
     }
 
+    public void deleteGift(Long idGift) {
+        giftRepository.deleteById(idGift);
+    }
 }
