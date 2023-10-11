@@ -1,7 +1,9 @@
 package com.maddoxgraham.TimeToToast.Controllers;
 
 
+
 import com.maddoxgraham.TimeToToast.DTOs.NewTaskDto;
+
 import com.maddoxgraham.TimeToToast.DTOs.TaskDto;
 import com.maddoxgraham.TimeToToast.Models.Task;
 import com.maddoxgraham.TimeToToast.Models.UserTask;
@@ -23,6 +25,13 @@ public class TaskController {
     private final TaskService taskService;
     private final UserTaskService userTaskService;
 
+
+
+    @PostMapping("/add")
+    public ResponseEntity<TaskDto> addTask(@RequestBody TaskDto taskDto){
+        TaskDto newTaskDto = taskService.addTask(taskDto);
+        return new ResponseEntity<>(newTaskDto, HttpStatus.CREATED);
+    }
 
     @GetMapping("/all/{idEvent}")
     public ResponseEntity<List<NewTaskDto>> getAllTask(@PathVariable Long idEvent) {
@@ -61,4 +70,5 @@ public class TaskController {
         taskService.deleteTask(idTask);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 }

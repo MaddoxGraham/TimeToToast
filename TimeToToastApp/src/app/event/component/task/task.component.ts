@@ -41,7 +41,9 @@ export class TaskComponent implements OnInit {
   dueDate!: Date;
   taskForm!: FormGroup;
   checked: boolean = false;
+
   selectedGuestId!: number;
+
 
   constructor(private fb: FormBuilder, 
               private sharedService: SharedService,
@@ -49,6 +51,18 @@ export class TaskComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
+
+  this.guestsSubscription = this.sharedService.guests$.subscribe(guests => {
+    this.guests = guests.map(guest => ({
+      ...guest,
+      label: guest.firstName && guest.lastName ? `${guest.firstName} ${guest.lastName}` : guest.email
+    }));
+    this.updateFilteredGuests();
+    this.taskForm.get('assignee')?.valueChanges.subscribe(() => {
+      this.updateFilteredGuests();
+    });
+  });
+
     this.guestsSubscription = this.sharedService.guests$.subscribe(guests => {
       this.guests = guests.map(guest => ({
         ...guest,
@@ -60,6 +74,7 @@ export class TaskComponent implements OnInit {
       });
     });
     this.getAllTasks(this.event.idEvent);
+
   }
 
   initForm() {
@@ -67,18 +82,27 @@ export class TaskComponent implements OnInit {
       description: ['', Validators.required],
       urgency: ['', Validators.required],
       dueDate: ['', Validators.required],
+
+      assignee: [''],
+      invisibleTo: ['']
+
       assignee: [[]],
       invisibleTo: [[]],
       showInvisibleToggle: [false],
+
     });
   }
 
   updateFilteredGuests() {
     const selectedAssignees = this.taskForm.get('assignee')?.value || [];
     this.Assignee = this.guests.filter(guest => selectedAssignees.includes(guest.idPerson));
+
+    this.filteredGuests = this.guests.filter(guest => !selectedAssignees.includes(guest.idPerson));
+
     console.log('selectedAssignees', selectedAssignees)
     this.filteredGuests = this.guests.filter(guest => !selectedAssignees.includes(guest));
     console.log('filteredGuests', this.filteredGuests)
+
   }
 
   createTask() {
@@ -108,6 +132,15 @@ export class TaskComponent implements OnInit {
     })
   }
 
+
+  createTask() {
+    if (this.taskForm.valid) {
+      let newTask: CreateTaskDto = this.taskForm.value;
+      this.taskService.addTask(newTask).subscribe((response: CreateTaskDto) => {
+        console.log(response);
+      })
+    }
+=======
   guestsForDropdown(ids: number[]) {
     return this.guests
       .filter(person => ids.includes(person.idPerson)) 
@@ -138,6 +171,7 @@ export class TaskComponent implements OnInit {
       this.taskService.deleteTask(idTask).subscribe(response => {
         this.getAllTasks(this.event.idEvent);
       })
+
   }
   
 }

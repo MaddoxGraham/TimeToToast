@@ -35,6 +35,9 @@ export class SingleEventComponent implements OnInit {
     idPerson: 0,
     idEvent: 0
   }
+  createurid!: number;
+  userId!: number;
+  IamTheCreator: boolean = false;
   emailForm: FormGroup = this.fb.group({});
   emailList: string[] = [];
   emailInvalid: boolean = false;
@@ -66,10 +69,14 @@ export class SingleEventComponent implements OnInit {
       if (idUser.idPerson && idEvent) {this.getUserEventRole(idUser.idPerson, idEvent) }
       if (idEvent) { this.getUserEventRoleList(idEvent) }
       this.eventId = idEvent
+      
     });
-
     const idUser: UserDto = JSON.parse(sessionStorage.getItem('user') || '{}');
-    this.user = idUser; 
+    this.user = idUser;
+    if(idUser && idUser.idPerson !== undefined) {
+      this.userId = idUser.idPerson;
+    }
+
   }
 
   // CURRENT USER OR EVENT  REALTED QUERY 
@@ -82,6 +89,7 @@ export class SingleEventComponent implements OnInit {
       if (userEvent.persons) {
         users.push(...userEvent.persons);
       }
+      
     });
 
     return users;
@@ -107,6 +115,11 @@ export class SingleEventComponent implements OnInit {
       (response) => {
         this.userEventList = response;
         this.createurid = this.userEventList[0].idPerson;
+
+        console.log('userEventList', this.userEventList[0].idPerson)
+        console.log(this.userId)
+=======
+
       },
       (error) => {
         console.error('Erreur lors de la récupération de la liste des utilisateurs:', error);

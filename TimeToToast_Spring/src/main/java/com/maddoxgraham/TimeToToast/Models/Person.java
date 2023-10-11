@@ -60,8 +60,6 @@ public class Person implements Serializable {
     @Column(name = "refreshToken")
     private String refreshToken;
 
-
-
     // Guest field
     private Boolean isPresent;
 

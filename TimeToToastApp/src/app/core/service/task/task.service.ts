@@ -15,6 +15,7 @@ export class TaskService {
     return this.httpClient.post<CreateTaskDto>(environment.addTask, task);
   }
 
+
   getAllTask(idEvent: number): Observable<CreateTaskDto[]> {
     return this.httpClient.get<CreateTaskDto[]>(`${environment.getAllTaskOfEvent}${idEvent}`)
   }
@@ -30,4 +31,5 @@ export class TaskService {
   deleteTask(idTask: number): Observable<any> {
     return this.httpClient.delete(`${environment.deleteTask}${idTask}`)
   }
+
 }

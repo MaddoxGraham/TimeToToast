@@ -40,6 +40,16 @@ public class GiftService {
         return null;
     }
       
+
+     public GiftDto addGift(GiftDto dto){
+            Gift gift = GiftMapper.toEntity(dto);
+            gift.setPaid(false);
+            Event event = eventService.findEventByIdEvent(dto.getEvent());
+            gift.setEvent(event);
+            Gift savedGift = giftRepository.save(gift);
+            return GiftMapper.toDto(savedGift);
+     }
+
  public GiftDto addGift(GiftDto dto){
         Gift gift = GiftMapper.toEntity(dto);
         gift.setPaid(false);
@@ -48,6 +58,7 @@ public class GiftService {
         Gift savedGift = giftRepository.save(gift);
         return GiftMapper.toDto(savedGift);
  }
+
 
     public Gift findGiftByIdGift(Long idGift){
         return giftRepository.findGiftByIdGift(idGift).orElseThrow(() -> new UserNotFoundException("User n° " + idGift + " was not found"));

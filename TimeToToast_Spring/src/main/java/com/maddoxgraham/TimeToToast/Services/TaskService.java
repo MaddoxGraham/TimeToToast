@@ -1,6 +1,11 @@
 package com.maddoxgraham.TimeToToast.Services;
 
 
+
+import com.maddoxgraham.TimeToToast.DTOs.TaskDto;
+import com.maddoxgraham.TimeToToast.Exception.UserNotFoundException;
+import com.maddoxgraham.TimeToToast.Mappers.TaskMapper;
+
 import com.maddoxgraham.TimeToToast.DTOs.NewTaskDto;
 import com.maddoxgraham.TimeToToast.DTOs.TaskDto;
 import com.maddoxgraham.TimeToToast.DTOs.UserTaskDto;
@@ -8,6 +13,7 @@ import com.maddoxgraham.TimeToToast.Exception.UserNotFoundException;
 import com.maddoxgraham.TimeToToast.Mappers.TaskMapper;
 import com.maddoxgraham.TimeToToast.Models.Event;
 import com.maddoxgraham.TimeToToast.Models.Person;
+
 import com.maddoxgraham.TimeToToast.Models.Task;
 import com.maddoxgraham.TimeToToast.Models.UserTask;
 import com.maddoxgraham.TimeToToast.Repository.EventRepository;
@@ -29,6 +35,12 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final UserTaskRepository userTaskRepository;
     private final TaskMapper taskMapper;
+
+
+    public TaskDto addTask(TaskDto taskDto){
+        Task task = taskRepository.save(taskMapper.toEntity(taskDto));
+        return taskMapper.toDto(task);
+
     private final PersonRepository personRepository;
     private final EventRepository eventRepository;
 
@@ -50,6 +62,7 @@ public class TaskService {
             }
         }
         return null;
+
     }
 
     public List<NewTaskDto> findAllTasks(Long idEvent){

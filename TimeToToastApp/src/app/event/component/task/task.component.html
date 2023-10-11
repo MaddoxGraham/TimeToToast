@@ -32,7 +32,11 @@
         <div *ngIf="displayMode === 'all'">
           <div class="container mt-4">
 
+
+            <div *ngIf="!Tasks" class="textInfosTask">
+=======
             <div *ngIf="!allTasks" class="textInfosTask">
+
               <div *ngIf="userEvent?.role == 'CREATEUR'">
                 <p> Ici vous pouvez créer et assigner des tâches pour vous ou pour vos convives. <br> <br>
                   Demander à un invité de ramener les chips n'as jamais été aussi simple !
@@ -43,7 +47,7 @@
                   sur le boutton "creer une tache" !</p>
               </div>
 
-              <div *ngIf="userEvent.role != 'CREATEUR'">
+              <div *ngIf="userEvent?.role != 'CREATEUR'">
                 <p> Le créateur de cet événement en surement en train d'ajouter de nouvelles tâches ! <br> <br>
                   Patientez encore un peu ! Le créateur de cet événement vient d'activer le module tâche !
                   Vous verrez surement apparaitre des tâches pour vous ou pou d'autres invités !
@@ -53,6 +57,37 @@
                 </p>
               </div>
             </div>
+
+
+            <table *ngIf="Tasks" class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Description</th>
+                  <th scope="col">Urgence</th>
+                  <th scope="col">Date d'exécution</th>
+                  <th scope="col">Assigné à</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Faire les courses</td>
+                  <td><span class="badge bg-danger">Haute</span></td>
+                  <td>2023-09-15</td>
+                  <td>Moi, Alice</td>
+                  <td>
+                    <!-- Visibles seulement si userEvent?.role == 'CREATEUR' -->
+                    <button class="btn btn-light me-2"><i class="fa-solid fa-eye-slash"></i></button>
+                    <!-- Oeil barré -->
+                    <button *ngIf="userEvent?.role == 'CREATEUR'" class="btn btn-primary"><i
+                        class="fa fa-pencil"></i></button> <!-- Edit -->
+                    <button *ngIf="userEvent?.role == 'CREATEUR'" class="btn btn-danger  ms-2"><i
+                        class="fa-regular fa-trash-can"></i></button> <!-- Poubelle -->
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+              
             <ng-container *ngIf="allTasks">
               <ng-container *ngFor="let task of allTasks">
                 <p-fieldset *ngIf="user.idPerson !== undefined && !task.invisibleTo.includes(user.idPerson)">
@@ -88,6 +123,7 @@
               </p-fieldset>
               </ng-container>
             </ng-container>
+
           </div>
         </div>
 
@@ -137,38 +173,40 @@
 
             <!-- Section de Description -->
             <div class="card flex p-float-label justify-content-center mb-3">
-                <label for="description" class="form-label">Décrivez en quelques mots votre nouvelle tâche</label>
-                <textarea formControlName="description" id="description" rows="5" pInputTextarea [autoResize]="true"
-                    class="form-control"></textarea>
+              <textarea formControlName="description" id="description" rows="5" pInputTextarea [autoResize]="true" class="form-control"></textarea>
+              <label for="description" class="form-label">Décrivez en quelques mots votre nouvelle tâche</label>
             </div>
         
             <!-- Section de l'Urgence -->
-            <div class="card flex justify-content-center mb-3">
-                <p>Définissez l'urgence de cette nouvelle tâche</p>
-                <p-selectButton formControlName="urgency" [options]="urgencies" optionLabel="name" optionValue="value"></p-selectButton>
-
+            <div class="flex d-flex flex-row mb-3">
+                <p class="me-4">Définissez l'urgence de cette nouvelle tâche</p>
+                <p-selectButton formControlName="urgency" [options]="urgencies" optionLabel="name" optionValue="value" [style]="{'min-width':'250px'}"></p-selectButton>
             </div>
         
             <!-- Section de Date -->
-            <div class="card flex justify-content-center mb-3">
-                <p>Choisissez une date pour réaliser cette tâche.</p>
-                <p-calendar formControlName="dueDate"></p-calendar>
+            <div class="flex d-flex flex-row mb-3">
+                <p class="me-3">Choisissez une date pour réaliser cette tâche.</p>
+                <p-calendar formControlName="dueDate" [style]="{'min-width':'250px'}"></p-calendar>
             </div>
         
             <!-- Section des Assignés -->
-            <div class="card flex justify-content-center mb-3">
-                <p-multiSelect [options]="guests" formControlName="assignee" display="chip"></p-multiSelect>
+            <div class="flex d-flex flex-row mb-3">
+                <p class="me-3">Avez vous une ou plusieurs personne en tête.</p>
+                <p-multiSelect [options]="guests" formControlName="assignee" display="chip" optionLabel="label" optionValue="idPerson" [style]="{'min-width':'250px'}"></p-multiSelect>
             </div>
         
             <!-- Section de Toggle Button -->
             <div class="d-flex align-items-center mb-3">
-                <p-toggleButton formControlName="showInvisibleToggle" onLabel="Yes" offLabel="No"></p-toggleButton>
-                <span class="me-2">Cacher la tâche pour certain(e)s</span>
+                <span class="me-3">Voulez vous cacher la tâche à certain(e)s personne ?</span>
+                <p-toggleButton [(ngModel)]="checked" [ngModelOptions]="{standalone: true}" onLabel="Yes" offLabel="No"></p-toggleButton>
+
             </div>
         
             <!-- Section des Invités Invisibles -->
-            <div *ngIf="taskForm.get('showInvisibleToggle')?.value" class="card flex justify-content-center mb-3">
-                <p-multiSelect [options]="filteredGuests" formControlName="invisibleTo" display="chip"  ></p-multiSelect>
+            <div *ngIf="checked == true" class="flex d-flex flex-row mb-3">
+              <p class="me-3">Selectionner les personnes qui ne verrons pas cette tâche.</p>
+              <p-multiSelect [options]="filteredGuests" formControlName="invisibleTo" display="chip" optionLabel="label" optionValue="idPerson" [style]="{'min-width':'250px'}"></p-multiSelect>
+
             </div>
         
             <!-- Section de Bouton de Soumission -->
