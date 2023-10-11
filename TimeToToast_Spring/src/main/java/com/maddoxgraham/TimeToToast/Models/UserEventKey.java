@@ -9,7 +9,6 @@ import java.io.Serializable;
 @Setter
 @Embeddable
 @AllArgsConstructor
-@Data
 @NoArgsConstructor
 @EqualsAndHashCode
 public class UserEventKey implements Serializable {

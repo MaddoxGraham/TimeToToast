@@ -17,11 +17,9 @@ export class AuthInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = window.localStorage.getItem('auth_token');
-
     if (token && request.url !== environment.refreshToken) {
       request = this.addTokenToRequest(request, token);
     }
-
     return next.handle(request).pipe(
       catchError(err => {
         if (err.status === 401) {
@@ -33,9 +31,14 @@ export class AuthInterceptor {
     );
   }
 
-  private addTokenToRequest(request: HttpRequest<any>, token: string): HttpRequest<any> {
-    return request.clone({
-      setHeaders: {
+  private addTokenToRequest(
+    request: HttpRequest<any>, 
+    token: string): HttpRequest<any>
+     {
+    return request.clone(
+      {
+      setHeaders: 
+      {
         Authorization: `Bearer ${token}`
       }
     });

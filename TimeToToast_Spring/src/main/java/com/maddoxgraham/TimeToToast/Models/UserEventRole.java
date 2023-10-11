@@ -9,7 +9,6 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 @ToString(exclude = {"person","event"})
 @Entity
 public class UserEventRole implements Serializable {

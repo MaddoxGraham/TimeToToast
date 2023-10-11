@@ -45,8 +45,6 @@ public class PersonController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
-
-
     @GetMapping("/getEventGuests/{idEvent}")
     public  ResponseEntity<List<PersonDto>> getEventGuests(@PathVariable Long idEvent){
     List<PersonDto> guests = personService.findGuestByEvent(idEvent);

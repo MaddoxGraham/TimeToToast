@@ -27,6 +27,10 @@ export const environment = {
     updateModule:'http://localhost:8080/event/update/',
 
     addTask:'http://localhost:8080/task/add',
+    getAllTaskOfEvent: 'http://localhost:8080/task/all/',
+    addTaskAssignee: 'http://localhost:8080/task/addTaskAssignee/',
+    removeTaskAssignee: 'http://localhost:8080/task/removeTaskAssignee/',
+    deleteTask: 'http://localhost:8080/task/deleteTask/',
 
     fromGuestToUser:'http://localhost:8080/person/guestToUser/',
 
@@ -41,5 +45,6 @@ export const environment = {
     addContribution : "http://localhost:8080/giftContribution/addContribution",
     giftIsPaid:"http://localhost:8080/gift/giftIsPaid",
     addGift: "http://localhost:8080/gift/addGift",
+    deleteGift: 'http://localhost:8080/gift/deleteGift/',
 }
   

@@ -33,4 +33,10 @@ public class GiftContributionService {
         return giftContributionMapper.toDto(savedContribution);
     }
 
+    public void deleteGiftContributionFromIdGift(Long idGift) {
+       List<GiftContribution> giftContributionList = giftContributionRepository.findByGiftIdGift(idGift);
+       for(GiftContribution giftContribution: giftContributionList){
+           giftContributionRepository.delete(giftContribution);
+       }
+    }
 }

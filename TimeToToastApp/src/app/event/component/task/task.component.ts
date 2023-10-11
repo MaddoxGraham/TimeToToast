@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { SharedService } from 'src/app/core/service/shared/shared.service';
 import { TaskService } from 'src/app/core/service/task/task.service';
 import { EventDto } from 'src/app/share/dtos/event/event-dto';
@@ -21,11 +21,12 @@ export class TaskComponent implements OnInit {
   @Input() event!: EventDto;
   @Input() user!: UserDto;
 
-  public displayMode: 'all' | 'mine' | 'create' = 'all';
+  public displayMode: 'all' | 'mine' | 'create' = 'mine';
   Tasks!: TaskDto[];
   public isTaskModuleActive!: boolean;
   private guestsSubscription!: Subscription;
   guests!: GuestDto[];
+  allTasks!: CreateTaskDto[];
   showInvisibleToggle: boolean = false;
   Assignee: GuestDto[] = [];
   InvisibleTo: GuestDto[] = [];
@@ -41,12 +42,16 @@ export class TaskComponent implements OnInit {
   taskForm!: FormGroup;
   checked: boolean = false;
 
+  selectedGuestId!: number;
+
+
   constructor(private fb: FormBuilder, 
               private sharedService: SharedService,
               private taskService: TaskService) { }
 
   ngOnInit(): void {
     this.initForm();
+
   this.guestsSubscription = this.sharedService.guests$.subscribe(guests => {
     this.guests = guests.map(guest => ({
       ...guest,
@@ -57,6 +62,19 @@ export class TaskComponent implements OnInit {
       this.updateFilteredGuests();
     });
   });
+
+    this.guestsSubscription = this.sharedService.guests$.subscribe(guests => {
+      this.guests = guests.map(guest => ({
+        ...guest,
+        label: guest.firstName && guest.lastName ? `${guest.firstName} ${guest.lastName}` : guest.email
+      }));
+      this.updateFilteredGuests();
+      this.taskForm.get('assignee')?.valueChanges.subscribe(() => {
+        this.updateFilteredGuests();    
+      });
+    });
+    this.getAllTasks(this.event.idEvent);
+
   }
 
   initForm() {
@@ -64,24 +82,56 @@ export class TaskComponent implements OnInit {
       description: ['', Validators.required],
       urgency: ['', Validators.required],
       dueDate: ['', Validators.required],
+
       assignee: [''],
       invisibleTo: ['']
+
+      assignee: [[]],
+      invisibleTo: [[]],
+      showInvisibleToggle: [false],
+
     });
   }
 
   updateFilteredGuests() {
     const selectedAssignees = this.taskForm.get('assignee')?.value || [];
     this.Assignee = this.guests.filter(guest => selectedAssignees.includes(guest.idPerson));
+
     this.filteredGuests = this.guests.filter(guest => !selectedAssignees.includes(guest.idPerson));
+
+    console.log('selectedAssignees', selectedAssignees)
+    this.filteredGuests = this.guests.filter(guest => !selectedAssignees.includes(guest));
+    console.log('filteredGuests', this.filteredGuests)
+
   }
 
-  saveAssignees() {
-    this.updateFilteredGuests();
+  createTask() {
+    if (this.taskForm.valid) {
+      console.log(this.taskForm.value)
+      let newTask!: CreateTaskDto;
+      newTask = {
+        ...this.taskForm.value, // Spread pour récupérer les autres valeurs (si elles sont correctes)
+        assignee: this.taskForm.value.assignee.map((assignee: any) => assignee.idPerson),
+        invisibleTo: this.taskForm.value.invisibleTo.map((invisible: any) => invisible.idPerson)
+      };
+      console.log(newTask)
+      if(this.user.idPerson)
+        newTask.creator = this.user.idPerson
+      newTask.event = this.event.idEvent
+      this.taskService.addTask(newTask).subscribe((response: CreateTaskDto) => {
+        this.getAllTasks(this.event.idEvent);
+      })
+      this.taskForm.reset();
+      this.displayMode = 'all'
+    }
   }
 
-  saveInvisibleTo() {
-    // Your logic to save guests for whom the task is invisible
+  getAllTasks(idEvent: number) {
+    this.taskService.getAllTask(idEvent).subscribe((response: CreateTaskDto[]) => {
+      this.allTasks = response;
+    })
   }
+
 
   createTask() {
     if (this.taskForm.valid) {
@@ -90,5 +140,38 @@ export class TaskComponent implements OnInit {
         console.log(response);
       })
     }
+=======
+  guestsForDropdown(ids: number[]) {
+    return this.guests
+      .filter(person => ids.includes(person.idPerson)) 
+      .map(person => {
+        return {
+          label: person.firstName && person.lastName ? `${person.firstName} ${person.lastName}` : person.email,
+          value: person.idPerson
+        };
+      });
   }
+
+  enlisted(idTask: number) {
+    if(this.user.idPerson)
+      this.taskService.addAssignee(idTask, this.user.idPerson).subscribe(response => {
+        this.getAllTasks(this.event.idEvent);
+      })
+  }
+
+  giveUpTask(idTask: number) {
+    if(this.user.idPerson)
+      this.taskService.giveUpTask(idTask, this.user.idPerson).subscribe(response => {
+        this.getAllTasks(this.event.idEvent);
+      })
+  }
+
+  deleteTask(idTask: number) {
+    if(this.user.idPerson)
+      this.taskService.deleteTask(idTask).subscribe(response => {
+        this.getAllTasks(this.event.idEvent);
+      })
+
+  }
+  
 }

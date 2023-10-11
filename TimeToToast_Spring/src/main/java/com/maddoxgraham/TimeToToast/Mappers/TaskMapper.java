@@ -3,11 +3,16 @@ package com.maddoxgraham.TimeToToast.Mappers;
 
 import com.maddoxgraham.TimeToToast.DTOs.TaskDto;
 import com.maddoxgraham.TimeToToast.Models.Event;
+import com.maddoxgraham.TimeToToast.Models.Person;
 import com.maddoxgraham.TimeToToast.Models.Task;
+import com.maddoxgraham.TimeToToast.Repository.EventRepository;
+import com.maddoxgraham.TimeToToast.Repository.PersonRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TaskMapper {
+
 
     public static TaskDto toDto(Task task) {
         if (task == null){
@@ -23,7 +28,7 @@ public class TaskMapper {
        return dto;
     }
 
-    public static Task toEntity(TaskDto dto) {
+    public static Task toEntity(TaskDto dto, Person person, Event event) {
         if (dto == null) {
             return null;
         }
@@ -32,6 +37,8 @@ public class TaskMapper {
         task.setDateTask(dto.getDateTask());
         task.setUrgence(dto.getUrgence());
         task.setDescription(dto.getDescription());
+        task.setCreator(person);
+        task.setEvent(event);
         return task;
     }
 

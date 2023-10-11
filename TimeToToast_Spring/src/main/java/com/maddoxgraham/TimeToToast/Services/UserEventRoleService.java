@@ -126,10 +126,7 @@ public class UserEventRoleService {
         return userEventRoleRepository.save(userEventRole);
     }
 
-    public UserEventRole findByUserEventKey(UserEventKey userEventKey){
-        return userEventRoleRepository.findByUserEventKey(userEventKey)
-                .orElseThrow(() -> new UserNotFoundException("UserEventRole with key " + userEventKey + " was not found"));
-    }
+
 
     public boolean deleteUserEventRole(UserEventRoleDto dto, PersonService personService, EventService eventService) {
         UserEventRole userEventRole = UserEventRoleMapper.toEntity(dto, personService, eventService);

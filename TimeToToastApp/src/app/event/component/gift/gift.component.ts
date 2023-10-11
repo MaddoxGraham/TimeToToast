@@ -5,14 +5,17 @@ import { GiftListService } from 'src/app/core/service/giftList/gift-list.service
 import { SharedService } from 'src/app/core/service/shared/shared.service';
 import { EventDto } from 'src/app/share/dtos/event/event-dto';
 import { GiftDto } from 'src/app/share/dtos/gift/gift-dto';
+import { GiftMessageDto } from 'src/app/share/dtos/gift/gift-message-dto';
 import { GiftContributionDto } from 'src/app/share/dtos/giftContribution/gift-contribution-dto';
 import { UserDto } from 'src/app/share/dtos/user/user-dto';
 import { UserEventRoleDto } from 'src/app/share/dtos/userEventRole/user-event-role-dto';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-gift',
   templateUrl: './gift.component.html',
-  styleUrls: ['./gift.component.css']
+  styleUrls: ['./gift.component.css'],
+  providers: [MessageService]
 })
 export class GiftComponent implements OnInit {
   @Output() moduleDeleted = new EventEmitter<void>();
@@ -24,6 +27,7 @@ export class GiftComponent implements OnInit {
               private giftService : GiftService,
               private fb: FormBuilder,
               private giftList:GiftListService,
+              private messageService: MessageService
               ) { }
 
 
@@ -51,7 +55,6 @@ export class GiftComponent implements OnInit {
   ngOnInit() {
     if( this.isOpen = true){
     this.getGifts();
-    console.log(this.contributionMap);
     }
 
     this.categories = this.giftList.getCategories()
@@ -68,7 +71,7 @@ export class GiftComponent implements OnInit {
     });
    
     this.addGiftForm.get('photo')?.valueChanges.subscribe(photo => {
-      console.log("URL changed to:", photo);  // Ajoutez cette ligne
+      console.log("URL changed to:", photo);  
       this.showImage = this.isValidUrl(photo);
     });
 
@@ -76,8 +79,6 @@ export class GiftComponent implements OnInit {
   }
 
   addGift(){  
-   
-    console.log("L'id de mon evenement " + this.addGiftForm.value.selectedCategory);
     if (this.addGiftForm.valid) {
       const data = {...this.addGiftForm.value};
       if (data.selectedCategory && data.selectedCategory.nom) {
@@ -85,8 +86,11 @@ export class GiftComponent implements OnInit {
       }
       delete data.selectedCategory;
       console.log('Form Submitted!', data);
-      this.giftService.addGift(this.addGiftForm.value).subscribe(
-        (reponse) => {console.log(reponse)
+      this.giftService.addGift(this.addGiftForm.value).subscribe(reponse => {
+        this.getGifts();
+        this.addGiftForm.reset();
+        this.displayMode = 'galleria';
+        this.messageService.add({severity:'success', summary: 'Succès', detail: 'le cadeau à été supprimé !'});
           });
     } else {
       console.log('Form is invalid!');
@@ -95,13 +99,13 @@ export class GiftComponent implements OnInit {
   }
 
   isValidUrl(photo: string): boolean {
-    return photo.startsWith('http'); // Votre logique de validation ici
+    return photo.startsWith('http'); 
   }
   
   onPriceInput(event: any) {
     let value = event.target.value;
-    value = value.replace(',', '.'); // remplace les virgules par des points
-    value = value.replace(/[^0-9.]/g, ''); // enlève tout ce qui n'est pas un chiffre ou un point
+    value = value.replace(',', '.'); 
+    value = value.replace(/[^0-9.]/g, '');
     this.addGiftForm.get('price')?.setValue(value);
   }
 
@@ -239,6 +243,11 @@ export class GiftComponent implements OnInit {
     }
   }
 
-
+  deleteGift(id: number) {
+    this.giftService.deleteGift(id).subscribe((response: GiftMessageDto) => {
+      let message: string = response.message;
+      this.getGifts();
+    })
+  }
 
 }

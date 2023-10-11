@@ -45,6 +45,7 @@ export class SingleEventComponent implements OnInit {
   successMessage: string = ''; // message de succès
   public guests!: GuestDto[];
   public guestsSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  createurid!: number;
 
   constructor(private route: ActivatedRoute,
               private eventService: EventService,
@@ -114,8 +115,11 @@ export class SingleEventComponent implements OnInit {
       (response) => {
         this.userEventList = response;
         this.createurid = this.userEventList[0].idPerson;
+
         console.log('userEventList', this.userEventList[0].idPerson)
         console.log(this.userId)
+=======
+
       },
       (error) => {
         console.error('Erreur lors de la récupération de la liste des utilisateurs:', error);
@@ -299,8 +303,8 @@ export class SingleEventComponent implements OnInit {
     this.eventService.eventGuest(this.event.idEvent).subscribe(
       (response) => {
         this.guests = response;
-        this.guestsSubject.next(this.guests); // Met à jour la valeur du BehaviorSubject
-
+        // Met à jour la valeur du BehaviorSubject
+        this.guestsSubject.next(this.guests); 
         this.sharedService.updateGuests(this.guests);
         this.getUserEventRoleList(this.eventId);
       }

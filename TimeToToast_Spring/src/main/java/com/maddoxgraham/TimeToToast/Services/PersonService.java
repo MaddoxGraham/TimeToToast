@@ -7,14 +7,9 @@ import com.maddoxgraham.TimeToToast.DTOs.SignUpDto;
 import com.maddoxgraham.TimeToToast.Exception.AppException;
 import com.maddoxgraham.TimeToToast.Exception.UserNotFoundException;
 import com.maddoxgraham.TimeToToast.Mappers.PersonMapper;
+import com.maddoxgraham.TimeToToast.Models.*;
 import com.maddoxgraham.TimeToToast.Models.Enums.Role;
-import com.maddoxgraham.TimeToToast.Models.Event;
-import com.maddoxgraham.TimeToToast.Models.Person;
-import com.maddoxgraham.TimeToToast.Models.UserEventKey;
-import com.maddoxgraham.TimeToToast.Models.UserEventRole;
-import com.maddoxgraham.TimeToToast.Repository.EventRepository;
-import com.maddoxgraham.TimeToToast.Repository.PersonRepository;
-import com.maddoxgraham.TimeToToast.Repository.UserEventRoleRepository;
+import com.maddoxgraham.TimeToToast.Repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.*;
@@ -35,6 +30,8 @@ public class PersonService {
     private final PersonMapper personMapper;
     private final UserEventRoleRepository userEventRoleRepository;
     private final EventRepository eventRepository;
+    private final UserTaskRepository userTaskRepository;
+    private final TaskRepository taskRepository;
 
     //find a person
     public Person findPersonByIdPerson(Long idPerson) {
@@ -48,6 +45,14 @@ public class PersonService {
         Optional<Person> personOptional = personRepository.findById(idPerson);
         if (personOptional.isPresent()) {
             Person personToDelete = personOptional.get();
+            List<Task> taskList = taskRepository.findByEvent_IdEvent(idEvent);
+            for(Task task: taskList){
+                Optional<UserTask> userTaskOpt = userTaskRepository.findByUserTaskKey_IdTaskAndUserTaskKey_IdPerson(task.getIdTask(), personToDelete.getIdPerson());
+                if(userTaskOpt.isPresent()){
+                    UserTask userTask = userTaskOpt.get();
+                    userTaskRepository.deleteById(userTask.getUserTaskKey());
+                }
+            }
             if (Role.GUEST.equals(personToDelete.getRole())){
                 personRepository.deleteByIdPerson(idPerson);
             }

@@ -8,7 +8,7 @@ import { GuestToUserFormComponent } from './component/guest-to-user-form/guest-t
 
 
 const routes: Routes = [
-  { path: '', component: LandingPageComponent }, // pour l'URL de base
+  { path: '', component: LandingPageComponent }, 
   { path: 'login', component: LoginFormComponent },
   { path: 'subscribe', component: GuestToUserFormComponent },
   { path: 'about', component:AboutUsComponent }

@@ -1,12 +1,10 @@
 package com.maddoxgraham.TimeToToast.Services;
 
-import com.maddoxgraham.TimeToToast.DTOs.EventDto;
-import com.maddoxgraham.TimeToToast.DTOs.TaskDto;
-import com.maddoxgraham.TimeToToast.DTOs.UserEventsDto;
-import com.maddoxgraham.TimeToToast.DTOs.UserTaskDto;
+import com.maddoxgraham.TimeToToast.DTOs.*;
 import com.maddoxgraham.TimeToToast.Mappers.TaskMapper;
 import com.maddoxgraham.TimeToToast.Mappers.UserTaskMapper;
 import com.maddoxgraham.TimeToToast.Models.*;
+import com.maddoxgraham.TimeToToast.Repository.PersonRepository;
 import com.maddoxgraham.TimeToToast.Repository.TaskRepository;
 import com.maddoxgraham.TimeToToast.Repository.UserTaskRepository;
 import lombok.AllArgsConstructor;
@@ -22,9 +20,11 @@ public class UserTaskService {
 
     private final UserTaskRepository userTaskRepository;
     private final PersonService personService;
+    private final PersonRepository personRepository;
     private final TaskService taskService;
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
+    private final UserTaskMapper userTaskMapper;
 
     public List<TaskDto> getTasksByIdPerson(Long idPerson) {
         List<UserTask> userTasksByPerson = userTaskRepository.findByUserTaskKey_IdPerson(idPerson);
@@ -81,4 +81,43 @@ public class UserTaskService {
            userTaskRepository.saveAll(newHiddenUserTasks);
        }
    }
+
+    public TaskDto addUserTask(NewTaskDto newTaskDto, Task task) {
+        for(Long assignee: newTaskDto.getAssignee()){
+            UserTaskDto userTaskDto = new UserTaskDto();
+            userTaskDto.setIdTask(task.getIdTask());
+            userTaskDto.setIdPerson(assignee);
+            userTaskDto.setIsInvisible(false);
+            UserTask userTask = userTaskMapper.toEntity(userTaskDto, personService, taskService);
+            userTaskRepository.save(userTask);
+        }
+        for(Long invisibleTo: newTaskDto.getInvisibleTo()){
+            UserTaskDto userTaskDto = new UserTaskDto();
+            userTaskDto.setIdTask(task.getIdTask());
+            userTaskDto.setIdPerson(invisibleTo);
+            userTaskDto.setIsInvisible(true);
+            UserTask userTask = userTaskMapper.toEntity(userTaskDto, personService, taskService);
+            userTaskRepository.save(userTask);
+        }
+        return taskMapper.toDto(task);
+    }
+
+    public void addTaskAssignee(Long idTask, Long idPerson) {
+        UserTaskDto userTaskDto = new UserTaskDto();
+        userTaskDto.setIdTask(idTask);
+        userTaskDto.setIdPerson(idPerson);
+        userTaskDto.setIsInvisible(false);
+        UserTask userTask = userTaskMapper.toEntity(userTaskDto, personService, taskService);
+        userTaskRepository.save(userTask);
+
+    }
+
+    public void removeTaskAssignee(Long idTask, Long idPerson) {
+        Optional<UserTask> userTaskOpt = userTaskRepository.findByUserTaskKey_IdTaskAndUserTaskKey_IdPerson(idTask, idPerson);
+        if(userTaskOpt.isPresent()){
+            UserTask userTask = userTaskOpt.get();
+            userTaskRepository.delete(userTask);
+        }
+    }
+
 }
